@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="devEnv = ${#arrays.contains(@environment.getActiveProfiles(),'development')}">
+<head>
+	<title>POI</title>
+	<meta name="description" content="POI"/>
+	
+	<th:block th:include="include/meta :: meta" />
+</head>
+<body >
+	<div id="googleMap" style="width:500px;height:380px;"></div>
+</body>
+</html>

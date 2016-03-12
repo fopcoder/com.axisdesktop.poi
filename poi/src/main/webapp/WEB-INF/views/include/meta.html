@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="meta">
+
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script>
+function initialize() {
+  var mapProp = {
+    center:new google.maps.LatLng(51.508742,-0.120850),
+    zoom:5,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+  };
+  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+  google.maps.event.addListener( map,'dragend', function() {
+
+		console.log('asdfasdf');
+		
+		// 3 seconds after the center of the map has changed, pan back to the marker
+		  /* window.setTimeout(function() {
+		    map.panTo(marker.getPosition());
+		  },3000); */
+	});
+
+  google.maps.event.addListener( map,'zoom_changed', function() {
+
+		console.log('777777');
+		
+		// 3 seconds after the center of the map has changed, pan back to the marker
+		  /* window.setTimeout(function() {
+		    map.panTo(marker.getPosition());
+		  },3000); */
+	});
+  
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+
+</script>
+
+</head>
+
+</html>

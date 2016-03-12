@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<sitemap>
+		<loc>http://www.doroga.ua/sitemap_main.xml</loc>
+		<lastmod>2010-04-23</lastmod>
+	</sitemap>
+	<sitemap>
+		<loc>http://www.doroga.ua/sitemap_pois.xml</loc>
+		<lastmod>2010-04-23</lastmod>
+	</sitemap>
+	<sitemap>
+		<loc>http://www.doroga.ua/sitemap_hotels.xml</loc>
+		<lastmod>2010-04-23</lastmod>
+	</sitemap>
+	<sitemap>
+		<loc>http://www.doroga.ua/sitemap_hotels_static.xml</loc>
+		<lastmod>2010-07-07</lastmod>
+	</sitemap>
+	<sitemap>
+		<loc>http://www.doroga.ua/sitemap_restaurants.xml</loc>
+		<lastmod>2010-04-23</lastmod>
+	</sitemap>
+</sitemapindex>
