@@ -34,8 +34,7 @@ public class Provider {
 	private String description;
 
 	@ManyToOne( fetch = FetchType.LAZY )
-	@JoinColumn( name = "id" )
-	@Column( name = "status_id" )
+	@JoinColumn( name = "status_id" )
 	private ProviderStatus providerStatus;
 
 	@PrePersist

@@ -1,11 +1,9 @@
 package com.axisdesktop.crawler;
 
 import java.util.List;
+import java.util.Set;
 
 public abstract class Parser {
-	abstract public void parse();
-
-	abstract public void parse( String txt );
 
 	public String title() {
 		System.err.println( "[INFO] title() unimplemented" );
@@ -71,4 +69,15 @@ public abstract class Parser {
 		System.err.println( "[INFO] tags() unimplemented" );
 		return null;
 	}
+
+	public Set<String> categoryLinks() {
+		System.err.println( "[INFO] categoryLinks() unimplemented" );
+		return null;
+	}
+
+	public Set<String> itemLinks() {
+		System.err.println( "[INFO] itemLinks() unimplemented" );
+		return null;
+	}
+
 }

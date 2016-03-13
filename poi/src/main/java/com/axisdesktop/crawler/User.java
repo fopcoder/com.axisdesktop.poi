@@ -3,14 +3,14 @@ package com.axisdesktop.crawler;
 public class User {
 	private String name;
 	private String imageUri;
-	private int extId;
+	private int externalId;
 
 	public User() {
 	}
 
 	public User( String name, int extId ) {
 		this.name = name;
-		this.extId = extId;
+		this.externalId = extId;
 	}
 
 	public String getName() {
@@ -22,11 +22,11 @@ public class User {
 	}
 
 	public int getExtId() {
-		return extId;
+		return externalId;
 	}
 
 	public void setExtId( int extId ) {
-		this.extId = extId;
+		this.externalId = extId;
 	}
 
 	public String getImageUri() {
@@ -39,7 +39,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", imageUri=" + imageUri + ", extId=" + extId + "]";
+		return "User [name=" + name + ", imageUri=" + imageUri + ", externalId=" + externalId + "]";
 	}
 
 }

@@ -4,7 +4,7 @@ public class Image {
 	private String uri;
 	private int width;
 	private int height;
-	private int extId;
+	private int externalId;
 	private String alt;
 
 	public Image() {
@@ -72,11 +72,11 @@ public class Image {
 	}
 
 	public int getExtId() {
-		return extId;
+		return externalId;
 	}
 
 	public void setExtId( int extId ) {
-		this.extId = extId;
+		this.externalId = extId;
 	}
 
 	public String getAlt() {
@@ -89,7 +89,7 @@ public class Image {
 
 	@Override
 	public String toString() {
-		return "Image [uri=" + uri + ", width=" + width + ", height=" + height + ", extId=" + extId + ", alt=" + alt
+		return "Image [uri=" + uri + ", width=" + width + ", height=" + height + ", externalId=" + externalId + ", alt=" + alt
 				+ "]";
 	}
 

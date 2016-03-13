@@ -5,9 +5,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,22 +28,8 @@ import com.axisdesktop.crawler.User;
 public class DorogaPoiParser extends Parser {
 	private Document doc;
 
-	public DorogaPoiParser() {
-	}
-
 	public DorogaPoiParser( String txt ) {
 		doc = Jsoup.parse( txt );
-	}
-
-	@Override
-	public void parse() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void parse( String txt ) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -244,6 +232,70 @@ public class DorogaPoiParser extends Parser {
 
 		if( e != null ) {
 			list.add( e.text().split( "," )[0].trim() );
+		}
+
+		return list;
+	}
+
+	// @Override
+	// public Set<Category> categoryLinks() {
+	// Set<Category> list = new HashSet<>();
+	//
+	// Elements elts = doc.select( "loc:contains(/pois/)" );
+	//
+	// for( Element e : elts ) {
+	// String[] params = e.text().replaceAll( ".*pois/", "" ).split( "/" );
+	//
+	// if( params[params.length - 1].matches( "^\\d+$" ) ) {
+	// String uri = e.text();
+	// int extId = Integer.parseInt( params[params.length - 1] );
+	// String uriPart = params[params.length - 2];
+	// int level = params.length - 2;
+	// String parentUriPart = null;
+	//
+	// if( level > 0 ) {
+	// parentUriPart = params[params.length - 3];
+	// }
+	//
+	// Category cat = new Category( uriPart, uriPart, uri, extId, parentUriPart, level );
+	// if( !list.contains( cat ) ) {
+	// list.add( cat );
+	// }
+	// }
+	// }
+	//
+	// return list;
+	// }
+
+	@Override
+	public Set<String> categoryLinks() {
+		Set<String> list = new HashSet<>();
+
+		Elements elts = doc.select( "loc:contains(/pois/)" );
+
+		for( Element e : elts ) {
+			String uri = e.text();
+
+			if( !list.contains( uri ) ) {
+				list.add( uri );
+			}
+		}
+
+		return list;
+	}
+
+	@Override
+	public Set<String> itemLinks() {
+		Set<String> list = new HashSet<>();
+
+		Elements elts = doc.select( "loc:contains(/poi/)" );
+
+		for( Element e : elts ) {
+			String uri = e.text();
+
+			if( !list.contains( uri ) ) {
+				list.add( uri );
+			}
 		}
 
 		return list;

@@ -1,4 +1,4 @@
-package com.axisdesktop.crawler.impl;
+package com.axisdesktop.crawler.test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import com.axisdesktop.crawler.Parser;
+import com.axisdesktop.crawler.impl.DorogaPoiParser;
 
 public class DorogaPoiParserTest {
 	public static Parser parser;

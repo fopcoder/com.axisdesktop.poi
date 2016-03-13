@@ -7,8 +7,8 @@ public class Comment {
 	private String body;
 	private Calendar date;
 	private User user;
-	private int extId;
-	private int parentExtId;
+	private int externalId;
+	private int parentExternalId;
 
 	public static class Builder {
 		private Comment comment;
@@ -89,25 +89,25 @@ public class Comment {
 	}
 
 	public int getExtId() {
-		return extId;
+		return externalId;
 	}
 
 	public void setExtId( int extId ) {
-		this.extId = extId;
+		this.externalId = extId;
 	}
 
 	public int getParentExtId() {
-		return parentExtId;
+		return parentExternalId;
 	}
 
 	public void setParentExtId( int parentExtId ) {
-		this.parentExtId = parentExtId;
+		this.parentExternalId = parentExtId;
 	}
 
 	@Override
 	public String toString() {
-		return "Comment [header=" + header + ", body=" + body + ", date=" + date + ", user=" + user + ", extId="
-				+ extId + ", parentExtId=" + parentExtId + "]";
+		return "Comment [header=" + header + ", body=" + body + ", date=" + date + ", user=" + user + ", externalId="
+				+ externalId + ", parentExternalId=" + parentExternalId + "]";
 	}
 
 }
