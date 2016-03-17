@@ -3,6 +3,7 @@ package com.axisdesktop.crawler.impl;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.axisdesktop.crawler.service.ProxyService;
+import com.axisdesktop.crawler.service.impl.ProxyServiceImpl;
 import com.axisdesktop.poi.config.AppConfig;
 import com.axisdesktop.poi.config.PersistenceConfig;
 

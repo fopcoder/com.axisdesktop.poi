@@ -38,6 +38,10 @@ public class Proxy {
 	@Temporal( TemporalType.TIMESTAMP )
 	private Calendar modified;
 
+	@Temporal( TemporalType.TIMESTAMP )
+	@Column( name = "last_online" )
+	private Calendar lastOnline;
+
 	@ManyToOne( fetch = FetchType.LAZY )
 	@JoinColumn( name = "status_id" )
 	private ProxyStatus proxyStatus;

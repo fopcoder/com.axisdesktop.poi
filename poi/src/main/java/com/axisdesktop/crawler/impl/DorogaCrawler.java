@@ -20,4 +20,8 @@ public class DorogaCrawler {
 	public void test() {
 		System.out.println( proxyService.findAll() );
 	}
+
+	public Object getProxy() {
+		return null;
+	}
 }
