@@ -3,14 +3,19 @@ package com.axisdesktop.crawler.entity;
 import java.util.Calendar;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-public class Status {
+@Entity
+@Inheritance( strategy = InheritanceType.TABLE_PER_CLASS )
+public abstract class AbstractStatus {
 	@Id
 	@GeneratedValue
 	private int id;
@@ -74,6 +79,12 @@ public class Status {
 
 	public void setDescription( String description ) {
 		this.description = description;
+	}
+
+	@Override
+	public String toString() {
+		return " [id=" + id + ", name=" + name + ", created=" + created + ", modified=" + modified + ", description="
+				+ description + "]";
 	}
 
 }

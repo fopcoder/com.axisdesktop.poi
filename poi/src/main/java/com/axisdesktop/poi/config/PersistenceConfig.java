@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories( { "com.axisdesktop.poi.repository", "com.axisdesktop.crawler.repository" } )
+@ComponentScan( { "com.axisdesktop.poi.service", "com.axisdesktop.crawler.service" } )
 public class PersistenceConfig {
 	@Autowired
 	private Environment environment;
@@ -53,12 +55,14 @@ public class PersistenceConfig {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter( vendorAdapter );
-		factory.setPackagesToScan( "com.axisdesktop.poi.entity", "com.axisdesktop.poi.entity" );
+		factory.setPackagesToScan( "com.axisdesktop.poi.entity", "com.axisdesktop.crawler.entity" );
 		factory.setDataSource( dataSource() );
 		factory.setPersistenceUnitName( "poi-jndi" );
 
 		Properties jpaProperties = new Properties();
 		// jpaProperties.put( "hibernate.format_sql", environment.getProperty( "hibernate.format_sql" ) );
+		jpaProperties.put( "hibernate.enable_lazy_load_no_trans", "true" );
+
 		factory.setJpaProperties( jpaProperties );
 		factory.afterPropertiesSet();
 
