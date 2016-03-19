@@ -37,7 +37,7 @@ public class PersistenceConfig {
 					"poi" );
 
 		}
-		catch( Exception e /* IllegalStateException | NamingException e */) {
+		catch( Exception e /* IllegalStateException | NamingException e */ ) {
 			// TODO log all exceptions
 			e.printStackTrace();
 		}
@@ -60,11 +60,11 @@ public class PersistenceConfig {
 		factory.setPersistenceUnitName( "poi-jndi" );
 
 		Properties jpaProperties = new Properties();
-		// jpaProperties.put( "hibernate.format_sql", environment.getProperty( "hibernate.format_sql" ) );
+		jpaProperties.put( "hibernate.format_sql", "true" );
 		jpaProperties.put( "hibernate.enable_lazy_load_no_trans", "true" );
 
 		factory.setJpaProperties( jpaProperties );
-		factory.afterPropertiesSet();
+		// factory.afterPropertiesSet();
 
 		return factory;
 	}

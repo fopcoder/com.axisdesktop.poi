@@ -14,6 +14,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table( name = "provider_feed_uri", schema = "crawler" )
@@ -28,6 +29,10 @@ public class ProviderFeedUri {
 	@JoinColumn( name = "status_id" )
 	private ProviderFeedUriStatus status;
 
+	@Transient
+	@Column( name = "status_id" )
+	private int statusId;
+
 	private String uri;
 	private String description;
 	private String log;
@@ -39,6 +44,7 @@ public class ProviderFeedUri {
 	@Temporal( TemporalType.TIMESTAMP )
 	private Calendar modified;
 
+	@Temporal( TemporalType.TIMESTAMP )
 	private Calendar fetched;
 
 	@PrePersist
@@ -121,6 +127,14 @@ public class ProviderFeedUri {
 
 	public void setFetched( Calendar fetched ) {
 		this.fetched = fetched;
+	}
+
+	public int getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId( int statusId ) {
+		this.statusId = statusId;
 	}
 
 	@Override

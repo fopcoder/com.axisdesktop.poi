@@ -9,14 +9,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table( name = "provider", schema = "crawler" )
+@NamedQueries( {
+		@NamedQuery( name = "Provider.findByStatusId", query = "SELECT p FROM Provider p WHERE status_id = :statusId" ) } )
 public class Provider {
 	@Id
 	@GeneratedValue
@@ -33,9 +38,13 @@ public class Provider {
 
 	private String description;
 
+	@Transient
+	@Column( name = "status_id" )
+	private int statusId;
+
 	@ManyToOne( fetch = FetchType.LAZY )
 	@JoinColumn( name = "status_id" )
-	private ProviderStatus providerStatus;
+	private ProviderStatus status;
 
 	@PrePersist
 	private void prePersist() {
@@ -87,10 +96,26 @@ public class Provider {
 		this.description = description;
 	}
 
+	public int getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId( int status_id ) {
+		this.statusId = status_id;
+	}
+
+	public ProviderStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus( ProviderStatus status ) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
-		return "Provider [id=" + id + ", name=" + name + ", created=" + created + ", modified=" + modified
-				+ ", description=" + description + "]";
+		return "Provider [id=" + id + ", name=" + name + ", created=" + created.get( Calendar.DATE ) + ", modified="
+				+ modified.get( Calendar.DATE ) + ", description=" + description + ", status_id=" + statusId + "]";
 	}
 
 }

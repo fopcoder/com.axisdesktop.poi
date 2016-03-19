@@ -20,7 +20,9 @@ import javax.persistence.Transient;
 
 @Entity
 @Table( name = "proxy", schema = "crawler" )
-@NamedQueries( { @NamedQuery( name = "Proxy.full", query = "SELECT p FROM Proxy p" ) } )
+@NamedQueries( {
+		@NamedQuery( name = "Proxy.findAllActiveProxyOrderByRandom", query = "SELECT p FROM Proxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor ) ORDER BY RANDOM()" ) } )
+// LIMIT 1
 public class Proxy {
 	@Id
 	@GeneratedValue
@@ -30,6 +32,7 @@ public class Proxy {
 	private int port;
 	private String user;
 	private String password;
+	private String log;
 
 	@Column( updatable = false )
 	@Temporal( TemporalType.TIMESTAMP )
@@ -39,15 +42,14 @@ public class Proxy {
 	private Calendar modified;
 
 	@Temporal( TemporalType.TIMESTAMP )
-	@Column( name = "last_online" )
-	private Calendar lastOnline;
+	private Calendar fetched;
 
 	@ManyToOne( fetch = FetchType.LAZY )
 	@JoinColumn( name = "status_id" )
 	private ProxyStatus proxyStatus;
 
-	@Transient
-	private int status_id;
+	@Column( name = "status_id", insertable = false, updatable = false )
+	private int statusId;
 
 	@PrePersist
 	private void prePersist() {
@@ -123,18 +125,35 @@ public class Proxy {
 		this.password = password;
 	}
 
-	public int getStatus_id() {
-		return status_id;
+	public int getStatusId() {
+		return statusId;
 	}
 
-	public void setStatus_id( int status_id ) {
-		this.status_id = status_id;
+	public void setStatusId( int status_id ) {
+		this.statusId = status_id;
+	}
+
+	public String getLog() {
+		return log;
+	}
+
+	public void setLog( String log ) {
+		this.log = log;
+	}
+
+	public Calendar getFetched() {
+		return fetched;
+	}
+
+	public void setFetched( Calendar fetched ) {
+		this.fetched = fetched;
 	}
 
 	@Override
 	public String toString() {
 		return "Proxy [id=" + id + ", host=" + host + ", port=" + port + ", user=" + user + ", password=" + password
-				+ ", created=" + created.get( Calendar.DATE ) + ", modified=" + modified.get( Calendar.DATE )
-				+ ", proxyStatus=" + status_id + "]";
+				+ ", log=" + log + ", created=" + created.get( Calendar.DATE ) + ", modified="
+				+ modified.get( Calendar.DATE ) + ", fetched=" + fetched.get( Calendar.DATE ) + ", status_id="
+				+ statusId + "]";
 	}
 }

@@ -7,7 +7,7 @@ import com.axisdesktop.crawler.entity.Proxy;
 public interface ProxyService {
 	List<Proxy> findAll();
 
-	Proxy getRandom();
+	Proxy getRandomActiveProxy();
 
 	Proxy load( int id );
 }

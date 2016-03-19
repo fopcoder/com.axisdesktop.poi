@@ -1,5 +1,10 @@
 package com.axisdesktop.poi.config;
 
+import java.util.TimeZone;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -17,4 +22,10 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
 	}
+
+	@Override
+	public void onStartup( ServletContext servletContext ) throws ServletException {
+		TimeZone.setDefault( TimeZone.getTimeZone( "Europe/Kiev" ) );
+	}
+
 }

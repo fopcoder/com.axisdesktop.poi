@@ -1,18 +1,17 @@
 package com.axisdesktop.crawler.service.impl;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.crawler.entity.Proxy;
 import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.service.ProxyService;
 
 @Service
-// @Transactional( readOnly = true )
 public class ProxyServiceImpl implements ProxyService {
 	@Autowired
 	private ProxyRepository proxyRepo;
@@ -23,16 +22,19 @@ public class ProxyServiceImpl implements ProxyService {
 	}
 
 	@Override
-	public Proxy getRandom() {
-
-		// proxyRepo.find
-		// return proxyRepo.findOneRandom();
-		return null;
+	public Proxy load( int id ) {
+		return proxyRepo.findOne( id );
 	}
 
 	@Override
-	public Proxy load( int id ) {
-		return proxyRepo.findOne( id );
+	public Proxy getRandomActiveProxy() {
+		List<Proxy> l = proxyRepo.getRandomActiveProxy( Calendar.getInstance(), new PageRequest( 0, 1 ) );
+
+		if( l != null && l.size() > 0 ) {
+			return l.get( 0 );
+		}
+
+		return null;// Calendar.getInstance()
 	}
 
 }
