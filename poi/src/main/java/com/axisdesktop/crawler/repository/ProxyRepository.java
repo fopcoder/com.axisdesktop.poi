@@ -11,6 +11,6 @@ import org.springframework.data.repository.query.Param;
 import com.axisdesktop.crawler.entity.Proxy;
 
 public interface ProxyRepository extends JpaRepository<Proxy, Integer> {
-	@Query( name = "Proxy.findAllActiveProxyOrderByRandom" )
+	@Query( name = "Proxy.findActiveOrderByRandom" )
 	List<Proxy> getRandomActiveProxy( @Param( "waitFor" ) Calendar date, Pageable pageable );
 }

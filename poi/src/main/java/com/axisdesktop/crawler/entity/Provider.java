@@ -1,6 +1,9 @@
 package com.axisdesktop.crawler.entity;
 
+import static com.axisdesktop.utils.Utils.calendarToString;
+
 import java.util.Calendar;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,17 +14,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 @Table( name = "provider", schema = "crawler" )
 @NamedQueries( {
-		@NamedQuery( name = "Provider.findByStatusId", query = "SELECT p FROM Provider p WHERE status_id = :statusId" ) } )
+		@NamedQuery( name = "Provider.findByStatusId", query = "SELECT p FROM Provider p WHERE statusId = :statusId" ) } )
 public class Provider {
 	@Id
 	@GeneratedValue
@@ -38,13 +41,15 @@ public class Provider {
 
 	private String description;
 
-	@Transient
-	@Column( name = "status_id" )
+	@Column( name = "status_id", insertable = false, updatable = false )
 	private int statusId;
 
 	@ManyToOne( fetch = FetchType.LAZY )
 	@JoinColumn( name = "status_id" )
 	private ProviderStatus status;
+
+	@OneToMany( fetch = FetchType.LAZY, mappedBy = "providerId" )
+	private Set<ProviderFeedUri> providerFeedUri;
 
 	@PrePersist
 	private void prePersist() {
@@ -112,10 +117,18 @@ public class Provider {
 		this.status = status;
 	}
 
+	public Set<ProviderFeedUri> getProviderFeedUri() {
+		return providerFeedUri;
+	}
+
+	public void setProviderFeedUri( Set<ProviderFeedUri> providerFeedUri ) {
+		this.providerFeedUri = providerFeedUri;
+	}
+
 	@Override
 	public String toString() {
-		return "Provider [id=" + id + ", name=" + name + ", created=" + created.get( Calendar.DATE ) + ", modified="
-				+ modified.get( Calendar.DATE ) + ", description=" + description + ", status_id=" + statusId + "]";
+		return "Provider [id=" + id + ", name=" + name + ", created=" + calendarToString( created ) + ", modified="
+				+ calendarToString( modified ) + ", description=" + description + ", status_id=" + statusId + "]";
 	}
 
 }

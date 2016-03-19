@@ -16,13 +16,13 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+
+import static com.axisdesktop.utils.Utils.*;
 
 @Entity
 @Table( name = "proxy", schema = "crawler" )
 @NamedQueries( {
-		@NamedQuery( name = "Proxy.findAllActiveProxyOrderByRandom", query = "SELECT p FROM Proxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor ) ORDER BY RANDOM()" ) } )
-// LIMIT 1
+		@NamedQuery( name = "Proxy.findActiveOrderByRandom", query = "SELECT p FROM Proxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < 10 ) ORDER BY RANDOM()" ) } )
 public class Proxy {
 	@Id
 	@GeneratedValue
@@ -30,9 +30,13 @@ public class Proxy {
 
 	private String host;
 	private int port;
+
+	@Column( name = "`user`" )
 	private String user;
+
 	private String password;
 	private String log;
+	private int tries;
 
 	@Column( updatable = false )
 	@Temporal( TemporalType.TIMESTAMP )
@@ -149,11 +153,19 @@ public class Proxy {
 		this.fetched = fetched;
 	}
 
+	public int getTries() {
+		return tries;
+	}
+
+	public void setTries( int tries ) {
+		this.tries = tries;
+	}
+
 	@Override
 	public String toString() {
 		return "Proxy [id=" + id + ", host=" + host + ", port=" + port + ", user=" + user + ", password=" + password
-				+ ", log=" + log + ", created=" + created.get( Calendar.DATE ) + ", modified="
-				+ modified.get( Calendar.DATE ) + ", fetched=" + fetched.get( Calendar.DATE ) + ", status_id="
-				+ statusId + "]";
+				+ ", log=" + log + ", created=" + calendarToString( created ) + ", modified="
+				+ calendarToString( modified ) + ", fetched=" + calendarToString( fetched ) + ", status_id=" + statusId
+				+ ", tries=" + tries + "]";
 	}
 }

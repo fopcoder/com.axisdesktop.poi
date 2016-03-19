@@ -1,10 +1,14 @@
 package com.axisdesktop.crawler.impl;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.axisdesktop.crawler.entity.Provider;
+import com.axisdesktop.crawler.entity.Proxy;
 import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
 import com.axisdesktop.crawler.service.impl.ProviderServiceImpl;
@@ -15,7 +19,6 @@ import com.axisdesktop.poi.config.PersistenceConfig;
 public class CrawlerMain {
 
 	public static void main( String[] args ) throws IOException, InterruptedException {
-
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 		ctx.register( AppConfig.class );
 		ctx.register( PersistenceConfig.class );
@@ -24,30 +27,29 @@ public class CrawlerMain {
 		ProviderService providerService = ctx.getBean( ProviderServiceImpl.class );
 		ProxyService proxyService = ctx.getBean( ProxyServiceImpl.class );
 
-		for( Provider p : providerService.findByStatusId( 1 ) ) {
-			System.out.println( p );
-		}
+		DorogaCrawler crawler = new DorogaCrawler( providerService, proxyService );
+		crawler.run();
 
-		System.out.println( proxyService.getRandomActiveProxy() );
+		// "178.150.89.31 ";60297
+		// "93.72.105.188 ";8090
+		// "176.36.141.92 ";15736
 
-		// System.out.println( providerService.findByStatusId( 1 ) );
-		// DorogaCrawler crawler = new DorogaCrawler();
-		// crawler.run();
-
+		// java.net.Proxy npr = null;
+		//
+		// URL urlTest = new URL( "http://google.com/" );
+		//
+		// npr = new java.net.Proxy( java.net.Proxy.Type.HTTP,
+		// new InetSocketAddress( "", proxy.getPort() ) );
+		//
+		// int code = 0;
+		// String msg = null;
+		//
 		// try {
-		// ProxyService myService = ctx.getBean( ProxyService.class );
-		// DorogaCrawler crawler = new DorogaCrawler();
-		// crawler.test();
-		// Proxy proxy = ctx.getBean( Proxy.class );
-		// ProxyService myService = ctx.getBean( ProxyService.class );
-		// DorogaCrawler crawler = new DorogaCrawler();
-		// crawler.getProxy();
-		// System.out.println( myService.findAll() );
+		// HttpURLConnection uc = (HttpURLConnection)urlTest.openConnection( npr );
+		// code = uc.getResponseCode();
+		// msg = uc.getResponseMessage();
 		// }
-		// catch( Exception e ) {
-		// TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
+		//
 
 		ctx.close();
 		System.out.println( "==>" );

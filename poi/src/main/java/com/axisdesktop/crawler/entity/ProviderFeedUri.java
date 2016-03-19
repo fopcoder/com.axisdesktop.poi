@@ -1,5 +1,7 @@
 package com.axisdesktop.crawler.entity;
 
+import static com.axisdesktop.utils.Utils.calendarToString;
+
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -9,33 +11,37 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 @Table( name = "provider_feed_uri", schema = "crawler" )
+@NamedQueries( {
+		@NamedQuery( name = "ProviderFeedUri.getActive", query = "SELECT u FROM ProviderFeedUri u WHERE providerId = :providerId AND statusId = 1" ) } )
 public class ProviderFeedUri {
 	@Id
 	@GeneratedValue
 	private int id;
 
-	private int provider_id;
+	@Column( name = "provider_id" )
+	private int providerId;
 
 	@ManyToOne( fetch = FetchType.LAZY )
 	@JoinColumn( name = "status_id" )
 	private ProviderFeedUriStatus status;
 
-	@Transient
-	@Column( name = "status_id" )
+	@Column( name = "status_id", insertable = false, updatable = false )
 	private int statusId;
 
 	private String uri;
 	private String description;
 	private String log;
+	private int tries;
 
 	@Column( updatable = false )
 	@Temporal( TemporalType.TIMESTAMP )
@@ -65,12 +71,12 @@ public class ProviderFeedUri {
 		this.id = id;
 	}
 
-	public int getProvider_id() {
-		return provider_id;
+	public int getProviderId() {
+		return providerId;
 	}
 
-	public void setProvider_id( int provider_id ) {
-		this.provider_id = provider_id;
+	public void setProviderId( int provider_id ) {
+		this.providerId = provider_id;
 	}
 
 	public ProviderFeedUriStatus getStatus() {
@@ -137,11 +143,20 @@ public class ProviderFeedUri {
 		this.statusId = statusId;
 	}
 
+	public int getTries() {
+		return tries;
+	}
+
+	public void setTries( int tries ) {
+		this.tries = tries;
+	}
+
 	@Override
 	public String toString() {
-		return "ProviderFeedUri [id=" + id + ", provider_id=" + provider_id + ", status=" + status + ", uri=" + uri
-				+ ", description=" + description + ", log=" + log + ", created=" + created + ", modified=" + modified
-				+ ", fetched=" + fetched + "]";
+		return "ProviderFeedUri [id=" + id + ", providerId=" + providerId + ", statusId=" + statusId + ", uri=" + uri
+				+ ", description=" + description + ", log=" + log + ", tries=" + tries + ", created="
+				+ calendarToString( created ) + ", modified=" + calendarToString( modified ) + ", fetched="
+				+ calendarToString( fetched ) + "]";
 	}
 
 }
