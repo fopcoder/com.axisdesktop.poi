@@ -52,8 +52,8 @@ public class DorogaCrawler {
 
 		List<ProviderUrl> provFeeds = this.provService.findActiveFeedUrl( this.provider.getId() );
 
-		for( ProviderUrl feed : provFeeds ) {
-			String uri = feed.getUrl();
+		for( ProviderUrl feedUrl : provFeeds ) {
+			String uri = feedUrl.getUrl();
 			int code = 0;
 			String msg = null;
 
@@ -97,29 +97,29 @@ public class DorogaCrawler {
 					}
 					catch( Exception e ) { /* ignore */ }
 
-					feed.setFetched( Calendar.getInstance() );
-					feed.setLog( null );
-					feed.setStatusId( 1 );
-					feed.setTries( 0 );
+					feedUrl.setFetched( Calendar.getInstance() );
+					feedUrl.setLog( null );
+					feedUrl.setStatusId( 1 );
+					feedUrl.setTries( 0 );
 
-					this.provService.updateUrl( feed );
+					this.provService.updateUrl( feedUrl );
 				}
 				else {
-					feed.setStatusId( 3 );
-					feed.setLog( String.format( "%s\n%s", code, msg ) );
-					feed.setTries( feed.getTries() + 1 );
-					feed.setFetched( Calendar.getInstance() );
+					feedUrl.setStatusId( 3 );
+					feedUrl.setLog( String.format( "%s\n%s", code, msg ) );
+					feedUrl.setTries( feedUrl.getTries() + 1 );
+					feedUrl.setFetched( Calendar.getInstance() );
 
-					this.provService.updateUrl( feed );
+					this.provService.updateUrl( feedUrl );
 				}
 			}
 			catch( Exception e ) {
-				feed.setFetched( Calendar.getInstance() );
-				feed.setLog( String.format( "%s\n%s", code, e.toString() ) );
-				feed.setStatusId( 3 );
-				feed.setTries( feed.getTries() + 1 );
+				feedUrl.setFetched( Calendar.getInstance() );
+				feedUrl.setLog( String.format( "%s\n%s", code, e.toString() ) );
+				feedUrl.setStatusId( 3 );
+				feedUrl.setTries( feedUrl.getTries() + 1 );
 
-				this.provService.updateUrl( feed );
+				this.provService.updateUrl( feedUrl );
 			}
 
 			try {
