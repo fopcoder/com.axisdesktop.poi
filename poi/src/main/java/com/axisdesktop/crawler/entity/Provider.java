@@ -12,8 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -23,8 +21,8 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table( name = "provider", schema = "crawler" )
-@NamedQueries( {
-		@NamedQuery( name = "Provider.findByStatusId", query = "SELECT p FROM Provider p WHERE statusId = :statusId" ) } )
+// @NamedQueries( {
+// @NamedQuery( name = "Provider.findByStatusId", query = "SELECT p FROM Provider p WHERE statusId = :statusId" ) } )
 public class Provider {
 	@Id
 	@GeneratedValue
@@ -41,15 +39,15 @@ public class Provider {
 
 	private String description;
 
-	@Column( name = "status_id", insertable = false, updatable = false )
+	@Column( name = "status_id" )
 	private int statusId;
 
 	@ManyToOne( fetch = FetchType.LAZY )
-	@JoinColumn( name = "status_id" )
+	@JoinColumn( name = "status_id", insertable = false, updatable = false )
 	private ProviderStatus status;
 
 	@OneToMany( fetch = FetchType.LAZY, mappedBy = "providerId" )
-	private Set<ProviderFeedUri> providerFeedUri;
+	private Set<ProviderUri> providerUri;
 
 	@PrePersist
 	private void prePersist() {
@@ -117,12 +115,12 @@ public class Provider {
 		this.status = status;
 	}
 
-	public Set<ProviderFeedUri> getProviderFeedUri() {
-		return providerFeedUri;
+	public Set<ProviderUri> getProviderFeedUri() {
+		return providerUri;
 	}
 
-	public void setProviderFeedUri( Set<ProviderFeedUri> providerFeedUri ) {
-		this.providerFeedUri = providerFeedUri;
+	public void setProviderFeedUri( Set<ProviderUri> providerUri ) {
+		this.providerUri = providerUri;
 	}
 
 	@Override

@@ -22,7 +22,7 @@ import static com.axisdesktop.utils.Utils.*;
 @Entity
 @Table( name = "proxy", schema = "crawler" )
 @NamedQueries( {
-		@NamedQuery( name = "Proxy.findActiveOrderByRandom", query = "SELECT p FROM Proxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < 10 ) ORDER BY RANDOM()" ) } )
+		@NamedQuery( name = "Proxy.findActiveOrderByRandom", query = "SELECT p FROM Proxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ORDER BY RANDOM()" ) } )
 public class Proxy {
 	@Id
 	@GeneratedValue
@@ -49,10 +49,10 @@ public class Proxy {
 	private Calendar fetched;
 
 	@ManyToOne( fetch = FetchType.LAZY )
-	@JoinColumn( name = "status_id" )
+	@JoinColumn( name = "status_id", insertable = false, updatable = false )
 	private ProxyStatus proxyStatus;
 
-	@Column( name = "status_id", insertable = false, updatable = false )
+	@Column( name = "status_id" )
 	private int statusId;
 
 	@PrePersist

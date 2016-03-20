@@ -20,10 +20,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table( name = "provider_feed_uri", schema = "crawler" )
+@Table( name = "provider_uri", schema = "crawler" )
 @NamedQueries( {
-		@NamedQuery( name = "ProviderFeedUri.getActive", query = "SELECT u FROM ProviderFeedUri u WHERE providerId = :providerId AND statusId = 1" ) } )
-public class ProviderFeedUri {
+		@NamedQuery( name = "ProviderUri.findActiveFeedUri", query = "SELECT u FROM ProviderUri u WHERE providerId = :providerId AND statusId = 1 AND isFeed = TRUE" ) } )
+public class ProviderUri {
 	@Id
 	@GeneratedValue
 	private int id;
@@ -32,11 +32,14 @@ public class ProviderFeedUri {
 	private int providerId;
 
 	@ManyToOne( fetch = FetchType.LAZY )
-	@JoinColumn( name = "status_id" )
-	private ProviderFeedUriStatus status;
+	@JoinColumn( name = "status_id", insertable = false, updatable = false )
+	private ProviderUriStatus status;
 
-	@Column( name = "status_id", insertable = false, updatable = false )
+	@Column( name = "status_id" )
 	private int statusId;
+
+	@Column( name = "is_feed" )
+	private boolean isFeed;
 
 	private String uri;
 	private String description;
@@ -79,11 +82,11 @@ public class ProviderFeedUri {
 		this.providerId = provider_id;
 	}
 
-	public ProviderFeedUriStatus getStatus() {
+	public ProviderUriStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus( ProviderFeedUriStatus status ) {
+	public void setStatus( ProviderUriStatus status ) {
 		this.status = status;
 	}
 
@@ -151,12 +154,20 @@ public class ProviderFeedUri {
 		this.tries = tries;
 	}
 
+	public boolean isFeed() {
+		return isFeed;
+	}
+
+	public void setFeed( boolean isFeed ) {
+		this.isFeed = isFeed;
+	}
+
 	@Override
 	public String toString() {
-		return "ProviderFeedUri [id=" + id + ", providerId=" + providerId + ", statusId=" + statusId + ", uri=" + uri
+		return "ProviderUri [id=" + id + ", providerId=" + providerId + ", statusId=" + statusId + ", uri=" + uri
 				+ ", description=" + description + ", log=" + log + ", tries=" + tries + ", created="
 				+ calendarToString( created ) + ", modified=" + calendarToString( modified ) + ", fetched="
-				+ calendarToString( fetched ) + "]";
+				+ calendarToString( fetched ) + ", isFeed=" + isFeed + "]";
 	}
 
 }

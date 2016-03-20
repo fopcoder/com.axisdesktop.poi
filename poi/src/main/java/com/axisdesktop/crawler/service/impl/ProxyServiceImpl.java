@@ -50,7 +50,7 @@ public class ProxyServiceImpl implements ProxyService {
 		Calendar cal = Calendar.getInstance();
 		cal.add( Calendar.MINUTE, -15 );
 
-		List<Proxy> l = proxyRepo.getRandomActiveProxy( cal, new PageRequest( 0, 1 ) );
+		List<Proxy> l = proxyRepo.getRandomActiveProxy( cal, 10, new PageRequest( 0, 1 ) );
 
 		if( l != null && l.size() > 0 ) {
 			return l.get( 0 );

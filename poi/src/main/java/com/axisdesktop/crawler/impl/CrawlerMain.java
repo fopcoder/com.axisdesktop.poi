@@ -30,27 +30,6 @@ public class CrawlerMain {
 		DorogaCrawler crawler = new DorogaCrawler( providerService, proxyService );
 		crawler.run();
 
-		// "178.150.89.31 ";60297
-		// "93.72.105.188 ";8090
-		// "176.36.141.92 ";15736
-
-		// java.net.Proxy npr = null;
-		//
-		// URL urlTest = new URL( "http://google.com/" );
-		//
-		// npr = new java.net.Proxy( java.net.Proxy.Type.HTTP,
-		// new InetSocketAddress( "", proxy.getPort() ) );
-		//
-		// int code = 0;
-		// String msg = null;
-		//
-		// try {
-		// HttpURLConnection uc = (HttpURLConnection)urlTest.openConnection( npr );
-		// code = uc.getResponseCode();
-		// msg = uc.getResponseMessage();
-		// }
-		//
-
 		ctx.close();
 		System.out.println( "==>" );
 	}

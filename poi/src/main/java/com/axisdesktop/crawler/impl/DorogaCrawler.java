@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.axisdesktop.crawler.Parser;
 import com.axisdesktop.crawler.entity.Provider;
-import com.axisdesktop.crawler.entity.ProviderFeedUri;
+import com.axisdesktop.crawler.entity.ProviderUri;
 import com.axisdesktop.crawler.entity.Proxy;
 import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
@@ -50,9 +50,9 @@ public class DorogaCrawler {
 		// parse feed uri
 		// create workers
 
-		List<ProviderFeedUri> provFeeds = this.provService.findActiveFeedUri( this.provider.getId() );
+		List<ProviderUri> provFeeds = this.provService.findActiveFeedUri( this.provider.getId() );
 
-		for( ProviderFeedUri feed : provFeeds ) {
+		for( ProviderUri feed : provFeeds ) {
 			String uri = feed.getUri();
 
 			HttpURLConnection uc = this.getConnection( uri, this.getReferer() );
@@ -143,7 +143,7 @@ public class DorogaCrawler {
 			if( code != 200 ) {
 				npr = null;
 
-				proxy.setProxyStatus( this.proxyService.getProxyStatusById( 3 ) );
+				proxy.setStatusId( 3 );
 				proxy.setLog( String.format( "%s\n%s", code, msg ) );
 				proxy.setTries( proxy.getTries() + 1 );
 				proxy.setFetched( Calendar.getInstance() );
@@ -153,7 +153,7 @@ public class DorogaCrawler {
 				continue;
 			}
 			else {
-				proxy.setProxyStatus( this.proxyService.getProxyStatusById( 1 ) );
+				proxy.setStatusId( 1 );
 				proxy.setLog( null );
 				proxy.setTries( 0 );
 				proxy.setFetched( Calendar.getInstance() );

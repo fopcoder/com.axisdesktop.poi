@@ -12,5 +12,6 @@ import com.axisdesktop.crawler.entity.Proxy;
 
 public interface ProxyRepository extends JpaRepository<Proxy, Integer> {
 	@Query( name = "Proxy.findActiveOrderByRandom" )
-	List<Proxy> getRandomActiveProxy( @Param( "waitFor" ) Calendar date, Pageable pageable );
+	List<Proxy> getRandomActiveProxy( @Param( "waitFor" ) Calendar date, @Param( "maxTries" ) int maxTries,
+			Pageable pageable );
 }
