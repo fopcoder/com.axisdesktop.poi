@@ -47,8 +47,10 @@ public class DorogaCrawler {
 		// + -- update proxy
 		// + fetch feed uri
 		// + -- update feed
-		// parse feed uri
+		// + parse feed uri
 		// create workers
+		// parse pages
+		// save page data
 
 		List<ProviderUrl> provFeeds = this.provService.findActiveFeedUrl( this.provider.getId() );
 
