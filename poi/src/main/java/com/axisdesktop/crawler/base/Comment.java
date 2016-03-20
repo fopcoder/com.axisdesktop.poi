@@ -1,4 +1,4 @@
-package com.axisdesktop.crawler;
+package com.axisdesktop.crawler.base;
 
 import java.util.Calendar;
 

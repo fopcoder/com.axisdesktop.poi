@@ -15,9 +15,9 @@ import java.util.concurrent.Executors;
 
 import org.springframework.stereotype.Component;
 
-import com.axisdesktop.crawler.Parser;
+import com.axisdesktop.crawler.base.Parser;
 import com.axisdesktop.crawler.entity.Provider;
-import com.axisdesktop.crawler.entity.ProviderUri;
+import com.axisdesktop.crawler.entity.ProviderUrl;
 import com.axisdesktop.crawler.entity.Proxy;
 import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
@@ -41,25 +41,34 @@ public class DorogaCrawler {
 		exec = Executors.newFixedThreadPool( 10 );
 	}
 
-	public void run() throws IOException, InterruptedException {
+	public void run() {
 		// + get feed uris
-		// get connection
-		// -- update proxy
-		// fetch feed uri
-		// -- update feed
+		// + get connection
+		// + -- update proxy
+		// + fetch feed uri
+		// + -- update feed
 		// parse feed uri
 		// create workers
 
-		List<ProviderUri> provFeeds = this.provService.findActiveFeedUri( this.provider.getId() );
+		List<ProviderUrl> provFeeds = this.provService.findActiveFeedUri( this.provider.getId() );
 
-		for( ProviderUri feed : provFeeds ) {
-			String uri = feed.getUri();
+		for( ProviderUrl feed : provFeeds ) {
+			String uri = feed.getUrl();
+			int code = 0;
+			String msg = null;
 
-			HttpURLConnection uc = this.getConnection( uri, this.getReferer() );
+			try {
+				HttpURLConnection uc = this.getConnection( uri, this.getReferer() );
 
-			if( false && uc != null ) {
-				if( uc.getContentType().contains( "text" ) ) {
+				if( uc == null ) {
+					System.err.println( "no free proxy" );
+					break;
+				}
 
+				code = uc.getResponseCode();
+				msg = uc.getResponseMessage();
+
+				if( code == 200 && uc.getContentType().contains( "text" ) ) {
 					try( BufferedReader br = new BufferedReader( new InputStreamReader( uc.getInputStream() ) ) ) {
 						StringBuilder sb = new StringBuilder();
 
@@ -69,18 +78,44 @@ public class DorogaCrawler {
 						}
 
 						Parser parser = new DorogaPoiParser( sb.toString() );
-						System.out.println( parser.itemLinks() );
+						System.err.println( parser.itemLinks() );
 
 					}
 					catch( Exception e ) { /* ignore */ }
+
+					feed.setFetched( Calendar.getInstance() );
+					feed.setLog( null );
+					feed.setStatusId( 1 );
+					feed.setTries( 0 );
+
+					this.provService.updateUrl( feed );
+				}
+				else {
+					feed.setStatusId( 3 );
+					feed.setLog( String.format( "%s\n%s", code, msg ) );
+					feed.setTries( feed.getTries() + 1 );
+					feed.setFetched( Calendar.getInstance() );
+
+					this.provService.updateUrl( feed );
 				}
 			}
+			catch( Exception e ) {
+				feed.setFetched( Calendar.getInstance() );
+				feed.setLog( String.format( "%s\n%s", code, e.toString() ) );
+				feed.setStatusId( 3 );
+				feed.setTries( feed.getTries() + 1 );
 
-			Thread.sleep( 2000 );
+				this.provService.updateUrl( feed );
+			}
+
+			try {
+				Thread.sleep( 2000 );
+			}
+			catch( InterruptedException e ) { /* ignore */ }
 		}
 	}
 
-	public HttpURLConnection getConnection( String link, String referer ) {
+	public HttpURLConnection getConnection( String link, String referer ) throws IOException {
 		HttpURLConnection uc = null;
 		java.net.Proxy npr = this.getProxy();
 
@@ -88,13 +123,8 @@ public class DorogaCrawler {
 
 		URL url = null;
 
-		try {
-			url = new URL( link );
-			uc = (HttpURLConnection)url.openConnection( npr );
-		}
-		catch( IOException e ) {
-			e.printStackTrace();
-		}
+		url = new URL( link );
+		uc = (HttpURLConnection)url.openConnection( npr );
 
 		uc.setRequestProperty( "User-Agent", this.getUserAgent() );
 
@@ -102,7 +132,7 @@ public class DorogaCrawler {
 			uc.setRequestProperty( "Referer", referer );
 		}
 
-		uc.setConnectTimeout( 10000 );
+		uc.setConnectTimeout( 10_000 );
 		uc.setReadTimeout( 20 * 60_000 );
 
 		return uc;
@@ -111,15 +141,12 @@ public class DorogaCrawler {
 	public java.net.Proxy getProxy() {
 		Proxy proxy = null;
 		java.net.Proxy npr = null;
-
 		URL urlTest = null;
+
 		try {
 			urlTest = new URL( "http://google.com/" );
 		}
-		catch( MalformedURLException e ) {
-			e.printStackTrace();
-			return null;
-		}
+		catch( MalformedURLException e ) { /* ignore */ }
 
 		while( ( proxy = this.proxyService.getRandomActiveProxy() ) != null ) {
 			npr = new java.net.Proxy( java.net.Proxy.Type.HTTP,
@@ -140,7 +167,17 @@ public class DorogaCrawler {
 				msg = e.toString();
 			}
 
-			if( code != 200 ) {
+			if( code == 200 ) {
+				proxy.setStatusId( 1 );
+				proxy.setLog( null );
+				proxy.setTries( 0 );
+				proxy.setFetched( Calendar.getInstance() );
+
+				this.proxyService.update( proxy );
+
+				break;
+			}
+			else {
 				npr = null;
 
 				proxy.setStatusId( 3 );
@@ -151,16 +188,6 @@ public class DorogaCrawler {
 				this.proxyService.update( proxy );
 
 				continue;
-			}
-			else {
-				proxy.setStatusId( 1 );
-				proxy.setLog( null );
-				proxy.setTries( 0 );
-				proxy.setFetched( Calendar.getInstance() );
-
-				this.proxyService.update( proxy );
-
-				break;
 			}
 		}
 

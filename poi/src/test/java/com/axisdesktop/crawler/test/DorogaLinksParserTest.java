@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
-import com.axisdesktop.crawler.Parser;
+import com.axisdesktop.crawler.base.Parser;
 import com.axisdesktop.crawler.impl.DorogaPoiParser;
 
 public class DorogaLinksParserTest {

@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table( name = "provider_status", schema = "crawler" )
-public class ProviderStatus extends AbstractStatus {
+public class ProviderStatus extends AbstractSimpleData {
 	@Override
 	public String toString() {
 		return "ProviderStatus" + super.toString();

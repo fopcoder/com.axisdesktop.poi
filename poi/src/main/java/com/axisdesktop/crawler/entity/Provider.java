@@ -47,7 +47,7 @@ public class Provider {
 	private ProviderStatus status;
 
 	@OneToMany( fetch = FetchType.LAZY, mappedBy = "providerId" )
-	private Set<ProviderUri> providerUri;
+	private Set<ProviderUrl> providerUrl;
 
 	@PrePersist
 	private void prePersist() {
@@ -115,12 +115,12 @@ public class Provider {
 		this.status = status;
 	}
 
-	public Set<ProviderUri> getProviderFeedUri() {
-		return providerUri;
+	public Set<ProviderUrl> getProviderFeedUri() {
+		return providerUrl;
 	}
 
-	public void setProviderFeedUri( Set<ProviderUri> providerUri ) {
-		this.providerUri = providerUri;
+	public void setProviderFeedUri( Set<ProviderUrl> providerUrl ) {
+		this.providerUrl = providerUrl;
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Inheritance( strategy = InheritanceType.TABLE_PER_CLASS )
-public abstract class AbstractStatus {
+public abstract class AbstractSimpleData {
 	@Id
 	@GeneratedValue
 	private int id;

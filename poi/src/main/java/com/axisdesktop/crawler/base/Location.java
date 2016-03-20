@@ -1,4 +1,4 @@
-package com.axisdesktop.crawler;
+package com.axisdesktop.crawler.base;
 
 public class Location {
 	private double longitude;
@@ -32,5 +32,4 @@ public class Location {
 	public String toString() {
 		return "Location [latitude=" + latitude + ", longitude=" + longitude + "]";
 	}
-
 }

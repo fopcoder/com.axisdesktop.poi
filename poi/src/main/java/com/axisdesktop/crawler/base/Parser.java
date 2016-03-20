@@ -1,22 +1,33 @@
-package com.axisdesktop.crawler;
+package com.axisdesktop.crawler.base;
 
 import java.util.List;
 import java.util.Set;
 
 public abstract class Parser {
-
+	// page meta
 	public String title() {
 		System.err.println( "[INFO] title() unimplemented" );
 		return null;
 	}
 
-	public Location location() {
-		System.err.println( "[INFO] location() unimplemented" );
+	// page name
+	public String header() {
+		System.err.println( "[INFO] header() unimplemented" );
 		return null;
 	}
 
-	public String header() {
-		System.err.println( "[INFO] header() unimplemented" );
+	public String shortDescription() {
+		System.err.println( "[INFO] shortDescription() unimplemented" );
+		return null;
+	}
+
+	public String fullDescription() {
+		System.err.println( "[INFO] fullDescription() unimplemented" );
+		return null;
+	}
+
+	public Location location() {
+		System.err.println( "[INFO] location() unimplemented" );
 		return null;
 	}
 
@@ -43,16 +54,6 @@ public abstract class Parser {
 	public double rating() {
 		System.err.println( "[INFO] rating() unimplemented" );
 		return 0;
-	}
-
-	public String shortDescription() {
-		System.err.println( "[INFO] shortDescription() unimplemented" );
-		return null;
-	}
-
-	public String fullDescription() {
-		System.err.println( "[INFO] fullDescription() unimplemented" );
-		return null;
 	}
 
 	public List<Image> images() {

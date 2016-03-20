@@ -19,11 +19,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.axisdesktop.crawler.Comment;
-import com.axisdesktop.crawler.Image;
-import com.axisdesktop.crawler.Location;
-import com.axisdesktop.crawler.Parser;
-import com.axisdesktop.crawler.User;
+import com.axisdesktop.crawler.base.Comment;
+import com.axisdesktop.crawler.base.Image;
+import com.axisdesktop.crawler.base.Location;
+import com.axisdesktop.crawler.base.Parser;
+import com.axisdesktop.crawler.base.User;
 
 public class DorogaPoiParser extends Parser {
 	private Document doc;

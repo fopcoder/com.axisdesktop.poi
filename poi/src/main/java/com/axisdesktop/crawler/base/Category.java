@@ -1,4 +1,4 @@
-package com.axisdesktop.crawler;
+package com.axisdesktop.crawler.base;
 
 public class Category {
 	private String name;

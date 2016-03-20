@@ -20,28 +20,32 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table( name = "provider_uri", schema = "crawler" )
+@Table( name = "provider_url", schema = "crawler" )
 @NamedQueries( {
-		@NamedQuery( name = "ProviderUri.findActiveFeedUri", query = "SELECT u FROM ProviderUri u WHERE providerId = :providerId AND statusId = 1 AND isFeed = TRUE" ) } )
-public class ProviderUri {
+		@NamedQuery( name = "ProviderUrl.findActiveFeedUri", query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND ( statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ) AND typeId = 1" ) } )
+public class ProviderUrl {
 	@Id
 	@GeneratedValue
-	private int id;
+	private long id;
 
 	@Column( name = "provider_id" )
 	private int providerId;
 
 	@ManyToOne( fetch = FetchType.LAZY )
 	@JoinColumn( name = "status_id", insertable = false, updatable = false )
-	private ProviderUriStatus status;
+	private ProviderUrlStatus status;
 
 	@Column( name = "status_id" )
 	private int statusId;
 
-	@Column( name = "is_feed" )
-	private boolean isFeed;
+	@ManyToOne( fetch = FetchType.LAZY )
+	@JoinColumn( name = "type_id", insertable = false, updatable = false )
+	private ProviderUrlType type;
 
-	private String uri;
+	@Column( name = "type_id" )
+	private int typeId;
+
+	private String url;
 	private String description;
 	private String log;
 	private int tries;
@@ -66,11 +70,11 @@ public class ProviderUri {
 		this.modified = Calendar.getInstance();
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId( int id ) {
+	public void setId( long id ) {
 		this.id = id;
 	}
 
@@ -78,24 +82,48 @@ public class ProviderUri {
 		return providerId;
 	}
 
-	public void setProviderId( int provider_id ) {
-		this.providerId = provider_id;
+	public void setProviderId( int providerId ) {
+		this.providerId = providerId;
 	}
 
-	public ProviderUriStatus getStatus() {
+	public ProviderUrlStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus( ProviderUriStatus status ) {
+	public void setStatus( ProviderUrlStatus status ) {
 		this.status = status;
 	}
 
-	public String getUri() {
-		return uri;
+	public int getStatusId() {
+		return statusId;
 	}
 
-	public void setUri( String uri ) {
-		this.uri = uri;
+	public void setStatusId( int statusId ) {
+		this.statusId = statusId;
+	}
+
+	// public ProviderUrlType getType() {
+	// return type;
+	// }
+	//
+	// public void setType( ProviderUrlType type ) {
+	// this.type = type;
+	// }
+
+	public int getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId( int typeId ) {
+		this.typeId = typeId;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl( String url ) {
+		this.url = url;
 	}
 
 	public String getDescription() {
@@ -112,6 +140,14 @@ public class ProviderUri {
 
 	public void setLog( String log ) {
 		this.log = log;
+	}
+
+	public int getTries() {
+		return tries;
+	}
+
+	public void setTries( int tries ) {
+		this.tries = tries;
 	}
 
 	public Calendar getCreated() {
@@ -138,36 +174,12 @@ public class ProviderUri {
 		this.fetched = fetched;
 	}
 
-	public int getStatusId() {
-		return statusId;
-	}
-
-	public void setStatusId( int statusId ) {
-		this.statusId = statusId;
-	}
-
-	public int getTries() {
-		return tries;
-	}
-
-	public void setTries( int tries ) {
-		this.tries = tries;
-	}
-
-	public boolean isFeed() {
-		return isFeed;
-	}
-
-	public void setFeed( boolean isFeed ) {
-		this.isFeed = isFeed;
-	}
-
 	@Override
 	public String toString() {
-		return "ProviderUri [id=" + id + ", providerId=" + providerId + ", statusId=" + statusId + ", uri=" + uri
+		return "ProviderUrl [id=" + id + ", providerId=" + providerId + ", statusId=" + statusId + ", url=" + url
 				+ ", description=" + description + ", log=" + log + ", tries=" + tries + ", created="
 				+ calendarToString( created ) + ", modified=" + calendarToString( modified ) + ", fetched="
-				+ calendarToString( fetched ) + ", isFeed=" + isFeed + "]";
+				+ calendarToString( fetched ) + ", typeId=" + typeId + "]";
 	}
 
 }
