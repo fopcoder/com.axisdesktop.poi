@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.axisdesktop.crawler.entity.Provider;
@@ -38,19 +39,27 @@ public class ProviderServiceImpl implements ProviderService {
 		return provRepo.findByStatusId( id );
 	}
 
-	@Override
-	public List<ProviderUrl> findActiveFeedUri( int providerId ) {
-		Calendar cal = Calendar.getInstance();
-		cal.add( Calendar.MINUTE, -15 );
-
-		return provUrlRepo.findActiveFeedUri( providerId, cal, 10 );
-	}
+	// ProviderUrl
 
 	@Override
 	public ProviderUrl loadUrl( long id ) {
 		if( id == 0 ) throw new IllegalArgumentException( "id == 0" );
 
 		return this.provUrlRepo.findOne( id );
+	}
+
+	@Override
+	public ProviderUrl loadUrl( int providerId, String url ) {
+		if( providerId == 0 ) throw new IllegalArgumentException( "id == 0" );
+		if( url == null ) throw new IllegalArgumentException( "url == null" );
+
+		List<ProviderUrl> l = provUrlRepo.findByProviderIdAndUrl( providerId, url, new PageRequest( 0, 1 ) );
+
+		if( l != null && l.size() > 0 ) {
+			return l.get( 0 );
+		}
+
+		return null;
 	}
 
 	@Override
@@ -76,6 +85,19 @@ public class ProviderServiceImpl implements ProviderService {
 		if( id == 0 ) throw new IllegalArgumentException( "id == 0" );
 
 		this.provUrlRepo.delete( id );
+	}
+
+	@Override
+	public List<ProviderUrl> findActiveFeedUrl( int providerId ) {
+		Calendar cal = Calendar.getInstance();
+		cal.add( Calendar.MINUTE, -15 );
+
+		return provUrlRepo.findActiveFeedUrl( providerId, cal, 10 );
+	}
+
+	@Override
+	public boolean isUrlExist( int providerId, String url ) {
+		return provUrlRepo.checkByProviderIdAndUrl( providerId, url );
 	}
 
 }

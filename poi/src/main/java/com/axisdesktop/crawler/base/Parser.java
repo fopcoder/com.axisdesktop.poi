@@ -1,5 +1,6 @@
 package com.axisdesktop.crawler.base;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -51,9 +52,19 @@ public abstract class Parser {
 		return null;
 	}
 
-	public double rating() {
+	public BigDecimal rating() {
 		System.err.println( "[INFO] rating() unimplemented" );
-		return 0;
+		return null;
+	}
+
+	public BigDecimal price() {
+		System.err.println( "[INFO] price() unimplemented" );
+		return null;
+	}
+
+	public BigDecimal priceOld() {
+		System.err.println( "[INFO] priceOld() unimplemented" );
+		return null;
 	}
 
 	public List<Image> images() {

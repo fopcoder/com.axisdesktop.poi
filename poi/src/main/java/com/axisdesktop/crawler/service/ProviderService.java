@@ -12,13 +12,18 @@ public interface ProviderService {
 
 	Provider load( int id );
 
-	List<ProviderUrl> findActiveFeedUri( int providerId );
-
 	ProviderUrl loadUrl( long id );
+
+	ProviderUrl loadUrl( int providerId, String url );
 
 	ProviderUrl createUrl( ProviderUrl pu );
 
 	ProviderUrl updateUrl( ProviderUrl pu );
 
 	void deleteUrl( long id );
+
+	List<ProviderUrl> findActiveFeedUrl( int providerId );
+
+	boolean isUrlExist( int providerId, String url );
+
 }

@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,10 +23,11 @@ import javax.persistence.TemporalType;
 @Entity
 @Table( name = "provider_url", schema = "crawler" )
 @NamedQueries( {
-		@NamedQuery( name = "ProviderUrl.findActiveFeedUri", query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND ( statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ) AND typeId = 1" ) } )
+		@NamedQuery( name = "ProviderUrl.findActiveFeedUrl", query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND ( statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ) AND typeId = 1" ),
+		@NamedQuery( name = "ProviderUrl.checkByProviderIdAndUrl", query = "SELECT 1 > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ) } )
 public class ProviderUrl {
 	@Id
-	@GeneratedValue
+	@GeneratedValue( strategy = GenerationType.IDENTITY )
 	private long id;
 
 	@Column( name = "provider_id" )
@@ -102,13 +104,13 @@ public class ProviderUrl {
 		this.statusId = statusId;
 	}
 
-	// public ProviderUrlType getType() {
-	// return type;
-	// }
-	//
-	// public void setType( ProviderUrlType type ) {
-	// this.type = type;
-	// }
+	public ProviderUrlType getType() {
+		return type;
+	}
+
+	public void setType( ProviderUrlType type ) {
+		this.type = type;
+	}
 
 	public int getTypeId() {
 		return typeId;

@@ -50,7 +50,7 @@ public class DorogaCrawler {
 		// parse feed uri
 		// create workers
 
-		List<ProviderUrl> provFeeds = this.provService.findActiveFeedUri( this.provider.getId() );
+		List<ProviderUrl> provFeeds = this.provService.findActiveFeedUrl( this.provider.getId() );
 
 		for( ProviderUrl feed : provFeeds ) {
 			String uri = feed.getUrl();
@@ -79,6 +79,20 @@ public class DorogaCrawler {
 
 						Parser parser = new DorogaPoiParser( sb.toString() );
 						System.err.println( parser.itemLinks() );
+
+						for( String s : parser.itemLinks() ) {
+							if( !this.provService.isUrlExist( this.provider.getId(), s ) ) {
+								ProviderUrl pu = new ProviderUrl();
+								pu.setStatusId( 4 );
+								pu.setUrl( s );
+								pu.setTypeId( 3 );
+								pu.setProviderId( this.provider.getId() );
+
+								this.provService.createUrl( pu );
+							}
+						}
+
+						// System.err.println( parser.categoryLinks() );
 
 					}
 					catch( Exception e ) { /* ignore */ }

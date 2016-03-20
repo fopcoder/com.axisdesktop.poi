@@ -1,5 +1,6 @@
 package com.axisdesktop.crawler.impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -51,10 +52,10 @@ public class DorogaPoiParser extends Parser {
 		String[] lat = latlng[0].split( "[^\\d\\.\\w]" );
 		String[] lng = latlng[1].split( "[^\\d\\.\\w]" );
 
-		double dlat = ( Double.parseDouble( lat[0] ) + Double.parseDouble( lat[1] ) / 60 + Double.parseDouble( lat[2] ) / 3600 )
-				* ( lat[3].matches( "(?i)n" ) ? 1 : -1 );
-		double dlng = ( Double.parseDouble( lng[0] ) + Double.parseDouble( lng[1] ) / 60 + Double.parseDouble( lng[2] ) / 3600 )
-				* ( lng[3].matches( "(?i)e" ) ? 1 : -1 );
+		double dlat = ( Double.parseDouble( lat[0] ) + Double.parseDouble( lat[1] ) / 60
+				+ Double.parseDouble( lat[2] ) / 3600 ) * ( lat[3].matches( "(?i)n" ) ? 1 : -1 );
+		double dlng = ( Double.parseDouble( lng[0] ) + Double.parseDouble( lng[1] ) / 60
+				+ Double.parseDouble( lng[2] ) / 3600 ) * ( lng[3].matches( "(?i)e" ) ? 1 : -1 );
 
 		Location loc = new Location( dlat, dlng );
 
@@ -126,14 +127,14 @@ public class DorogaPoiParser extends Parser {
 	}
 
 	@Override
-	public double rating() {
+	public BigDecimal rating() {
 		Element e = doc.select( "table span[class=RatingBigText]" ).first();
 
 		if( e != null ) {
-			return Double.parseDouble( e.text() );
+			return new BigDecimal( e.text() );
 		}
 
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -185,8 +186,8 @@ public class DorogaPoiParser extends Parser {
 		Elements comments = doc.select( "span[id*=uccFeedbacks] > table tr" );
 		Pattern userPattern = Pattern.compile( "UserID=(\\d+)" );
 
-		DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate( FormatStyle.FULL ).withLocale(
-				new Locale( "ru" ) );
+		DateTimeFormatter dateFormatter = DateTimeFormatter.ofLocalizedDate( FormatStyle.FULL )
+				.withLocale( new Locale( "ru" ) );
 
 		for( Element c : comments ) {
 			User user = new User();
