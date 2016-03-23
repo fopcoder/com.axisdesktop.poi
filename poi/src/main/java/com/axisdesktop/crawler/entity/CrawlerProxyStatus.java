@@ -5,10 +5,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table( name = "proxy_status", schema = "crawler" )
-public class ProxyStatus extends AbstractSimpleData {
+public class CrawlerProxyStatus extends AbstractSimpleData {
 	@Override
 	public String toString() {
-		return "ProxyStatus" + super.toString();
+		return "CrawlerProxyStatus" + super.toString();
 	}
 
 }

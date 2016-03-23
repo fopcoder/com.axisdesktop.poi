@@ -1,7 +1,7 @@
 package com.axisdesktop.crawler.base;
 
 public class Image {
-	private String uri;
+	private String url;
 	private int width;
 	private int height;
 	private int externalId;
@@ -13,8 +13,8 @@ public class Image {
 	public static class Builder {
 		Image img = new Image();
 
-		public Builder uri( String url ) {
-			img.setUri( url );
+		public Builder url( String url ) {
+			img.setUrl( url );
 			return this;
 		}
 
@@ -39,20 +39,20 @@ public class Image {
 		}
 
 		public Image build() {
-			if( img.getUri() == null ) {
-				throw new IllegalStateException( "bad image uri" );
+			if( img.getUrl() == null ) {
+				throw new IllegalStateException( "bad image url" );
 			}
 
 			return img;
 		}
 	}
 
-	public String getUri() {
-		return uri;
+	public String getUrl() {
+		return url;
 	}
 
-	public void setUri( String url ) {
-		this.uri = url;
+	public void setUrl( String url ) {
+		this.url = url;
 	}
 
 	public int getWidth() {
@@ -89,7 +89,7 @@ public class Image {
 
 	@Override
 	public String toString() {
-		return "Image [uri=" + uri + ", width=" + width + ", height=" + height + ", externalId=" + externalId + ", alt=" + alt
+		return "Image [url=" + url + ", width=" + width + ", height=" + height + ", externalId=" + externalId + ", alt=" + alt
 				+ "]";
 	}
 

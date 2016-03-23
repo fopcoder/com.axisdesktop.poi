@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.axisdesktop.crawler.entity.Proxy;
+import com.axisdesktop.crawler.entity.CrawlerProxy;
 
-public interface ProxyRepository extends JpaRepository<Proxy, Integer> {
-	@Query( name = "Proxy.findActiveOrderByRandom" )
-	List<Proxy> getRandomActiveProxy( @Param( "waitFor" ) Calendar date, @Param( "maxTries" ) int maxTries,
+public interface ProxyRepository extends JpaRepository<CrawlerProxy, Integer> {
+	@Query( name = "CrawlerProxy.findActiveOrderByRandom" )
+	List<CrawlerProxy> getRandomActiveProxy( @Param( "waitFor" ) Calendar date, @Param( "maxTries" ) int maxTries,
 			Pageable pageable );
 }

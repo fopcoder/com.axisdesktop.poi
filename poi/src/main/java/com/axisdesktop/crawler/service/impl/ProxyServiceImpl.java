@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.axisdesktop.crawler.entity.Proxy;
-import com.axisdesktop.crawler.entity.ProxyStatus;
+import com.axisdesktop.crawler.entity.CrawlerProxy;
+import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
@@ -25,32 +25,32 @@ public class ProxyServiceImpl implements ProxyService {
 	}
 
 	@Override
-	public List<Proxy> findAll() {
+	public List<CrawlerProxy> findAll() {
 		return proxyRepo.findAll();
 	}
 
 	@Override
-	public Proxy load( int id ) {
+	public CrawlerProxy load( int id ) {
 		if( id <= 0 ) throw new IllegalArgumentException( "proxyId must be > 0" );
 		return proxyRepo.findOne( id );
 	}
 
 	@Override
-	public Proxy update( Proxy proxy ) {
-		if( proxy == null ) throw new IllegalArgumentException( "proxy is null" );
-		if( proxy.getId() == 0 ) throw new IllegalArgumentException( "can't update new proxy" );
-		if( this.proxyRepo.findOne( proxy.getId() ) == null )
-			throw new IllegalArgumentException( "proxy " + proxy + " not found" );
+	public CrawlerProxy update( CrawlerProxy crawlerProxy ) {
+		if( crawlerProxy == null ) throw new IllegalArgumentException( "proxy is null" );
+		if( crawlerProxy.getId() == 0 ) throw new IllegalArgumentException( "can't update new proxy" );
+		if( this.proxyRepo.findOne( crawlerProxy.getId() ) == null )
+			throw new IllegalArgumentException( "proxy " + crawlerProxy + " not found" );
 
-		return this.proxyRepo.save( proxy );
+		return this.proxyRepo.save( crawlerProxy );
 	}
 
 	@Override
-	public Proxy getRandomActiveProxy() {
+	public CrawlerProxy getRandomActiveProxy() {
 		Calendar cal = Calendar.getInstance();
 		cal.add( Calendar.MINUTE, -15 );
 
-		List<Proxy> l = proxyRepo.getRandomActiveProxy( cal, 10, new PageRequest( 0, 1 ) );
+		List<CrawlerProxy> l = proxyRepo.getRandomActiveProxy( cal, 10, new PageRequest( 0, 1 ) );
 
 		if( l != null && l.size() > 0 ) {
 			return l.get( 0 );
@@ -60,7 +60,7 @@ public class ProxyServiceImpl implements ProxyService {
 	}
 
 	@Override
-	public ProxyStatus getProxyStatusById( int id ) {
+	public CrawlerProxyStatus getProxyStatusById( int id ) {
 		return proxyStausRepo.findOne( id );
 	}
 

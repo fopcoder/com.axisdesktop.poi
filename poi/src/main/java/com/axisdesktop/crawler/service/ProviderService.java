@@ -24,6 +24,8 @@ public interface ProviderService {
 
 	List<ProviderUrl> findActiveFeedUrl( int providerId );
 
+	List<ProviderUrl> findUrlForUpdate( int providerId );
+
 	boolean isUrlExist( int providerId, String url );
 
 }

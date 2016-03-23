@@ -92,4 +92,14 @@ public abstract class Parser {
 		return null;
 	}
 
+	@Override
+	public String toString() {
+		return "Parser [title()=" + title() + ", header()=" + header() + ", shortDescription()=" + shortDescription()
+				+ ", fullDescription()=" + fullDescription() + ", location()=" + location() + ", contacts()="
+				+ contacts() + ", contactsLink()=" + contactsLink() + ", status()=" + status() + ", statusText()="
+				+ statusText() + ", rating()=" + rating() + ", price()=" + price() + ", priceOld()=" + priceOld()
+				+ ", images()=" + images() + ", comments()=" + comments() + ", tags()=" + tags() + ", categoryLinks()="
+				+ categoryLinks() + ", itemLinks()=" + itemLinks() + "]";
+	}
+
 }

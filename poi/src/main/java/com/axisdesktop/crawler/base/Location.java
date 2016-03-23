@@ -1,31 +1,33 @@
 package com.axisdesktop.crawler.base;
 
+import java.math.BigDecimal;
+
 public class Location {
-	private double longitude;
-	private double latitude;
+	private BigDecimal longitude;
+	private BigDecimal latitude;
 
 	public Location() {
 	}
 
 	public Location( double latitude, double longitude ) {
-		this.longitude = longitude;
-		this.latitude = latitude;
+		this.longitude = BigDecimal.valueOf( longitude );
+		this.latitude = BigDecimal.valueOf( latitude );
 	}
 
-	public double getLongitude() {
+	public BigDecimal getLongitude() {
 		return longitude;
 	}
 
 	public void setLongitude( double longitude ) {
-		this.longitude = longitude;
+		this.longitude = BigDecimal.valueOf( longitude );
 	}
 
-	public double getLatitude() {
+	public BigDecimal getLatitude() {
 		return latitude;
 	}
 
 	public void setLatitude( double latitude ) {
-		this.latitude = latitude;
+		this.latitude = BigDecimal.valueOf( latitude );
 	}
 
 	@Override

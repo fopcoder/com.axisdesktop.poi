@@ -24,7 +24,8 @@ import javax.persistence.TemporalType;
 @Table( name = "provider_url", schema = "crawler" )
 @NamedQueries( {
 		@NamedQuery( name = "ProviderUrl.findActiveFeedUrl", query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND ( statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ) AND typeId = 1" ),
-		@NamedQuery( name = "ProviderUrl.checkByProviderIdAndUrl", query = "SELECT 1 > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ) } )
+		@NamedQuery( name = "ProviderUrl.isExistByProviderIdAndUrl", query = "SELECT 1 > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ),
+		@NamedQuery( name = "ProviderUrl.fidUrlForUpdate", query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND typeId IN(2,3) AND statusId IN(4,6)" ) } )
 public class ProviderUrl {
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -48,9 +49,11 @@ public class ProviderUrl {
 	private int typeId;
 
 	private String url;
-	private String description;
 	private String log;
 	private int tries;
+
+	@Column( name = "parent_id" )
+	private long parentId;
 
 	@Column( updatable = false )
 	@Temporal( TemporalType.TIMESTAMP )
@@ -128,14 +131,6 @@ public class ProviderUrl {
 		this.url = url;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription( String description ) {
-		this.description = description;
-	}
-
 	public String getLog() {
 		return log;
 	}
@@ -176,12 +171,20 @@ public class ProviderUrl {
 		this.fetched = fetched;
 	}
 
+	public long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId( long parentId ) {
+		this.parentId = parentId;
+	}
+
 	@Override
 	public String toString() {
 		return "ProviderUrl [id=" + id + ", providerId=" + providerId + ", statusId=" + statusId + ", url=" + url
-				+ ", description=" + description + ", log=" + log + ", tries=" + tries + ", created="
-				+ calendarToString( created ) + ", modified=" + calendarToString( modified ) + ", fetched="
-				+ calendarToString( fetched ) + ", typeId=" + typeId + "]";
+				+ ", log=" + log + ", tries=" + tries + ", created=" + calendarToString( created ) + ", modified="
+				+ calendarToString( modified ) + ", fetched=" + calendarToString( fetched ) + ", typeId=" + typeId
+				+ ", parentId=" + parentId + "]";
 	}
 
 }

@@ -6,26 +6,28 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 //import java.net.Proxy;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.springframework.stereotype.Component;
 
 import com.axisdesktop.crawler.base.Parser;
+import com.axisdesktop.crawler.base.WebCrawler;
+import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.Provider;
 import com.axisdesktop.crawler.entity.ProviderUrl;
-import com.axisdesktop.crawler.entity.Proxy;
 import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
 
 @Component
-public class DorogaCrawler {
-	private ProxyService proxyService;
-	private ProviderService provService;
+public class DorogaCrawler extends WebCrawler {
 	private ExecutorService exec;
 	private Provider provider;
 
@@ -41,6 +43,7 @@ public class DorogaCrawler {
 		exec = Executors.newFixedThreadPool( 10 );
 	}
 
+	@Override
 	public void run() {
 		// + get feed uris
 		// + get connection
@@ -52,15 +55,36 @@ public class DorogaCrawler {
 		// parse pages
 		// save page data
 
-		List<ProviderUrl> provFeeds = this.provService.findActiveFeedUrl( this.provider.getId() );
+		List<ProviderUrl> provFeedUrls = this.provService.findActiveFeedUrl( this.provider.getId() );
 
-		for( ProviderUrl feedUrl : provFeeds ) {
+		Map<String, String> connProps = new HashMap<>();
+		connProps.put( "timeout", Integer.toString( 10_000 ) );
+		connProps.put( "read-timeout", Integer.toString( 20 * 60_000 ) );
+
+		for( ProviderUrl feedUrl : provFeedUrls ) {
 			String uri = feedUrl.getUrl();
-			int code = 0;
 			String msg = null;
+			Proxy proxy = null;
+
+			int code;
+
+			CrawlerProxy crawlerProxy = this.proxyService.getRandomActiveProxy();
+			try {
+				proxy = this.getProxy( crawlerProxy );
+			}
+			catch( IOException e1 ) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+			connProps.put( "user-agent", this.getUserAgent() );
+			connProps.put( "referer", this.getReferer() );
+
+			HttpURLConnection uc = this.getConnection( uri, proxy, connProps );
 
 			try {
-				HttpURLConnection uc = this.getConnection( uri, this.getReferer() );
+
+				// HttpURLConnection uc = this.getConnection( uri, this.getReferer() );
 
 				if( uc == null ) {
 					System.err.println( "no free proxy" );
@@ -129,33 +153,88 @@ public class DorogaCrawler {
 			}
 			catch( InterruptedException e ) { /* ignore */ }
 		}
-	}
 
-	public HttpURLConnection getConnection( String link, String referer ) throws IOException {
-		HttpURLConnection uc = null;
-		java.net.Proxy npr = this.getProxy();
+		List<ProviderUrl> updList = this.provService.findUrlForUpdate( this.provider.getId() );
+		for( ProviderUrl provUrl : updList ) {
+			String uri = provUrl.getUrl();
+			int code = 0;
+			String msg = null;
 
-		if( npr == null ) return null;
+			CrawlerProxy crawlerProxy = this.proxyService.getRandomActiveProxy();
+			Proxy proxy = this.getProxy( crawlerProxy );
 
-		URL url = null;
+			try {
+				HttpURLConnection uc = this.getConnection( uri, proxy );
 
-		url = new URL( link );
-		uc = (HttpURLConnection)url.openConnection( npr );
+				if( uc == null ) {
+					System.err.println( "no free proxy" );
+					break;
+				}
 
-		uc.setRequestProperty( "User-Agent", this.getUserAgent() );
+				code = uc.getResponseCode();
+				msg = uc.getResponseMessage();
 
-		if( referer != null ) {
-			uc.setRequestProperty( "Referer", referer );
+				if( code == 200 && uc.getContentType().contains( "text" ) ) {
+					try( BufferedReader br = new BufferedReader( new InputStreamReader( uc.getInputStream() ) ) ) {
+						StringBuilder sb = new StringBuilder();
+
+						String str;
+						while( ( str = br.readLine() ) != null ) {
+							sb.append( str );
+						}
+
+						Parser parser = new DorogaPoiParser( sb.toString() );
+
+						System.out.println( parser );
+
+						Thread.sleep( 2_000 );
+
+						// System.err.println( parser.itemLinks() );
+
+						// for( String s : parser.itemLinks() ) {
+						// if( !this.provService.isUrlExist( this.provider.getId(), s ) ) {
+						// ProviderUrl pu = new ProviderUrl();
+						// pu.setStatusId( 4 );
+						// pu.setUrl( s );
+						// pu.setTypeId( 3 );
+						// pu.setProviderId( this.provider.getId() );
+						//
+						// this.provService.createUrl( pu );
+						// }
+						// }
+
+						// System.err.println( parser.categoryLinks() );
+
+					}
+					catch( Exception e ) { /* ignore */ }
+
+					provUrl.setFetched( Calendar.getInstance() );
+					provUrl.setLog( null );
+					provUrl.setStatusId( 5 );
+					provUrl.setTries( 0 );
+
+					this.provService.updateUrl( provUrl );
+				}
+				else {
+					provUrl.setStatusId( 3 );
+					provUrl.setLog( String.format( "%s\n%s", code, msg ) );
+					provUrl.setTries( provUrl.getTries() + 1 );
+					provUrl.setFetched( Calendar.getInstance() );
+
+					this.provService.updateUrl( provUrl );
+				}
+
+			}
+			catch( IOException e ) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
-		uc.setConnectTimeout( 10_000 );
-		uc.setReadTimeout( 20 * 60_000 );
-
-		return uc;
 	}
 
-	public java.net.Proxy getProxy() {
-		Proxy proxy = null;
+	public Proxy getProxy2() {
+		CrawlerProxy crawlerProxy = null;
 		java.net.Proxy npr = null;
 		URL urlTest = null;
 
@@ -164,9 +243,9 @@ public class DorogaCrawler {
 		}
 		catch( MalformedURLException e ) { /* ignore */ }
 
-		while( ( proxy = this.proxyService.getRandomActiveProxy() ) != null ) {
+		while( ( crawlerProxy = this.proxyService.getRandomActiveProxy() ) != null ) {
 			npr = new java.net.Proxy( java.net.Proxy.Type.HTTP,
-					new InetSocketAddress( proxy.getHost().trim(), proxy.getPort() ) );
+					new InetSocketAddress( crawlerProxy.getHost().trim(), crawlerProxy.getPort() ) );
 
 			int code = 0;
 			String msg = null;
@@ -184,24 +263,24 @@ public class DorogaCrawler {
 			}
 
 			if( code == 200 ) {
-				proxy.setStatusId( 1 );
-				proxy.setLog( null );
-				proxy.setTries( 0 );
-				proxy.setFetched( Calendar.getInstance() );
+				crawlerProxy.setStatusId( 1 );
+				crawlerProxy.setLog( null );
+				crawlerProxy.setTries( 0 );
+				crawlerProxy.setFetched( Calendar.getInstance() );
 
-				this.proxyService.update( proxy );
+				this.proxyService.update( crawlerProxy );
 
 				break;
 			}
 			else {
 				npr = null;
 
-				proxy.setStatusId( 3 );
-				proxy.setLog( String.format( "%s\n%s", code, msg ) );
-				proxy.setTries( proxy.getTries() + 1 );
-				proxy.setFetched( Calendar.getInstance() );
+				crawlerProxy.setStatusId( 3 );
+				crawlerProxy.setLog( String.format( "%s\n%s", code, msg ) );
+				crawlerProxy.setTries( crawlerProxy.getTries() + 1 );
+				crawlerProxy.setFetched( Calendar.getInstance() );
 
-				this.proxyService.update( proxy );
+				this.proxyService.update( crawlerProxy );
 
 				continue;
 			}
@@ -210,11 +289,4 @@ public class DorogaCrawler {
 		return npr;
 	}
 
-	public String getReferer() {
-		return "http://google.com/";
-	}
-
-	public String getUserAgent() {
-		return "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36";
-	}
 }

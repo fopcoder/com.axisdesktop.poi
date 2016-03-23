@@ -2,18 +2,18 @@ package com.axisdesktop.crawler.service;
 
 import java.util.List;
 
-import com.axisdesktop.crawler.entity.Proxy;
-import com.axisdesktop.crawler.entity.ProxyStatus;
+import com.axisdesktop.crawler.entity.CrawlerProxy;
+import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 
 public interface ProxyService {
-	List<Proxy> findAll();
+	List<CrawlerProxy> findAll();
 
-	Proxy getRandomActiveProxy();
+	CrawlerProxy getRandomActiveProxy();
 
-	Proxy load( int id );
+	CrawlerProxy load( int id );
 
-	Proxy update( Proxy proxy );
+	CrawlerProxy update( CrawlerProxy crawlerProxy );
 
-	ProxyStatus getProxyStatusById( int id );
+	CrawlerProxyStatus getProxyStatusById( int id );
 
 }

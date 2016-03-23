@@ -1,7 +1,7 @@
 package com.axisdesktop.crawler.repository;
 
-import com.axisdesktop.crawler.entity.ProxyStatus;
+import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 
-public interface ProxyStatusRepository extends SimpleDataRepository<ProxyStatus> {
+public interface ProxyStatusRepository extends SimpleDataRepository<CrawlerProxyStatus> {
 
 }

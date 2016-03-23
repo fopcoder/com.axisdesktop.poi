@@ -22,8 +22,8 @@ import static com.axisdesktop.utils.Utils.*;
 @Entity
 @Table( name = "proxy", schema = "crawler" )
 @NamedQueries( {
-		@NamedQuery( name = "Proxy.findActiveOrderByRandom", query = "SELECT p FROM Proxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ORDER BY RANDOM()" ) } )
-public class Proxy {
+		@NamedQuery( name = "CrawlerProxy.findActiveOrderByRandom", query = "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ORDER BY RANDOM()" ) } )
+public class CrawlerProxy {
 	@Id
 	@GeneratedValue
 	private int id;
@@ -50,7 +50,7 @@ public class Proxy {
 
 	@ManyToOne( fetch = FetchType.LAZY )
 	@JoinColumn( name = "status_id", insertable = false, updatable = false )
-	private ProxyStatus proxyStatus;
+	private CrawlerProxyStatus crawlerProxyStatus;
 
 	@Column( name = "status_id" )
 	private int statusId;
@@ -105,12 +105,12 @@ public class Proxy {
 		this.modified = modified;
 	}
 
-	public ProxyStatus getProxyStatus() {
-		return proxyStatus;
+	public CrawlerProxyStatus getProxyStatus() {
+		return crawlerProxyStatus;
 	}
 
-	public void setProxyStatus( ProxyStatus proxyStatus ) {
-		this.proxyStatus = proxyStatus;
+	public void setProxyStatus( CrawlerProxyStatus crawlerProxyStatus ) {
+		this.crawlerProxyStatus = crawlerProxyStatus;
 	}
 
 	public String getUser() {
@@ -163,7 +163,7 @@ public class Proxy {
 
 	@Override
 	public String toString() {
-		return "Proxy [id=" + id + ", host=" + host + ", port=" + port + ", user=" + user + ", password=" + password
+		return "CrawlerProxy [id=" + id + ", host=" + host + ", port=" + port + ", user=" + user + ", password=" + password
 				+ ", log=" + log + ", created=" + calendarToString( created ) + ", modified="
 				+ calendarToString( modified ) + ", fetched=" + calendarToString( fetched ) + ", status_id=" + statusId
 				+ ", tries=" + tries + "]";

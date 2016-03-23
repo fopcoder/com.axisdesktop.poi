@@ -55,7 +55,7 @@ public class ProviderServiceImpl implements ProviderService {
 
 		List<ProviderUrl> l = provUrlRepo.findByProviderIdAndUrl( providerId, url, new PageRequest( 0, 1 ) );
 
-		if( l != null && l.size() > 0 ) {
+		if( !l.isEmpty() ) {
 			return l.get( 0 );
 		}
 
@@ -97,7 +97,12 @@ public class ProviderServiceImpl implements ProviderService {
 
 	@Override
 	public boolean isUrlExist( int providerId, String url ) {
-		return provUrlRepo.checkByProviderIdAndUrl( providerId, url );
+		return provUrlRepo.isExistByProviderIdAndUrl( providerId, url );
+	}
+
+	@Override
+	public List<ProviderUrl> findUrlForUpdate( int providerId ) {
+		return provUrlRepo.findUrlForUpdate( providerId );
 	}
 
 }

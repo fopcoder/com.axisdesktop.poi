@@ -170,7 +170,7 @@ public class DorogaPoiParser extends Parser {
 			Matcher m = p.matcher( t.attr( "href" ) );
 
 			if( m.find() ) {
-				Image img = new Image.Builder().uri( t.attr( "href" ) ).alt( t.attr( "title" ) )
+				Image img = new Image.Builder().url( t.attr( "href" ) ).alt( t.attr( "title" ) )
 						.extId( Integer.parseInt( m.group( 1 ) ) ).build();
 				list.add( img );
 			}
