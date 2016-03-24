@@ -22,7 +22,7 @@ public class CrawlerMain {
 		ProviderService providerService = ctx.getBean( ProviderServiceImpl.class );
 		ProxyService proxyService = ctx.getBean( ProxyServiceImpl.class );
 
-		DorogaCrawler crawler = new DorogaCrawler( providerService, proxyService );
+		DorogaCrawler crawler = new DorogaCrawler( proxyService, providerService );
 		crawler.run();
 
 		ctx.close();

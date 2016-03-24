@@ -22,6 +22,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 		<dependency>
@@ -33,7 +43,9 @@
 			<artifactId>spring-data-jpa</artifactId>
 			<version>${spring-jpa.version}</version>
 		</dependency>
-
+		
+		<!-- thymeleaf -->
+		
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
 			<artifactId>thymeleaf</artifactId>
@@ -57,13 +69,14 @@
 			<version>${validation-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
+		
+		<!-- database -->
+		
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.4.1208</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
@@ -73,14 +86,12 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-spatial</artifactId>
 			<version>${hibernate.version}</version>
-			
 			<exclusions>
 				<exclusion>
-                    <groupId>postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                </exclusion>
+					<groupId>postgresql</groupId>
+					<artifactId>postgresql</artifactId>
+				</exclusion>
 			</exclusions>
-			 
 		</dependency>
 
 		<dependency>
@@ -90,13 +101,14 @@
 			<scope>provided</scope>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 			<version>1.8.2</version>
 		</dependency>
+
+		<!-- tests -->
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -120,6 +132,19 @@
 			<artifactId>hamcrest-library</artifactId>
 			<version>1.3</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- logging -->
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.13</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.3</version>
 		</dependency>
 	</dependencies>
 
