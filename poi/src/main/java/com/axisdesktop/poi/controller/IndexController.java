@@ -13,7 +13,6 @@ public class IndexController {
 
 	@RequestMapping( "/" )
 	public String index() {
-
 		System.out.println( locService.findAll() );
 
 		return "/index";

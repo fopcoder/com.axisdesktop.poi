@@ -30,7 +30,7 @@ public class Utils {
 	}
 
 	public static HttpURLConnection getConnection( String link, Proxy proxy, Map<String, String> properties )
-			throws IOException {
+			throws IOException, IllegalArgumentException {
 		if( link == null ) throw new IllegalArgumentException( "url is null" );
 
 		if( properties == null ) {

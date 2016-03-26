@@ -4,10 +4,8 @@ import java.io.IOException;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.axisdesktop.crawler.service.ProviderService;
-import com.axisdesktop.crawler.service.ProxyService;
-import com.axisdesktop.crawler.service.impl.ProviderServiceImpl;
-import com.axisdesktop.crawler.service.impl.ProxyServiceImpl;
+import com.axisdesktop.crawler.base.Crawler;
+import com.axisdesktop.crawler.component.DorogaCrawler;
 import com.axisdesktop.poi.config.AppConfig;
 import com.axisdesktop.poi.config.PersistenceConfig;
 
@@ -19,10 +17,12 @@ public class CrawlerMain {
 		ctx.register( PersistenceConfig.class );
 		ctx.refresh();
 
-		ProviderService providerService = ctx.getBean( ProviderServiceImpl.class );
-		ProxyService proxyService = ctx.getBean( ProxyServiceImpl.class );
+		// ProviderService providerService = ctx.getBean( ProviderService.class );
+		// ProxyService proxyService = ctx.getBean( ProxyService.class );
 
-		DorogaCrawler crawler = new DorogaCrawler( proxyService, providerService );
+		// DorogaCrawler crawler = new DorogaCrawler( proxyService, providerService );
+		// DorogaCrawler crawler = new DorogaCrawler();
+		Crawler crawler = ctx.getBean( Crawler.class );
 		crawler.run();
 
 		ctx.close();

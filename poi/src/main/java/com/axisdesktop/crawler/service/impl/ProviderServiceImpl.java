@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.crawler.entity.Provider;
 import com.axisdesktop.crawler.entity.ProviderUrl;
@@ -14,6 +15,7 @@ import com.axisdesktop.crawler.repository.ProviderUrlRepository;
 import com.axisdesktop.crawler.service.ProviderService;
 
 @Service
+@Transactional
 public class ProviderServiceImpl implements ProviderService {
 	private ProviderRepository provRepo;
 	private ProviderUrlRepository provUrlRepo;

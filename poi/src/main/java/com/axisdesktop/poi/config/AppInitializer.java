@@ -25,6 +25,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
 	@Override
 	public void onStartup( ServletContext servletContext ) throws ServletException {
+		super.onStartup( servletContext );
 		TimeZone.setDefault( TimeZone.getTimeZone( "Europe/Kiev" ) );
 	}
 

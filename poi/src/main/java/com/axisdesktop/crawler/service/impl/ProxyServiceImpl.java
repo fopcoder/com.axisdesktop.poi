@@ -78,7 +78,7 @@ public class ProxyServiceImpl implements ProxyService {
 				this.update( crawlerProxy );
 				break;
 			}
-			catch( IOException e ) {
+			catch( IllegalStateException | IOException e ) {
 				proxy = null;
 
 				crawlerProxy.setStatusId( 3 );

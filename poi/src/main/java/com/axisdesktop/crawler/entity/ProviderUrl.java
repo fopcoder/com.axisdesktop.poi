@@ -3,6 +3,8 @@ package com.axisdesktop.crawler.entity;
 import static com.axisdesktop.utils.Utils.calendarToString;
 
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,11 +22,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 @Entity
 @Table( name = "provider_url", schema = "crawler" )
+@TypeDef( name = "hstore", typeClass = HstoreUserType.class )
 @NamedQueries( {
 		@NamedQuery( name = "ProviderUrl.findActiveFeedUrl", query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND ( statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ) AND typeId = 1" ),
-		@NamedQuery( name = "ProviderUrl.isExistByProviderIdAndUrl", query = "SELECT 1 > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ),
+		@NamedQuery( name = "ProviderUrl.isExistByProviderIdAndUrl", query = "SELECT COUNT(*) > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ),
 		@NamedQuery( name = "ProviderUrl.fidUrlForUpdate", query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND typeId IN(2,3) AND statusId IN(4,6)" ) } )
 public class ProviderUrl {
 	@Id
@@ -65,14 +71,19 @@ public class ProviderUrl {
 	@Temporal( TemporalType.TIMESTAMP )
 	private Calendar fetched;
 
+	@Type( type = "hstore" )
+	private Map<String, Object> params;
+
 	@PrePersist
 	private void prePersist() {
 		this.created = this.modified = Calendar.getInstance();
+		if( params == null ) params = new HashMap<>();
 	}
 
 	@PreUpdate
 	private void preUpdate() {
 		this.modified = Calendar.getInstance();
+		if( params == null ) params = new HashMap<>();
 	}
 
 	public long getId() {
@@ -184,7 +195,7 @@ public class ProviderUrl {
 		return "ProviderUrl [id=" + id + ", providerId=" + providerId + ", statusId=" + statusId + ", url=" + url
 				+ ", log=" + log + ", tries=" + tries + ", created=" + calendarToString( created ) + ", modified="
 				+ calendarToString( modified ) + ", fetched=" + calendarToString( fetched ) + ", typeId=" + typeId
-				+ ", parentId=" + parentId + "]";
+				+ ", parentId=" + parentId + ", params=" + params + "]";
 	}
 
 }
