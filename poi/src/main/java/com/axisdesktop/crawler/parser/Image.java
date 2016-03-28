@@ -1,4 +1,4 @@
-package com.axisdesktop.crawler.base;
+package com.axisdesktop.crawler.parser;
 
 public class Image {
 	private String url;

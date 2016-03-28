@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
@@ -21,10 +22,14 @@ import com.axisdesktop.utils.Utils;
 
 @Service
 public class ProxyServiceImpl implements ProxyService {
+	@Autowired
 	private ProxyRepository proxyRepo;
+	@Autowired
 	private ProxyStatusRepository proxyStausRepo;
 
-	@Autowired
+	public ProxyServiceImpl() {
+	}
+
 	public ProxyServiceImpl( ProxyRepository proxyRepo, ProxyStatusRepository proxyStausRepo ) {
 		this.proxyRepo = proxyRepo;
 		this.proxyStausRepo = proxyStausRepo;
@@ -62,14 +67,15 @@ public class ProxyServiceImpl implements ProxyService {
 			CrawlerProxy crawlerProxy = proxyList.get( 0 );
 			proxy = new Proxy( Type.HTTP, new InetSocketAddress( crawlerProxy.getHost(), crawlerProxy.getPort() ) );
 
+			System.out.println( "proxy: start connect " );
 			try {
 				HttpURLConnection uc = Utils.getConnection( "http://google.com/", proxy );
-
+				System.out.println( "proxy: google recived " );
 				if( uc.getResponseCode() != 200 ) {
 					throw new IllegalStateException(
 							String.format( "%d\n%s", uc.getResponseCode(), uc.getResponseMessage() ) );
 				}
-
+				System.out.println( "proxy: external recived " );
 				crawlerProxy.setStatusId( 1 );
 				crawlerProxy.setLog( null );
 				crawlerProxy.setTries( 0 );
@@ -88,6 +94,7 @@ public class ProxyServiceImpl implements ProxyService {
 
 				this.update( crawlerProxy );
 			}
+			System.out.println( "proxy: finish" );
 		}
 
 		return proxy;

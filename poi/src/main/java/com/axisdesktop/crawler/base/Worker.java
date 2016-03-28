@@ -4,4 +4,6 @@ public interface Worker extends Runnable {
 	Crawler getCrawler();
 
 	String getUrl();
+
+	String getUrlContent();
 }

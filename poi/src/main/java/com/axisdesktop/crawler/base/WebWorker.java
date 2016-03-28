@@ -37,7 +37,7 @@ public class WebWorker implements Worker {
 		// sb.append( str );
 		// }
 		//
-		// Parser parser = new DorogaPoiParser( sb.toString() );
+		// Parser parser = new DorogaParser( sb.toString() );
 		//
 		// System.out.println( parser );
 		//
@@ -98,6 +98,12 @@ public class WebWorker implements Worker {
 	@Override
 	public String getUrl() {
 		return url;
+	}
+
+	@Override
+	public String getUrlContent() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.axisdesktop.crawler.impl;
+package com.axisdesktop.crawler.parser.impl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,16 +20,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.axisdesktop.crawler.base.Comment;
-import com.axisdesktop.crawler.base.Image;
-import com.axisdesktop.crawler.base.Location;
-import com.axisdesktop.crawler.base.Parser;
-import com.axisdesktop.crawler.base.User;
+import com.axisdesktop.crawler.parser.Comment;
+import com.axisdesktop.crawler.parser.Image;
+import com.axisdesktop.crawler.parser.Location;
+import com.axisdesktop.crawler.parser.Parser;
+import com.axisdesktop.crawler.parser.User;
 
-public class DorogaPoiParser extends Parser {
+public class DorogaParser extends Parser {
 	private Document doc;
 
-	public DorogaPoiParser( String txt ) {
+	public DorogaParser( String txt ) {
 		doc = Jsoup.parse( txt );
 	}
 

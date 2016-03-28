@@ -6,22 +6,29 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.crawler.entity.Provider;
+import com.axisdesktop.crawler.entity.ProviderData;
 import com.axisdesktop.crawler.entity.ProviderUrl;
+import com.axisdesktop.crawler.repository.ProviderDataRepository;
 import com.axisdesktop.crawler.repository.ProviderRepository;
 import com.axisdesktop.crawler.repository.ProviderUrlRepository;
 import com.axisdesktop.crawler.service.ProviderService;
 
 @Service
-@Transactional
 public class ProviderServiceImpl implements ProviderService {
-	private ProviderRepository provRepo;
-	private ProviderUrlRepository provUrlRepo;
-
 	@Autowired
-	public ProviderServiceImpl( ProviderRepository provRepo, ProviderUrlRepository provFeedUriRepo ) {
+	private ProviderRepository provRepo;
+	@Autowired
+	private ProviderUrlRepository provUrlRepo;
+	@Autowired
+	private ProviderDataRepository provDataRepo;
+
+	public ProviderServiceImpl() {
+	}
+
+	public ProviderServiceImpl( ProviderRepository provRepo, ProviderUrlRepository provFeedUriRepo,
+			ProviderDataRepository provDataRepo ) {
 		this.provRepo = provRepo;
 		this.provUrlRepo = provFeedUriRepo;
 	}
@@ -105,6 +112,11 @@ public class ProviderServiceImpl implements ProviderService {
 	@Override
 	public List<ProviderUrl> findUrlForUpdate( int providerId ) {
 		return provUrlRepo.findUrlForUpdate( providerId );
+	}
+
+	@Override
+	public ProviderData saveProviderData( ProviderData data ) {
+		return provDataRepo.save( data );
 	}
 
 }

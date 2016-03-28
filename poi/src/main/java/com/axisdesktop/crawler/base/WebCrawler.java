@@ -1,10 +1,5 @@
 package com.axisdesktop.crawler.base;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.axisdesktop.crawler.service.ProviderService;
@@ -33,26 +28,6 @@ public abstract class WebCrawler implements Crawler {
 	@Override
 	public String getReferer() {
 		return "http://google.com/";
-	}
-
-	@Override
-	public String getTextContent( HttpURLConnection uc ) {
-		String text = null;
-
-		try( BufferedReader br = new BufferedReader( new InputStreamReader( uc.getInputStream() ) ) ) {
-			StringBuilder sb = new StringBuilder();
-
-			String str;
-			while( ( str = br.readLine() ) != null ) {
-				sb.append( str );
-			}
-
-			text = sb.toString();
-
-		}
-		catch( IOException e ) { /* ignore */ }
-
-		return text;
 	}
 
 	@Override

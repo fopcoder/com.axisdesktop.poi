@@ -3,6 +3,7 @@ package com.axisdesktop.crawler.service;
 import java.util.List;
 
 import com.axisdesktop.crawler.entity.Provider;
+import com.axisdesktop.crawler.entity.ProviderData;
 import com.axisdesktop.crawler.entity.ProviderUrl;
 
 public interface ProviderService {
@@ -27,5 +28,7 @@ public interface ProviderService {
 	List<ProviderUrl> findUrlForUpdate( int providerId );
 
 	boolean isUrlExist( int providerId, String url );
+
+	ProviderData saveProviderData( ProviderData data );
 
 }

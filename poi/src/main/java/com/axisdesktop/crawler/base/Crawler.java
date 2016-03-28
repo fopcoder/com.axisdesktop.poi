@@ -1,13 +1,11 @@
 package com.axisdesktop.crawler.base;
 
-import java.net.HttpURLConnection;
+import java.util.Map;
 
 import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
 
 public interface Crawler extends Runnable {
-	String getTextContent( HttpURLConnection con );
-
 	ProxyService getProxyService();
 
 	ProviderService getProviderService();
@@ -15,4 +13,8 @@ public interface Crawler extends Runnable {
 	String getReferer();
 
 	String getUserAgent();
+
+	Map<String, String> getConnectionProperties();
+
+	int getProviderId();
 }
