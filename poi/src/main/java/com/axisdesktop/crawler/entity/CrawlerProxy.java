@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import static com.axisdesktop.utils.Utils.*;
+import static com.axisdesktop.utils.DateUtils.*;
 
 @Entity
 @Table( name = "proxy", schema = "crawler" )

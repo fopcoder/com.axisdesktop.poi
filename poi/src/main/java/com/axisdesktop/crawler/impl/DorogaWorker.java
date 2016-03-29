@@ -1,5 +1,10 @@
 package com.axisdesktop.crawler.impl;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.axisdesktop.crawler.base.Crawler;
 import com.axisdesktop.crawler.base.CrawlerUtils;
 import com.axisdesktop.crawler.base.Worker;
@@ -9,6 +14,8 @@ import com.axisdesktop.crawler.parser.Parser;
 import com.axisdesktop.crawler.parser.impl.DorogaParser;
 
 public class DorogaWorker implements Worker {
+	private static final Logger logger = LoggerFactory.getLogger( DorogaWorker.class );
+
 	private Crawler crawler;
 	private ProviderUrl providerUrl;
 
@@ -26,18 +33,34 @@ public class DorogaWorker implements Worker {
 		// save subcontent
 		// catch exceptions
 
-		String text = CrawlerUtils.getCrawlerUrlTextContent( crawler, providerUrl );
+		try {
+			String text = CrawlerUtils.getCrawlerUrlTextContent( crawler, providerUrl );
 
-		if( text != null ) {
-			Parser parser = new DorogaParser( text );
+			if( text != null ) {
+				Parser parser = new DorogaParser( text );
 
-			ProviderData data = new ProviderData.Builder().urlId( providerUrl.getId() ).header( parser.header() )
-					.shortDescription( parser.shortDescription() ).fullDescription( parser.fullDescription() )
-					.status( parser.status() ).statusText( parser.statusText() ).contacts( parser.contacts() )
-					.contactsLink( parser.contactsLink() ).rating( parser.rating() )
-					.longitude( parser.location().getLongitude() ).latitude( parser.location().getLatitude() ).build();
-			crawler.getProviderService().saveProviderData( data );
+				ProviderData data = new ProviderData.Builder()//
+						.urlId( providerUrl.getId() )//
+						.header( parser.header() )//
+						.shortDescription( parser.shortDescription() )//
+						.fullDescription( parser.fullDescription() )//
+						.status( parser.status() )//
+						.statusText( parser.statusText() )//
+						.contacts( parser.contacts() )//
+						.contactsLink( parser.contactsLink() )//
+						.rating( parser.rating() )//
+						.longitude( parser.location().getLongitude() )//
+						.latitude( parser.location().getLatitude() )//
+						.build();
+
+				crawler.getProviderService().saveProviderData( data );
+			}
 		}
+		catch( IOException e ) {
+			logger.debug( e.getMessage() );
+			logger.trace( e.getStackTrace().toString() );
+		}
+
 	}
 
 	@Override

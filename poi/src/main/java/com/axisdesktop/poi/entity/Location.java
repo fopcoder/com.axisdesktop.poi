@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.axisdesktop.utils.DateUtils;
 import com.vividsolutions.jts.geom.Point;
 
 @Entity
@@ -57,6 +58,6 @@ public class Location {
 
 	@Override
 	public String toString() {
-		return "Location [id=" + id + ", point=" + point + ", created=" + created + "]";
+		return "Location [id=" + id + ", point=" + point + ", created=" + DateUtils.calendarToString( created ) + "]";
 	}
 }

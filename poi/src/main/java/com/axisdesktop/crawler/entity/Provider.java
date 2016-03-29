@@ -1,6 +1,6 @@
 package com.axisdesktop.crawler.entity;
 
-import static com.axisdesktop.utils.Utils.calendarToString;
+import static com.axisdesktop.utils.DateUtils.calendarToString;
 
 import java.util.Calendar;
 import java.util.Set;

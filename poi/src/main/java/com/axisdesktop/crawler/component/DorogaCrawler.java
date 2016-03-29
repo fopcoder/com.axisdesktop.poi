@@ -1,9 +1,14 @@
 package com.axisdesktop.crawler.component;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.axisdesktop.crawler.base.CrawlerUtils;
@@ -18,7 +23,7 @@ import com.axisdesktop.crawler.service.ProxyService;
 
 @Component
 public class DorogaCrawler extends WebCrawler {
-	// private static final Logger logger = LoggerFactory.getLogger( DorogaCrawler.class );
+	private static final Logger logger = LoggerFactory.getLogger( DorogaCrawler.class );
 
 	private final int providerId = 1;
 	private Map<String, String> connProps = new HashMap<>();
@@ -36,33 +41,30 @@ public class DorogaCrawler extends WebCrawler {
 
 	@Override
 	public void run() {
-		// + get feed uris
-		// + get connection
-		// + -- update proxy
-		// + fetch feed uri
-		// + -- update feed
-		// + parse feed uri
-		// + create workers
-		// parse pages
-		// save page data
+		try {
+			this.getAndUpdateFeedUrls();
 
-		getAndUpdateFeedUrls();
+			// ExecutorService exec = Executors.newFixedThreadPool( 5 );
 
-		// ExecutorService exec = Executors.newFixedThreadPool( 10 );
-		// getExecutor().execute( new WorkerImpl( getStartUri(), this ) );
-		// getExecutor().awaitTermination( 2, TimeUnit.MINUTES );
-		// getExecutor().shutdown();
+			List<ProviderUrl> updateList = this.getProviderService().findUrlForUpdate( providerId );
+			for( ProviderUrl updateUrl : updateList ) {
+				Worker worker = new DorogaWorker( this, updateUrl );
+				// exec.execute( worker );
+				worker.run();
+				Thread.sleep( 1_000 );
+				// break;
+			}
 
-		List<ProviderUrl> updateList = this.getProviderService().findUrlForUpdate( providerId );
-		for( ProviderUrl updateUrl : updateList ) {
-			Worker worker = new DorogaWorker( this, updateUrl );
-			worker.run();
-			break;
+			// exec.shutdown();
 		}
-
+		catch( Exception e ) {
+			e.printStackTrace();
+			// logger.error( e.getMessage() );
+			// logger.error( e.getStackTrace().toString() );
+		}
 	}
 
-	private void getAndUpdateFeedUrls() {
+	private void getAndUpdateFeedUrls() throws IOException {
 		List<ProviderUrl> provFeedUrls = this.getProviderService().findActiveFeedUrl( providerId );
 
 		for( ProviderUrl feedUrl : provFeedUrls ) {

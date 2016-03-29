@@ -9,12 +9,18 @@ import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 public interface ProxyService {
 	List<CrawlerProxy> findAll();
 
+	CrawlerProxy create( CrawlerProxy proxy );
+
 	CrawlerProxy load( int id );
 
 	CrawlerProxy update( CrawlerProxy crawlerProxy );
 
+	CrawlerProxy delete( int id );
+
 	CrawlerProxyStatus getProxyStatusById( int id );
 
 	Proxy getRandomActiveProxy();
+
+	Proxy getRandomActiveProxy( int proxyTimeout, int proxyMaxTries, String proxyTestDomain );
 
 }

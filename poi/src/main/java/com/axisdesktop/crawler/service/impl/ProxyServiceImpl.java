@@ -1,6 +1,5 @@
 package com.axisdesktop.crawler.service.impl;
 
-import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -8,28 +7,32 @@ import java.net.Proxy.Type;
 import java.util.Calendar;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
-import com.axisdesktop.utils.Utils;
+import com.axisdesktop.utils.HttpUtils;
 
 @Service
 public class ProxyServiceImpl implements ProxyService {
-	@Autowired
+	private static final Logger logger = LoggerFactory.getLogger( ProxyServiceImpl.class );
+
+	// @Autowired
 	private ProxyRepository proxyRepo;
-	@Autowired
+	// @Autowired
 	private ProxyStatusRepository proxyStausRepo;
 
 	public ProxyServiceImpl() {
 	}
 
+	@Autowired
 	public ProxyServiceImpl( ProxyRepository proxyRepo, ProxyStatusRepository proxyStausRepo ) {
 		this.proxyRepo = proxyRepo;
 		this.proxyStausRepo = proxyStausRepo;
@@ -58,24 +61,35 @@ public class ProxyServiceImpl implements ProxyService {
 
 	@Override
 	public Proxy getRandomActiveProxy() {
-		Proxy proxy = null;
-		Calendar cal = Calendar.getInstance();
-		cal.add( Calendar.MINUTE, -15 );
+		return getRandomActiveProxy( -15, 10, "http://google.com/" );
+	}
 
+	@Override
+	public Proxy getRandomActiveProxy( int proxyTimeout, int proxyMaxTries, String proxyTestDomain ) {
+		Proxy proxy = null;
+
+		Calendar cal = Calendar.getInstance();
+		cal.add( Calendar.MINUTE, proxyTimeout );
 		List<CrawlerProxy> proxyList;
-		while( !( proxyList = proxyRepo.getRandomActiveProxy( cal, 10, new PageRequest( 0, 1 ) ) ).isEmpty() ) {
+
+		while( !( proxyList = proxyRepo.getRandomActiveProxy( cal, proxyMaxTries, new PageRequest( 0, 1 ) ) )
+				.isEmpty() ) {
 			CrawlerProxy crawlerProxy = proxyList.get( 0 );
 			proxy = new Proxy( Type.HTTP, new InetSocketAddress( crawlerProxy.getHost(), crawlerProxy.getPort() ) );
 
-			System.out.println( "proxy: start connect " );
 			try {
-				HttpURLConnection uc = Utils.getConnection( "http://google.com/", proxy );
-				System.out.println( "proxy: google recived " );
+				HttpURLConnection uc = HttpUtils.getConnection( proxyTestDomain, proxy );
+				uc.setRequestMethod( "HEAD" );
+
+				logger.debug( "proxy: test url {} start {}", proxyTestDomain, crawlerProxy.getHost() );
+
 				if( uc.getResponseCode() != 200 ) {
 					throw new IllegalStateException(
 							String.format( "%d\n%s", uc.getResponseCode(), uc.getResponseMessage() ) );
 				}
-				System.out.println( "proxy: external recived " );
+
+				logger.debug( "proxy: test url recived " );
+
 				crawlerProxy.setStatusId( 1 );
 				crawlerProxy.setLog( null );
 				crawlerProxy.setTries( 0 );
@@ -84,7 +98,9 @@ public class ProxyServiceImpl implements ProxyService {
 				this.update( crawlerProxy );
 				break;
 			}
-			catch( IllegalStateException | IOException e ) {
+			catch( Exception e ) {
+				logger.debug( "proxy: test url exception {}", e.getMessage() );
+
 				proxy = null;
 
 				crawlerProxy.setStatusId( 3 );
@@ -94,7 +110,6 @@ public class ProxyServiceImpl implements ProxyService {
 
 				this.update( crawlerProxy );
 			}
-			System.out.println( "proxy: finish" );
 		}
 
 		return proxy;
@@ -103,6 +118,18 @@ public class ProxyServiceImpl implements ProxyService {
 	@Override
 	public CrawlerProxyStatus getProxyStatusById( int id ) {
 		return proxyStausRepo.findOne( id );
+	}
+
+	@Override
+	public CrawlerProxy create( CrawlerProxy proxy ) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CrawlerProxy delete( int id ) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
