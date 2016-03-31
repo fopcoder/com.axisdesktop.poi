@@ -51,6 +51,11 @@ public abstract class Parser {
 		return null;
 	}
 
+	public String contactsAddress() {
+		logger.info( "contactsAddress() unimplemented" );
+		return null;
+	}
+
 	public String contactsLink() {
 		logger.info( "contactsLink() unimplemented" );
 		return null;
@@ -63,6 +68,11 @@ public abstract class Parser {
 
 	public String contactsPhone() {
 		logger.info( "contactsPhone() unimplemented" );
+		return null;
+	}
+
+	public String contactsWorktime() {
+		logger.info( "contactsWorktime() unimplemented" );
 		return null;
 	}
 

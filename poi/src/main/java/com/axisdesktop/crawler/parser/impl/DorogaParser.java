@@ -19,6 +19,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.axisdesktop.crawler.parser.Comment;
 import com.axisdesktop.crawler.parser.Image;
@@ -27,6 +29,8 @@ import com.axisdesktop.crawler.parser.Parser;
 import com.axisdesktop.crawler.parser.User;
 
 public class DorogaParser extends Parser {
+	private static final Logger logger = LoggerFactory.getLogger( DorogaParser.class );
+
 	private Document doc;
 
 	public DorogaParser( String txt ) {
@@ -36,35 +40,49 @@ public class DorogaParser extends Parser {
 	@Override
 	public Location location() {
 		// 48°25'50.3''N, 22°41'15.7''E
-		String[] latlng = doc.select( "table div span:matches(\\d{1,2}°)" ).first().text().replaceAll( "''", "\"" )
-				.replaceAll( "\\s+", "" ).split( "," );
+		Location loc = new Location();
 
-		if( latlng.length != 2 ) {
-			throw new IllegalArgumentException( "must be 2 coords: " + Arrays.toString( latlng ) );
-		}
+		try {
+			String[] latlng = doc.select( "table div span:matches(\\d{1,2}°)" ).first().text().replaceAll( "''", "\"" )
+					.replaceAll( "\\s+", "" ).split( "," );
 
-		for( String c : latlng ) {
-			if( !c.matches( "\\d+\\W\\d+\\W[\\w\\.]+\\W\\w" ) ) {
-				throw new IllegalArgumentException( "bad coords: " + c );
+			if( latlng.length != 2 ) {
+				throw new IllegalArgumentException( "must be 2 coords: " + Arrays.toString( latlng ) );
 			}
+
+			for( String c : latlng ) {
+				if( !c.matches( "\\d+\\W\\d+\\W[\\w\\.]+\\W\\w" ) ) {
+					throw new IllegalArgumentException( "bad coords: " + c );
+				}
+			}
+
+			String[] lat = latlng[0].split( "[^\\d\\.\\w]" );
+			String[] lng = latlng[1].split( "[^\\d\\.\\w]" );
+
+			double dlat = ( Double.parseDouble( lat[0] ) + Double.parseDouble( lat[1] ) / 60
+					+ Double.parseDouble( lat[2] ) / 3600 ) * ( lat[3].matches( "(?i)n" ) ? 1 : -1 );
+			double dlng = ( Double.parseDouble( lng[0] ) + Double.parseDouble( lng[1] ) / 60
+					+ Double.parseDouble( lng[2] ) / 3600 ) * ( lng[3].matches( "(?i)e" ) ? 1 : -1 );
+
+			loc = new Location( dlat, dlng );
 		}
-
-		String[] lat = latlng[0].split( "[^\\d\\.\\w]" );
-		String[] lng = latlng[1].split( "[^\\d\\.\\w]" );
-
-		double dlat = ( Double.parseDouble( lat[0] ) + Double.parseDouble( lat[1] ) / 60
-				+ Double.parseDouble( lat[2] ) / 3600 ) * ( lat[3].matches( "(?i)n" ) ? 1 : -1 );
-		double dlng = ( Double.parseDouble( lng[0] ) + Double.parseDouble( lng[1] ) / 60
-				+ Double.parseDouble( lng[2] ) / 3600 ) * ( lng[3].matches( "(?i)e" ) ? 1 : -1 );
-
-		Location loc = new Location( dlat, dlng );
+		catch( Exception e ) {
+			logger.error( "location parse exception", e );
+		}
 
 		return loc;
 	}
 
 	@Override
 	public String header() {
-		String h = doc.select( "td.TitleText" ).first().text();
+		String h = null;
+
+		Element el = doc.select( "td.TitleText" ).first();
+
+		if( el != null ) {
+			h = el.text();
+		}
+
 		return h;
 	}
 
@@ -90,14 +108,55 @@ public class DorogaParser extends Parser {
 	}
 
 	@Override
+	public String contactsAddress() {
+		String str = null;
+
+		Element el = doc.select( "td.main-column table div:contains(Адрес)" ).first();
+
+		if( el != null ) {
+			str = el.text().replaceFirst( "Адрес:", "" ).replace( "\u00a0", "" ).trim();
+		}
+
+		return str;
+	}
+
+	@Override
+	public String contactsPhone() {
+		String str = null;
+
+		Element el = doc.select( "td.main-column table div:matches(\\d+-\\d+-\\d+)" ).first();
+
+		if( el != null ) {
+			str = el.text().trim();
+		}
+
+		return str;
+	}
+
+	@Override
+	public String contactsWorktime() {
+		String str = null;
+
+		Element el = doc.select( "td.main-column table div:contains(Работает)" ).first();
+
+		if( el != null ) {
+			str = el.text().replaceAll( "Работает:", "" ).replace( "\u00a0", "" ).trim();
+		}
+
+		return str;
+	}
+
+	@Override
 	public String contactsLink() {
+		String str = null;
+
 		Element e = doc.select( "td.main-column table noindex a[class=NormalLink][target=_blank]" ).first();
 
 		if( e != null ) {
-			return e.attr( "href" );
+			str = e.attr( "href" );
 		}
 
-		return "";
+		return str;
 	}
 
 	@Override
@@ -123,7 +182,7 @@ public class DorogaParser extends Parser {
 			return e.attr( "title" );
 		}
 
-		return "";
+		return null;
 	}
 
 	@Override
@@ -145,7 +204,7 @@ public class DorogaParser extends Parser {
 			return e.text();
 		}
 
-		return "";
+		return null;
 	}
 
 	@Override
@@ -156,7 +215,7 @@ public class DorogaParser extends Parser {
 			return e.text();
 		}
 
-		return "";
+		return null;
 	}
 
 	@Override

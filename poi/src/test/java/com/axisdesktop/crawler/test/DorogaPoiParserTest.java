@@ -53,6 +53,11 @@ public class DorogaPoiParserTest {
 	}
 
 	@Test
+	public void contactsAddress() {
+		System.out.println( "address: " + parser.contactsAddress() );
+	}
+
+	@Test
 	public void contacts_link() {
 		System.out.println( "contact_link: " + parser.contactsLink() );
 	}

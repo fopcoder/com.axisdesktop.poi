@@ -46,11 +46,15 @@ public class DorogaWorker implements Worker {
 						.fullDescription( parser.fullDescription() )//
 						.status( parser.status() )//
 						.statusText( parser.statusText() )//
-						.contacts( parser.contacts() )//
+						// .contacts( parser.contacts() )//
+						.contactsAddress( parser.contactsAddress() )//
+						.contactsPhone( parser.contactsPhone() )//
 						.contactsLink( parser.contactsLink() )//
+						.contactsWorktime( parser.contactsWorktime() )//
 						.rating( parser.rating() )//
 						.longitude( parser.location().getLongitude() )//
 						.latitude( parser.location().getLatitude() )//
+						.languageId( "ru" )//
 						.build();
 
 				crawler.getProviderService().saveProviderData( data );

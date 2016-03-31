@@ -55,6 +55,9 @@ public class ProviderData {
 
 	private String contacts;
 
+	@Column( name = "contacts_address" )
+	private String contactsAddress;
+
 	@Column( name = "contacts_link" )
 	private String contactsLink;
 
@@ -64,11 +67,17 @@ public class ProviderData {
 	@Column( name = "contacts_phone" )
 	private String contactsPhone;
 
+	@Column( name = "contacts_worktime" )
+	private String contactsWorktime;
+
 	private BigDecimal rating;
 	private BigDecimal price;
 
 	@Column( name = "price_old" )
 	private BigDecimal priceOld;
+
+	@Column( name = "language_id" )
+	private String languageId;
 
 	@PrePersist
 	private void prePersist() {
@@ -143,6 +152,11 @@ public class ProviderData {
 			return this;
 		}
 
+		public Builder contactsAddress( String txt ) {
+			data.setContactsAddress( txt );
+			return this;
+		}
+
 		public Builder contactsLink( String txt ) {
 			data.setContactsLink( txt );
 			return this;
@@ -155,6 +169,11 @@ public class ProviderData {
 
 		public Builder contactsPhone( String txt ) {
 			data.setContactsPhone( txt );
+			return this;
+		}
+
+		public Builder contactsWorktime( String txt ) {
+			data.setContactsWorktime( txt );
 			return this;
 		}
 
@@ -175,6 +194,11 @@ public class ProviderData {
 
 		public Builder urlId( long val ) {
 			data.setUrlId( val );
+			return this;
+		}
+
+		public Builder languageId( String txt ) {
+			data.setLanguageId( txt );
 			return this;
 		}
 
@@ -351,15 +375,40 @@ public class ProviderData {
 		this.priceOld = priceOld;
 	}
 
+	public String getContactsAddress() {
+		return contactsAddress;
+	}
+
+	public void setContactsAddress( String contactsAddress ) {
+		this.contactsAddress = contactsAddress;
+	}
+
+	public String getContactsWorktime() {
+		return contactsWorktime;
+	}
+
+	public void setContactsWorktime( String contactsWorktime ) {
+		this.contactsWorktime = contactsWorktime;
+	}
+
+	public String getLanguageId() {
+		return languageId;
+	}
+
+	public void setLanguageId( String languageId ) {
+		this.languageId = languageId;
+	}
+
 	@Override
 	public String toString() {
 		return "ProviderData [urlId=" + urlId + ", categoryId=" + categoryId + ", created=" + created + ", modified="
-				+ modified + ", metaTitle=" + metaTitle + ", metaKeywords=" + metaKeywords + ", metaDescriprion="
+				+ modified + ", metaTitle=" + metaTitle + ", metaKeywords=" + metaKeywords + ", metaDescription="
 				+ metaDescription + ", header=" + header + ", shortDescription=" + shortDescription
 				+ ", fullDescription=" + fullDescription + ", latitude=" + latitude + ", longitude=" + longitude
-				+ ", status=" + status + ", statusText=" + statusText + ", contacts=" + contacts + ", contactsLink="
-				+ contactsLink + ", contactsEmail=" + contactsEmail + ", contactsPhone=" + contactsPhone + ", rating="
-				+ rating + ", price=" + price + ", priceOld=" + priceOld + "]";
+				+ ", status=" + status + ", statusText=" + statusText + ", contacts=" + contacts + ", contactsAddress="
+				+ contactsAddress + ", contactsLink=" + contactsLink + ", contactsEmail=" + contactsEmail
+				+ ", contactsPhone=" + contactsPhone + ", contactsWorktime=" + contactsWorktime + ", rating=" + rating
+				+ ", price=" + price + ", priceOld=" + priceOld + ", languageId=" + languageId + "]";
 	}
 
 }

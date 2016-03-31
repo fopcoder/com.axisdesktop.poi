@@ -33,8 +33,8 @@ public class PersistenceConfig {
 		try {
 			// ds = (DataSource)new JndiTemplate().lookup( environment.getRequiredProperty( "db.jndi" ) );
 
-			ds = new SimpleDriverDataSource( new org.postgresql.Driver(), "jdbc:postgresql://127.0.0.1/poi", "poi",
-					"poi" );
+			ds = new SimpleDriverDataSource( new org.postgresql.Driver(), "jdbc:postgresql://127.0.0.1/poi", "crawler",
+					"crawler" );
 
 		}
 		catch( Exception e /* IllegalStateException | NamingException e */ ) {
