@@ -20,9 +20,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories( { "com.axisdesktop.poi.repository", "com.axisdesktop.crawler.repository" } )
-@ComponentScan( { "com.axisdesktop.poi.service", "com.axisdesktop.crawler.service" } )
-public class PersistenceConfig {
+@EnableJpaRepositories( { "com.axisdesktop.poi.repository", "com.axisdesktop.crawler.repository",
+		"com.axisdesktop.user" } )
+@ComponentScan( { "com.axisdesktop.poi.service", "com.axisdesktop.crawler.service", "com.axisdesktop.user" } )
+public class PersistenceConf {
 	@Autowired
 	private Environment environment;
 
@@ -55,7 +56,8 @@ public class PersistenceConfig {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter( vendorAdapter );
-		factory.setPackagesToScan( "com.axisdesktop.poi.entity", "com.axisdesktop.crawler.entity" );
+		factory.setPackagesToScan( "com.axisdesktop.poi.entity", "com.axisdesktop.crawler.entity",
+				"com.axisdesktop.user" );
 		factory.setDataSource( dataSource() );
 		factory.setPersistenceUnitName( "poi-jndi" );
 

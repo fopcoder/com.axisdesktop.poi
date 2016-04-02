@@ -39,7 +39,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", imageUri=" + imageUri + ", externalId=" + externalId + "]";
+		return "AppUserEntity [name=" + name + ", imageUri=" + imageUri + ", externalId=" + externalId + "]";
 	}
 
 }
