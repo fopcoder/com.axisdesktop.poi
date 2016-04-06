@@ -8,25 +8,25 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
 
+import com.axisdesktop.poi.service.UserService;
 import com.axisdesktop.user.AppSocialUserService;
-import com.axisdesktop.user.AppUserRepository;
-import com.axisdesktop.user.AppUserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConf extends WebSecurityConfigurerAdapter {
 	@Autowired
-	private AppUserRepository appUserRepository;
+	private UserService userService;
 
 	@Autowired
 	public void configureGlobal( AuthenticationManagerBuilder auth ) throws Exception {
-		auth.userDetailsService( userDetailsService() ).passwordEncoder( passwordEncoder() );
+		auth //
+				.userDetailsService( userService ) //
+				.passwordEncoder( passwordEncoder() );
 		// auth.inMemoryAuthentication().withUser( "user" ).password( "password" ).roles( "USER" ) //
 		// .and().withUser( "admin" ).password( "password" ).roles( "USER", "ADMIN" );
 	}
@@ -35,23 +35,25 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 	public void configure( HttpSecurity http ) throws Exception {
 		// @formatter:off
 		http
-        .formLogin()
+        .authorizeRequests()
+        	
+            //.antMatchers("/favicon.ico", "/resources/**", "/static/**").permitAll()
+            .antMatchers("/porom/**").authenticated()
+            .anyRequest().permitAll()
+            //.antMatchers("/getdata/**").permitAll()
+            //.antMatchers("/porom/**").hasRole( "USER" )
+            .and()
+		.formLogin()
             .loginPage("/login")
-            .loginProcessingUrl("/login/authenticate")
+            //.loginProcessingUrl("/login/auth")
             .failureUrl("/login?param.error=bad_credentials")
-            .permitAll()
 	    .and()
 	        .logout()
 	            .logoutUrl("/logout")
 	            .deleteCookies("JSESSIONID")
-	    .and()
-	        .authorizeRequests()
-	            .antMatchers("/favicon.ico", "/resources/**", "/static/**").permitAll()
-	            .antMatchers("/porom/**","/home/**").authenticated()
-	            .antMatchers("/getdata/**").permitAll()
-	            //.antMatchers("/porom/**").hasRole( "USER" )
-	    .and()
-	        .rememberMe()
+	    
+	    //.and()
+	    //    .rememberMe()
 	    .and()
 	        .apply(new SpringSocialConfigurer()
 	            .postLoginUrl("/")
@@ -98,12 +100,12 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public SocialUserDetailsService socialUserDetailsService() {
-		return new AppSocialUserService( userDetailsService() );
+		return new AppSocialUserService( userService );
 	}
 
-	@Override
-	public UserDetailsService userDetailsService() {
-		return new AppUserService( appUserRepository );
-	}
+	// @Override
+	// public UserDetailsService userDetailsService() {
+	// return new AppUserService( appUserRepository );
+	// }
 
 }

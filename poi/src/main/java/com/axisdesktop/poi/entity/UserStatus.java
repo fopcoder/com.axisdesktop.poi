@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import com.axisdesktop.base.entity.SimpleEntity;
 
 @Entity
-@Table( name = "user_status" )
+@Table( name = "user_status", schema = "poi" )
 public class UserStatus extends SimpleEntity<Integer> {
 
 	@Override

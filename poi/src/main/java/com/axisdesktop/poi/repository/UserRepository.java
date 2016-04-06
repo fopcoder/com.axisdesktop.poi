@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.axisdesktop.poi.entity.User;
-import com.axisdesktop.poi.entity.UserRole;
+import com.axisdesktop.poi.entity.Role;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	User findByEmail( String email );
@@ -14,5 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	User findByName( String name );
 
 	@Query( name = "User.findRole" )
-	List<UserRole> findRole();
+	List<Role> findRole();
 }

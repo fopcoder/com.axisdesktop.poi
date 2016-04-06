@@ -1,33 +1,25 @@
 package com.axisdesktop.crawler.entity;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import com.axisdesktop.base.entity.BaseEntity;
 
 @Entity
 @Table( name = "provider_data", schema = "crawler" )
-public class ProviderData {
-	@Id
+public class ProviderData extends BaseEntity<Long> {
+
 	@Column( name = "url_id" )
 	private long urlId;
 
+	@Column( name = "provider_id" )
+	private int providerId;
+
 	@Column( name = "category_id" )
 	private int categoryId;
-
-	@Column( updatable = false )
-	@Temporal( TemporalType.TIMESTAMP )
-	private Calendar created;
-
-	@Temporal( TemporalType.TIMESTAMP )
-	private Calendar modified;
 
 	@Column( name = "meta_title" )
 	private String metaTitle;
@@ -78,16 +70,6 @@ public class ProviderData {
 
 	@Column( name = "language_id" )
 	private String languageId;
-
-	@PrePersist
-	private void prePersist() {
-		this.created = this.modified = Calendar.getInstance();
-	}
-
-	@PreUpdate
-	private void preUpdate() {
-		this.modified = Calendar.getInstance();
-	}
 
 	public static class Builder {
 		ProviderData data = new ProviderData();
@@ -221,22 +203,6 @@ public class ProviderData {
 
 	public void setCategoryId( int categoryId ) {
 		this.categoryId = categoryId;
-	}
-
-	public Calendar getCreated() {
-		return created;
-	}
-
-	public void setCreated( Calendar created ) {
-		this.created = created;
-	}
-
-	public Calendar getModified() {
-		return modified;
-	}
-
-	public void setModified( Calendar modified ) {
-		this.modified = modified;
 	}
 
 	public String getMetaTitle() {
@@ -401,14 +367,14 @@ public class ProviderData {
 
 	@Override
 	public String toString() {
-		return "ProviderData [urlId=" + urlId + ", categoryId=" + categoryId + ", created=" + created + ", modified="
-				+ modified + ", metaTitle=" + metaTitle + ", metaKeywords=" + metaKeywords + ", metaDescription="
-				+ metaDescription + ", header=" + header + ", shortDescription=" + shortDescription
-				+ ", fullDescription=" + fullDescription + ", latitude=" + latitude + ", longitude=" + longitude
-				+ ", status=" + status + ", statusText=" + statusText + ", contacts=" + contacts + ", contactsAddress="
-				+ contactsAddress + ", contactsLink=" + contactsLink + ", contactsEmail=" + contactsEmail
-				+ ", contactsPhone=" + contactsPhone + ", contactsWorktime=" + contactsWorktime + ", rating=" + rating
-				+ ", price=" + price + ", priceOld=" + priceOld + ", languageId=" + languageId + "]";
+		return "ProviderData [urlId=" + urlId + ", categoryId=" + categoryId + ", metaTitle=" + metaTitle
+				+ ", metaKeywords=" + metaKeywords + ", metaDescription=" + metaDescription + ", header=" + header
+				+ ", shortDescription=" + shortDescription + ", fullDescription=" + fullDescription + ", latitude="
+				+ latitude + ", longitude=" + longitude + ", status=" + status + ", statusText=" + statusText
+				+ ", contacts=" + contacts + ", contactsAddress=" + contactsAddress + ", contactsLink=" + contactsLink
+				+ ", contactsEmail=" + contactsEmail + ", contactsPhone=" + contactsPhone + ", contactsWorktime="
+				+ contactsWorktime + ", rating=" + rating + ", price=" + price + ", priceOld=" + priceOld
+				+ ", languageId=" + languageId + "]";
 	}
 
 }

@@ -49,12 +49,18 @@
                 </tr>
             </table>
 
-            <div th:include="aaa/fragments/exception :: errorInfo"/>
+            <p></p>
             
-            <form method="POST" th:action="@{/update}">
-                <input type="text" name="data" th:value="${currentData}"/>
+            <form method="POST" th:action="@{/login}">
+                <input type="text" name="username" placeholder="email"/><br/>
+                <input type="password" name="password" />
                 <input type="hidden" name="_csrf"  th:value="${_csrf.token}" />
-                <button>Update your data</button>
+                <button>Login</button>
+            </form>
+            
+            <form method="POST" th:action="@{/logout}">
+                <input type="hidden" name="_csrf"  th:value="${_csrf.token}" />
+                <button>Logout</button>
             </form>
 
         </div><!-- /.container -->

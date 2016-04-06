@@ -14,7 +14,7 @@ public class JsonController {
 	@Autowired
 	private LocationService locService;
 
-	@RequestMapping( value = "/getdata", method = RequestMethod.POST )
+	@RequestMapping( value = "/getdata1", method = RequestMethod.POST )
 	public List<String[]> data( double south, double west, double north, double east ) {
 
 		List<String[]> res = locService.findPointsInBoundingBox( south, west, north, east );

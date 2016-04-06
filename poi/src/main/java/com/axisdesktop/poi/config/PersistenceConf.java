@@ -50,7 +50,7 @@ public class PersistenceConf {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		vendorAdapter.setGenerateDdl( false );
-		vendorAdapter.setShowSql( false );
+		vendorAdapter.setShowSql( true );
 		vendorAdapter.setDatabasePlatform( "org.hibernate.spatial.dialect.postgis.PostgisDialect" );
 		// vendorAdapter.setDatabase( Database.POSTGRESQL );
 

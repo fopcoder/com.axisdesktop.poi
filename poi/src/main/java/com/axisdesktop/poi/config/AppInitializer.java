@@ -32,11 +32,11 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		super.onStartup( servletContext );
 		TimeZone.setDefault( TimeZone.getTimeZone( "Europe/Kiev" ) );
 
-		EnumSet<DispatcherType> dispatcherTypes = EnumSet.of( DispatcherType.REQUEST, DispatcherType.FORWARD );
-
-		FilterRegistration.Dynamic security = servletContext.addFilter( "springSecurityFilterChain",
-				new DelegatingFilterProxy() );
-		security.addMappingForUrlPatterns( dispatcherTypes, true, "/*" );
+		// EnumSet<DispatcherType> dispatcherTypes = EnumSet.of( DispatcherType.REQUEST, DispatcherType.FORWARD );
+		//
+		// FilterRegistration.Dynamic security = servletContext.addFilter( "springSecurityFilterChain",
+		// new DelegatingFilterProxy() );
+		// security.addMappingForUrlPatterns( dispatcherTypes, true, "/*" );
 
 	}
 

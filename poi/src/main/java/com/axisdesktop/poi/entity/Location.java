@@ -22,7 +22,7 @@ import com.vividsolutions.jts.geom.Point;
 public class Location {
 	@Id
 	@GeneratedValue
-	private int id;
+	private long id;
 
 	private Point point;
 
@@ -35,11 +35,11 @@ public class Location {
 		this.created = Calendar.getInstance();
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId( int id ) {
+	public void setId( long id ) {
 		this.id = id;
 	}
 
