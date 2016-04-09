@@ -1,0 +1,1 @@
+var MapApp = angular.module( "MapApp", ["ngMap"] );

@@ -8,112 +8,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3&amp;sensor=false"></script>
+<script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/src/markerclusterer.js"></script>
+<script th:src="@{/static/js/angular/angular.min.js}"></script>
+<script th:src="@{/static/js/angular/ng-map.min.js}"></script>
+
+<script th:src="@{/static/js/Map/app.js}"></script>
+<script th:src="@{/static/js/Map/controller/MapController.js}"></script>
+
 <script th:inline="javascript">
 /*<![CDATA[*/
 
-var markers = [];
+//var markers = [];
 
-function initialize() {
-  var mapProp = {
-    center:new google.maps.LatLng(48.8206639,31.2979349),
-    zoom:6,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-  var map=new google.maps.Map(document.getElementById("map"),mapProp);
 
-  google.maps.event.addListener( map,'dragend', function() {
-
-		console.log('dragend');
-		
-		// 3 seconds after the center of the map has changed, pan back to the marker
-		  /* window.setTimeout(function() {
-		    map.panTo(marker.getPosition());
-		  },3000); */
-	});
-  
-  
-  google.maps.event.addListener( map,'idle', function() {
-
-		console.log('idle');
-		var bounds = map.getBounds();
-		console.log(bounds.toJSON());
-		
-		var infowindow = new google.maps.InfoWindow({
-			  maxWidth: 300,
-			  infoBoxClearance: new google.maps.Size(1, 1),
-			  disableAutoPan: false
-			});
-		
-		$.ajax(
-				{
-					url: "/poi/getdata", 
-					data: bounds.toJSON(),
-					type: "POST",
-					//processData: false,
-					//dataType: 'json',
-					success: function(result) {
-						for( var i = 0; i < markers.length; i++ ){
-							markers[i].setMap(null);
-						}
-						
-						markers = [];
-						
-						
-						
-						for( var i = 0; i < result.length; i++ )	{
-							var marker = new google.maps.Marker({
-							    position: new google.maps.LatLng(result[i][1], result[i][2]),
-							    title: result[i][3],
-							    map:map
-							});
-							// Push your newly created marker into the array:
-							markers.push(marker);
-							
-							
-							google.maps.event.addListener(marker, 'click', (function(marker, i) {
-							    return function() {
-							    	map.setCenter(marker.position);
-							      if ( markers[i].title !== "") {
-							        infowindow.setContent('<div class="content" id="content-' + markers[i].id +
-							          '" style="max-height:300px; font-size:12px;"><h3>' + markers[i].title + '</h3>' +
-							          '<hr class="grey" />' +
-							           '</div>');
-							        infowindow.open(map, marker);
-							      }
-							    }
-							  })(marker, i));
-							
-							
-						}
-						
-					},
-					failure: function(result) {
-						console.log(result);
-					},
-				}
-		);
-		
-		
-		
-		// 3 seconds after the center of the map has changed, pan back to the marker
-		  /* window.setTimeout(function() {
-		    map.panTo(marker.getPosition());
-		  },3000); */
-	});
-
-  google.maps.event.addListener( map,'zoom_changed', function() {
-
-		console.log('zoom_changed');
-		
-		// 3 seconds after the center of the map has changed, pan back to the marker
-		  /* window.setTimeout(function() {
-		    map.panTo(marker.getPosition());
-		  },3000); */
-	});
-  
-}
-google.maps.event.addDomListener(window, 'load', initialize);
+// google.maps.event.addDomListener(window, 'load', initialize);
 
 
 

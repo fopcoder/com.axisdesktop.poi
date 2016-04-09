@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.axisdesktop.poi.service.LocationService;
@@ -50,14 +49,17 @@ public class IndexController {
 
 	@RequestMapping( value = "/getdata", produces = "application/json" )
 	@ResponseBody
-	public List<String[]> data( double south, double west, double north, double east ) {
+	public List<String[]> data( @RequestBody Coords arr ) {
+		// System.out.println( arr );
 
-		List<String[]> res = locService.findPointsInBoundingBox( south, west, north, east );
+		// double south = 0, west = 0, north = 0, east = 0;
 
-		System.out.println( east );
-		System.out.println( south );
-		System.out.println( north );
-		System.out.println( west );
+		List<String[]> res = locService.findPointsInBoundingBox( arr.south, arr.west, arr.north, arr.east );
+
+		// System.out.println( east );
+		// System.out.println( south );
+		// System.out.println( north );
+		// System.out.println( west );
 
 		// String[][] str = { { "1", "23.555", "sssssss" }, { "2", "43.999", "aaaaa" } };
 		// List<Location> l = locService.findAll();
