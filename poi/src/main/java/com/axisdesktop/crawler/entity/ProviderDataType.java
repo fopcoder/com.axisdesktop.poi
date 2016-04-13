@@ -6,11 +6,10 @@ import javax.persistence.Table;
 import com.axisdesktop.base.entity.SimpleEntity;
 
 @Entity
-@Table( name = "proxy_status", schema = "crawler" )
-public class CrawlerProxyStatus extends SimpleEntity<Integer> {
+@Table( name = "provider_data_type", schema = "crawler" )
+public class ProviderDataType extends SimpleEntity<Integer> {
 	@Override
 	public String toString() {
-		return "CrawlerProxyStatus" + super.toString();
+		return "ProviderDataType" + super.toString();
 	}
-
 }

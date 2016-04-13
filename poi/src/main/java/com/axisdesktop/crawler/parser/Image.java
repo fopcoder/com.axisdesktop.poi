@@ -2,9 +2,9 @@ package com.axisdesktop.crawler.parser;
 
 public class Image {
 	private String url;
-	private int width;
-	private int height;
-	private int externalId;
+	private String width;
+	private String height;
+	private String externalId;
 	private String alt;
 
 	public Image() {
@@ -23,18 +23,18 @@ public class Image {
 			return this;
 		}
 
-		public Builder width( int width ) {
+		public Builder width( String width ) {
 			img.setWidth( width );
 			return this;
 		}
 
-		public Builder height( int height ) {
+		public Builder height( String height ) {
 			img.setHeight( height );
 			return this;
 		}
 
-		public Builder extId( int id ) {
-			img.setExtId( id );
+		public Builder externalId( String id ) {
+			img.setExternalId( id );
 			return this;
 		}
 
@@ -55,27 +55,27 @@ public class Image {
 		this.url = url;
 	}
 
-	public int getWidth() {
+	public String getWidth() {
 		return width;
 	}
 
-	public void setWidth( int width ) {
+	public void setWidth( String width ) {
 		this.width = width;
 	}
 
-	public int getHeight() {
+	public String getHeight() {
 		return height;
 	}
 
-	public void setHeight( int height ) {
+	public void setHeight( String height ) {
 		this.height = height;
 	}
 
-	public int getExtId() {
+	public String getExternalId() {
 		return externalId;
 	}
 
-	public void setExtId( int extId ) {
+	public void setExternalId( String extId ) {
 		this.externalId = extId;
 	}
 
@@ -89,8 +89,8 @@ public class Image {
 
 	@Override
 	public String toString() {
-		return "Image [url=" + url + ", width=" + width + ", height=" + height + ", externalId=" + externalId + ", alt=" + alt
-				+ "]";
+		return "Image [url=" + url + ", width=" + width + ", height=" + height + ", externalId=" + externalId + ", alt="
+				+ alt + "]";
 	}
 
 }

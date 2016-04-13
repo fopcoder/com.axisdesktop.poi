@@ -72,19 +72,19 @@ public class ProviderServiceImpl implements ProviderService {
 	}
 
 	@Override
-	public ProviderUrl updateUrl( ProviderUrl pu ) {
+	public ProviderUrl createUrl( ProviderUrl pu ) {
 		if( pu == null ) throw new IllegalArgumentException( "ProviderUrl is null" );
-		if( pu.getId() == 0 ) throw new IllegalArgumentException( "can't update new ProviderUrl" );
-		if( this.provUrlRepo.findOne( pu.getId() ) == null )
-			throw new IllegalArgumentException( "ProviderUrl " + pu + " not found" );
+		if( pu.getId() != 0 ) throw new IllegalArgumentException( "id must be 0" );
 
 		return this.provUrlRepo.save( pu );
 	}
 
 	@Override
-	public ProviderUrl createUrl( ProviderUrl pu ) {
+	public ProviderUrl updateUrl( ProviderUrl pu ) {
 		if( pu == null ) throw new IllegalArgumentException( "ProviderUrl is null" );
-		if( pu.getId() != 0 ) throw new IllegalArgumentException( "id must be 0" );
+		// if( pu.getId() == 0 ) throw new IllegalArgumentException( "can't update new ProviderUrl" );
+		// if( this.provUrlRepo.findOne( pu.getId() ) == null )
+		// throw new IllegalArgumentException( "ProviderUrl " + pu + " not found" );
 
 		return this.provUrlRepo.save( pu );
 	}
@@ -106,7 +106,7 @@ public class ProviderServiceImpl implements ProviderService {
 
 	@Override
 	public boolean isUrlExist( int providerId, String url ) {
-		return provUrlRepo.isExistByProviderIdAndUrl( providerId, url );
+		return provUrlRepo.isExist( providerId, url );
 	}
 
 	@Override
@@ -116,7 +116,18 @@ public class ProviderServiceImpl implements ProviderService {
 
 	@Override
 	public ProviderData saveProviderData( ProviderData data ) {
+		Long id = provDataRepo.getIdByUrlId( data.getUrlId() );
+		if( id != null ) data.setId( id );
+
 		return provDataRepo.save( data );
+	}
+
+	@Override
+	public void clearProviderDataCommentsByParentId( long parentId ) {
+		provDataRepo.clearCommentsByParentId( parentId );
+		// provDataRepo.
+		// TODO Auto-generated method stub
+
 	}
 
 }

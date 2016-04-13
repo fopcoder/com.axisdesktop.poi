@@ -1,1 +1,1 @@
-var MapApp = angular.module( "MapApp", ["ngMap"] );
+var MapApp = angular.module( "MapApp", ["ngMap","ngStorage"] );

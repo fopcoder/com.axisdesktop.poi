@@ -15,11 +15,17 @@
 	</style>
 </head>
 <body ng-controller="MapController as mc">
-<ng-map zoom="6" center="[48.8206639,31.2979349]" style="height:100%" on-idle="mc.onIdle()">
+
+<ng-map 
+	zoom="6" 
+	center="[48.8206639,31.2979349]" 
+	style="height:100%" 
+	on-idle="mc.onIdle()" 
+	>
+	
 	<info-window id="info-window">
 		<form>
 		<div ng-non-bindable="">
-	
 			<div>header {{anchor.title}}</div>
 			<div>body {{anchor.getPosition()}}</div>
 			<label>Добавить в избранное: <input type="checkbox" ng-model="chkp" ng-click="mc.checkPoint( anchor.id, chkp )" /></label>
@@ -27,6 +33,6 @@
 		</form>
 	</info-window>
 </ng-map>
-	<!-- <div id="map"></div> -->
+
 </body>
 </html>

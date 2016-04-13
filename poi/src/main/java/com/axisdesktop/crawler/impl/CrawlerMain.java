@@ -17,11 +17,12 @@ public class CrawlerMain {
 	private static final Logger logger = LoggerFactory.getLogger( CrawlerMain.class );
 
 	public static void main( String[] args ) throws IOException {
+
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
 		ctx.register( AppConf.class );
 		ctx.register( PersistenceConf.class );
-		ctx.register( SecurityConf.class );
-		ctx.register( SocialConf.class );
+		// ctx.register( SecurityConf.class );
+		// ctx.register( SocialConf.class );
 
 		ctx.refresh();
 
@@ -31,7 +32,7 @@ public class CrawlerMain {
 		// DorogaCrawler crawler = new DorogaCrawler( proxyService, providerService );
 		// DorogaCrawler crawler = new DorogaCrawler();
 		Crawler crawler = ctx.getBean( Crawler.class );
-		// crawler.run();
+		crawler.run();
 
 		ctx.close();
 		logger.warn( "==>" );

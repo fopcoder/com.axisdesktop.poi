@@ -18,8 +18,8 @@ public interface ProviderUrlRepository extends JpaRepository<ProviderUrl, Long> 
 	List<ProviderUrl> findByProviderIdAndUrl( int providerId, String url, Pageable page );
 
 	@Query( name = "ProviderUrl.isExistByProviderIdAndUrl" )
-	boolean isExistByProviderIdAndUrl( @Param( "providerId" ) int providerId, @Param( "url" ) String url );
+	boolean isExist( @Param( "providerId" ) int providerId, @Param( "url" ) String url );
 
-	@Query( name = "ProviderUrl.fidUrlForUpdate" )
+	@Query( name = "ProviderUrl.findUrlForUpdate" )
 	List<ProviderUrl> findUrlForUpdate( @Param( "providerId" ) int providerId );
 }

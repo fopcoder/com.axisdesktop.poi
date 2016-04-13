@@ -1,33 +1,31 @@
 package com.axisdesktop.crawler.parser;
 
-import java.math.BigDecimal;
-
 public class Location {
-	private BigDecimal longitude;
-	private BigDecimal latitude;
+	private String longitude;
+	private String latitude;
 
 	public Location() {
 	}
 
-	public Location( double latitude, double longitude ) {
-		this.longitude = BigDecimal.valueOf( longitude );
-		this.latitude = BigDecimal.valueOf( latitude );
+	public Location( String latitude, String longitude ) {
+		this.longitude = longitude;
+		this.latitude = latitude;
 	}
 
-	public BigDecimal getLongitude() {
+	public String getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude( double longitude ) {
-		this.longitude = BigDecimal.valueOf( longitude );
+	public void setLongitude( String longitude ) {
+		this.longitude = longitude;
 	}
 
-	public BigDecimal getLatitude() {
+	public String getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude( double latitude ) {
-		this.latitude = BigDecimal.valueOf( latitude );
+	public void setLatitude( String latitude ) {
+		this.latitude = latitude;
 	}
 
 	@Override

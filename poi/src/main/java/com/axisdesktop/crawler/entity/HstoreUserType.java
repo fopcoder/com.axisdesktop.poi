@@ -105,12 +105,21 @@ public class HstoreUserType implements UserType {
 			builder.append( "\"" );
 			builder.append( entry.getKey() );
 			builder.append( "\"" );
+
 			builder.append( HSTORE_SEPARATOR_TOKEN );
+
 			builder.append( "\"" );
-			builder.append( entry.getValue().toString() );
+			if( entry.getValue() != null ) {
+				builder.append( quote( entry.getValue().toString() ) );
+			}
 			builder.append( "\"" );
 		}
+
 		return builder.toString();
+	}
+
+	private String quote( String str ) {
+		return str.replaceAll( "\"", "\\\\\"" );
 	}
 
 	private Map<String, Object> convertToEntityAttribute( final String dbData ) {

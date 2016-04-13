@@ -1,14 +1,12 @@
 package com.axisdesktop.crawler.parser;
 
-import java.util.Calendar;
-
 public class Comment {
 	private String header;
 	private String body;
-	private Calendar date;
+	private String date;
 	private User user;
-	private int externalId;
-	private int parentExternalId;
+	private String externalId;
+	private String parentExternalId;
 
 	public static class Builder {
 		private Comment comment;
@@ -27,7 +25,7 @@ public class Comment {
 			return this;
 		}
 
-		public Builder date( Calendar date ) {
+		public Builder date( String date ) {
 			comment.setDate( date );
 			return this;
 		}
@@ -37,12 +35,12 @@ public class Comment {
 			return this;
 		}
 
-		public Builder extId( int id ) {
+		public Builder extId( String id ) {
 			comment.setExtId( id );
 			return this;
 		}
 
-		public Builder extParentId( int id ) {
+		public Builder extParentId( String id ) {
 			comment.setParentExtId( id );
 			return this;
 		}
@@ -72,11 +70,11 @@ public class Comment {
 		this.body = body;
 	}
 
-	public Calendar getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate( Calendar date ) {
+	public void setDate( String date ) {
 		this.date = date;
 	}
 
@@ -88,19 +86,19 @@ public class Comment {
 		this.user = user;
 	}
 
-	public int getExtId() {
+	public String getExtId() {
 		return externalId;
 	}
 
-	public void setExtId( int extId ) {
+	public void setExtId( String extId ) {
 		this.externalId = extId;
 	}
 
-	public int getParentExtId() {
+	public String getParentExtId() {
 		return parentExternalId;
 	}
 
-	public void setParentExtId( int parentExtId ) {
+	public void setParentExtId( String parentExtId ) {
 		this.parentExternalId = parentExtId;
 	}
 

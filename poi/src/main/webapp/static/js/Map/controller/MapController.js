@@ -1,8 +1,9 @@
-MapApp.controller("MapController", function($scope, $http, NgMap) {
+MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap) {
 	var mc = this;
 	var markers = [];
 	var markerClusterer;
 	var checkedPoints = {};
+	var defaultZoom = 6;
 	
 	var checkedIcon = new google.maps.MarkerImage(
 	    "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|00D900",
@@ -20,13 +21,24 @@ MapApp.controller("MapController", function($scope, $http, NgMap) {
 	    null //new google.maps.Size(12, 18)
 	);
 	
+	
+	
 	NgMap.getMap().then(function(map) {
 		mc.map = map;
 		markerClusterer = new MarkerClusterer( map );
 		
-		mc.onIdle = function(event) {
-			console.log("idle");
+		restoreCheckedPoints();
+		restoreZoom();
+		restoreCenterPoint();
+		
+		if( markers.length == 0 )	{
 			mc.loadPointsInBBox( mc.map.getBounds() );
+		}
+		
+		mc.onIdle = function(event) {
+			mc.loadPointsInBBox( mc.map.getBounds() );
+			saveCenterPoint();
+			saveZoom();
 		}
 	});
 
@@ -89,6 +101,7 @@ MapApp.controller("MapController", function($scope, $http, NgMap) {
 	setChecked = function( id, checked )	{
 		if( checked == false )	{
 			delete checkedPoints[id];
+			
 			for( var i = 0; i < markers.length; i++ )	{
 				if( markers[i].id == id )	{
 					markers[i].setIcon(freeIcon);	
@@ -97,6 +110,7 @@ MapApp.controller("MapController", function($scope, $http, NgMap) {
 		}
 		else	{
 			checkedPoints[id] = 1;
+			
 			for( var i = 0; i < markers.length; i++ )	{
 				if( markers[i].id == id )	{
 					markers[i].setIcon( checkedIcon );	
@@ -105,9 +119,42 @@ MapApp.controller("MapController", function($scope, $http, NgMap) {
 		}
 	}
 	
+	saveCheckedPoints = function()	{
+		$localStorage.checkedPoints = angular.toJson( checkedPoints );
+	}
+	
+	restoreCheckedPoints = function()	{
+		if( $localStorage.checkedPoints )	{
+			checkedPoints = angular.fromJson( $localStorage.checkedPoints );
+		}
+	}
+	
+	saveZoom = function()	{
+		$localStorage.zoom = mc.map.getZoom();
+	}
+	
+	restoreZoom = function()	{
+		mc.map.setZoom( $localStorage.zoom ? $localStorage.zoom : defaultZoom );
+	}
+	
+	saveCenterPoint = function()	{
+		$localStorage.centerPoint = angular.toJson( mc.map.getCenter() );
+	}
+	
+	restoreCenterPoint = function()	{
+		if( $localStorage.centerPoint )	{
+			mc.map.setCenter( angular.fromJson( $localStorage.centerPoint ) );
+		}
+		else	{
+			// TODO
+		}
+	}
+	
 	mc.checkPoint = function( id, checked )	{
 		setChecked( id, checked );
+		saveCheckedPoints();
 		console.log( id, checked );
 	}
+	
 	
 })

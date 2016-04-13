@@ -3,7 +3,6 @@ package com.axisdesktop.crawler.base;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
-import java.util.Calendar;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -37,7 +36,6 @@ public class CrawlerUtils {
 
 			text = HttpUtils.getTextFromConnection( uc );
 
-			providerUrl.setFetched( Calendar.getInstance() );
 			providerUrl.setLog( null );
 			if( providerUrl.getTypeId() == 1 ) { // feed
 				providerUrl.setStatusId( 1 );
@@ -52,7 +50,6 @@ public class CrawlerUtils {
 		catch( Exception e ) {
 			text = null;
 
-			providerUrl.setFetched( Calendar.getInstance() );
 			providerUrl.setLog( e.getMessage() );
 			providerUrl.setStatusId( 3 );
 			providerUrl.setTries( providerUrl.getTries() + 1 );

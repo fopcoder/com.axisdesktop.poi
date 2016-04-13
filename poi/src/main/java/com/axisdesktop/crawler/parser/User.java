@@ -3,12 +3,12 @@ package com.axisdesktop.crawler.parser;
 public class User {
 	private String name;
 	private String imageUri;
-	private int externalId;
+	private String externalId;
 
 	public User() {
 	}
 
-	public User( String name, int extId ) {
+	public User( String name, String extId ) {
 		this.name = name;
 		this.externalId = extId;
 	}
@@ -21,11 +21,11 @@ public class User {
 		this.name = name;
 	}
 
-	public int getExtId() {
+	public String getExtId() {
 		return externalId;
 	}
 
-	public void setExtId( int extId ) {
+	public void setExtId( String extId ) {
 		this.externalId = extId;
 	}
 

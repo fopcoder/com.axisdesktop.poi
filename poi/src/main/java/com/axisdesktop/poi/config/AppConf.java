@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@ComponentScan( { "com.axisdesktop.crawler.impl", "com.axisdesktop.crawler.component", "com.axisdesktop.user" } )
+@ComponentScan( { "com.axisdesktop.crawler.impl", "com.axisdesktop.crawler.component", "com.axisdesktop.user1" } )
 @PropertySource( "classpath:application.properties" )
 public class AppConf {
 	// @Bean

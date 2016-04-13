@@ -76,9 +76,9 @@ public abstract class Parser {
 		return null;
 	}
 
-	public int status() {
+	public String status() {
 		logger.info( "status() unimplemented" );
-		return 0;
+		return null;
 	}
 
 	public String statusText() {
@@ -86,7 +86,7 @@ public abstract class Parser {
 		return null;
 	}
 
-	public BigDecimal rating() {
+	public String rating() {
 		logger.info( "rating() unimplemented" );
 		return null;
 	}

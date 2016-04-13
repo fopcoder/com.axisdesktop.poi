@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +40,8 @@ public class DorogaCrawler extends WebCrawler {
 	@Override
 	public void run() {
 		try {
-			this.getAndUpdateFeedUrls();
+			// TODO switsh on feed url
+			// this.getAndUpdateFeedUrls();
 
 			// ExecutorService exec = Executors.newFixedThreadPool( 5 );
 
@@ -75,12 +74,7 @@ public class DorogaCrawler extends WebCrawler {
 
 				for( String s : parser.itemLinks() ) {
 					if( !this.getProviderService().isUrlExist( providerId, s ) ) {
-						ProviderUrl pu = new ProviderUrl();
-						pu.setStatusId( 4 );
-						pu.setUrl( s );
-						pu.setTypeId( 3 );
-						pu.setProviderId( providerId );
-
+						ProviderUrl pu = new ProviderUrl( providerId, s, 3, 4 ); // item new
 						this.getProviderService().createUrl( pu );
 					}
 				}

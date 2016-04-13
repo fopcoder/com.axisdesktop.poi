@@ -1,6 +1,5 @@
 package com.axisdesktop.crawler.parser.impl;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -27,6 +26,7 @@ import com.axisdesktop.crawler.parser.Image;
 import com.axisdesktop.crawler.parser.Location;
 import com.axisdesktop.crawler.parser.Parser;
 import com.axisdesktop.crawler.parser.User;
+import com.axisdesktop.utils.DateUtils;
 
 public class DorogaParser extends Parser {
 	private static final Logger logger = LoggerFactory.getLogger( DorogaParser.class );
@@ -64,7 +64,7 @@ public class DorogaParser extends Parser {
 			double dlng = ( Double.parseDouble( lng[0] ) + Double.parseDouble( lng[1] ) / 60
 					+ Double.parseDouble( lng[2] ) / 3600 ) * ( lng[3].matches( "(?i)e" ) ? 1 : -1 );
 
-			loc = new Location( dlat, dlng );
+			loc = new Location( Double.toString( dlat ), Double.toString( dlng ) );
 		}
 		catch( Exception e ) {
 			logger.error( "location parse exception", e );
@@ -160,18 +160,18 @@ public class DorogaParser extends Parser {
 	}
 
 	@Override
-	public int status() {
+	public String status() {
 		Element e = doc.select( "td.main-column table div[class*=IconRouteBig]" ).first();
 
 		if( e != null ) {
 			for( String cn : e.classNames() ) {
 				if( cn.contains( "IconRouteBig" ) ) {
-					return Integer.parseInt( cn.replaceAll( "(?i)IconRouteBig", "" ) );
+					return cn.replaceAll( "(?i)IconRouteBig", "" );
 				}
 			}
 		}
 
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -186,11 +186,11 @@ public class DorogaParser extends Parser {
 	}
 
 	@Override
-	public BigDecimal rating() {
+	public String rating() {
 		Element e = doc.select( "table span[class=RatingBigText]" ).first();
 
 		if( e != null ) {
-			return new BigDecimal( e.text() );
+			return e.text();
 		}
 
 		return null;
@@ -230,7 +230,7 @@ public class DorogaParser extends Parser {
 
 			if( m.find() ) {
 				Image img = new Image.Builder().url( t.attr( "href" ) ).alt( t.attr( "title" ) )
-						.extId( Integer.parseInt( m.group( 1 ) ) ).build();
+						.externalId( m.group( 1 ) ).build();
 				list.add( img );
 			}
 		}
@@ -259,7 +259,7 @@ public class DorogaParser extends Parser {
 				Matcher um = userPattern.matcher( userEl.attr( "href" ) );
 
 				if( um.find() ) {
-					user.setExtId( Integer.parseInt( um.group( 1 ) ) );
+					user.setExtId( um.group( 1 ) );
 				}
 
 				user.setImageUri( "/" + tdEl.select( "img" ).attr( "src" ).replaceAll( "\\.\\.\\/", "" ) );
@@ -276,7 +276,8 @@ public class DorogaParser extends Parser {
 				}
 				catch( Exception e ) {/* ignore error */}
 
-				Comment comment = new Comment.Builder().date( date ).body( body ).user( user ).build();
+				Comment comment = new Comment.Builder().date( DateUtils.calendarToString( date ) ).body( body )
+						.user( user ).build();
 
 				list.add( comment );
 			}
