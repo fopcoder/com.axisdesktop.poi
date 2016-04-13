@@ -1,32 +1,27 @@
 package com.axisdesktop.crawler.entity;
 
+import static com.axisdesktop.utils.DateUtils.calendarToString;
+
 import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import static com.axisdesktop.utils.DateUtils.*;
+import com.axisdesktop.base.entity.BaseEntity;
 
 @Entity
 @Table( name = "proxy", schema = "crawler" )
 @NamedQueries( {
 		@NamedQuery( name = "CrawlerProxy.findActiveOrderByRandom", query = "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ORDER BY RANDOM()" ) } )
-public class CrawlerProxy {
-	@Id
-	@GeneratedValue
-	private int id;
+public class CrawlerProxy extends BaseEntity<Integer> {
 
 	private String host;
 	private int port;
@@ -38,13 +33,6 @@ public class CrawlerProxy {
 	private String log;
 	private int tries;
 
-	@Column( updatable = false )
-	@Temporal( TemporalType.TIMESTAMP )
-	private Calendar created;
-
-	@Temporal( TemporalType.TIMESTAMP )
-	private Calendar modified;
-
 	@Temporal( TemporalType.TIMESTAMP )
 	private Calendar fetched;
 
@@ -54,24 +42,6 @@ public class CrawlerProxy {
 
 	@Column( name = "status_id" )
 	private int statusId;
-
-	@PrePersist
-	private void prePersist() {
-		this.created = this.modified = Calendar.getInstance();
-	}
-
-	@PreUpdate
-	private void preUpdate() {
-		this.modified = Calendar.getInstance();
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId( int id ) {
-		this.id = id;
-	}
 
 	public String getHost() {
 		return host;
@@ -87,22 +57,6 @@ public class CrawlerProxy {
 
 	public void setPort( int port ) {
 		this.port = port;
-	}
-
-	public Calendar getCreated() {
-		return created;
-	}
-
-	public void setCreated( Calendar created ) {
-		this.created = created;
-	}
-
-	public Calendar getModified() {
-		return modified;
-	}
-
-	public void setModified( Calendar modified ) {
-		this.modified = modified;
 	}
 
 	public CrawlerProxyStatus getProxyStatus() {
@@ -163,9 +117,8 @@ public class CrawlerProxy {
 
 	@Override
 	public String toString() {
-		return "CrawlerProxy [id=" + id + ", host=" + host + ", port=" + port + ", user=" + user + ", password=" + password
-				+ ", log=" + log + ", created=" + calendarToString( created ) + ", modified="
-				+ calendarToString( modified ) + ", fetched=" + calendarToString( fetched ) + ", status_id=" + statusId
-				+ ", tries=" + tries + "]";
+		return "CrawlerProxy [" + ", host=" + host + ", port=" + port + ", user=" + user + ", password=" + password
+				+ ", log=" + log + ", fetched=" + calendarToString( fetched ) + ", status_id=" + statusId + ", tries="
+				+ tries + "]";
 	}
 }
