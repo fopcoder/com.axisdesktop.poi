@@ -29,7 +29,7 @@ import com.axisdesktop.base.entity.BaseEntity;
 		@NamedQuery( name = "ProviderUrl.isExistByProviderIdAndUrl", //
 				query = "SELECT COUNT(*) > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ),
 		@NamedQuery( name = "ProviderUrl.findUrlForUpdate", //
-				query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND typeId IN(2,3) AND statusId IN(4,6)" ) } )
+				query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND typeId IN(2,3,4) AND statusId IN(4,6)" ) } )
 public class ProviderUrl extends BaseEntity<Long> {
 
 	@Column( name = "provider_id" )

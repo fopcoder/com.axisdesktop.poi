@@ -18,8 +18,9 @@ import com.axisdesktop.base.entity.BaseEntity;
 @Table( name = "provider_data", schema = "crawler" )
 @TypeDef( name = "hstore", typeClass = HstoreUserType.class )
 @NamedQueries( {
-		@NamedQuery( name = "ProviderData.getIdByUrlId", query = "SELECT d.id FROM ProviderData d WHERE urlId = :urlId" ),
-		@NamedQuery( name = "ProviderData.clearCommentsByParentId", query = "DELETE FROM ProviderData WHERE parentId = :parentId" ) } )
+		@NamedQuery( name = "ProviderData.getIdByUrlIdAndTypeId", query = "SELECT d.id FROM ProviderData d WHERE urlId = :urlId AND typeId = :typeId" ),
+		@NamedQuery( name = "ProviderData.clearCommentsByParentId", query = "DELETE FROM ProviderData WHERE parentId = :parentId" ),
+		@NamedQuery( name = "ProviderData.findCommentsByParentId", query = "SELECT d FROM ProviderData d WHERE parentId = :parentId AND typeId = 7" ) } )
 public class ProviderData extends BaseEntity<Long> {
 
 	@Column( name = "url_id" )
@@ -35,13 +36,23 @@ public class ProviderData extends BaseEntity<Long> {
 	private String languageId;
 
 	@Column( name = "parent_id" )
-	private long parentId;
+	private Long parentId;
 
 	@Column( name = "type_id" )
 	private int typeId;
 
 	@Type( type = "hstore" )
 	private Map<String, String> data = new HashMap<>();
+
+	public ProviderData() {
+	}
+
+	public ProviderData( int providerId, long urlId, int typeId, String languageId ) {
+		this.urlId = urlId;
+		this.providerId = providerId;
+		this.languageId = languageId;
+		this.typeId = typeId;
+	}
 
 	public Map<String, String> getData() {
 		return data;
@@ -75,11 +86,11 @@ public class ProviderData extends BaseEntity<Long> {
 		this.languageId = languageId;
 	}
 
-	public long getParentId() {
+	public Long getParentId() {
 		return parentId;
 	}
 
-	public void setParentId( long parentId ) {
+	public void setParentId( Long parentId ) {
 		this.parentId = parentId;
 	}
 

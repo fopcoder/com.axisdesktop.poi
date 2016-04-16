@@ -1,19 +1,27 @@
 package com.axisdesktop.crawler.impl;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.Proxy;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.axisdesktop.crawler.base.Crawler;
-import com.axisdesktop.crawler.base.CrawlerUtils;
 import com.axisdesktop.crawler.base.Worker;
 import com.axisdesktop.crawler.entity.ProviderData;
 import com.axisdesktop.crawler.entity.ProviderUrl;
+import com.axisdesktop.crawler.parser.Comment;
 import com.axisdesktop.crawler.parser.Image;
 import com.axisdesktop.crawler.parser.Parser;
 import com.axisdesktop.crawler.parser.impl.DorogaParser;
+import com.axisdesktop.utils.HttpUtils;
 
 public class DorogaWorker implements Worker {
 	private static final Logger logger = LoggerFactory.getLogger( DorogaWorker.class );
@@ -29,7 +37,69 @@ public class DorogaWorker implements Worker {
 	@Override
 	public void run() {
 		try {
-			String text = CrawlerUtils.getCrawlerUrlTextContent( crawler, providerUrl );
+			// String text = CrawlerUtils.getCrawlerUrlTextContent( crawler, providerUrl );
+
+			String text = null;
+
+			Proxy proxy = crawler.getProxyService().getRandomActiveProxy();
+
+			if( proxy == null ) {
+				throw new IOException( "active proxy not found!" );
+			}
+
+			Map<String, String> connProps = crawler.getConnectionProperties();
+			connProps.put( "user-agent", crawler.getUserAgent() );
+			connProps.put( "referer", crawler.getReferer() );
+
+			HttpURLConnection uc = HttpUtils.getConnection( providerUrl.getUrl(), proxy, connProps );
+
+			if( uc.getResponseCode() != 200 ) {
+				throw new IllegalStateException(
+						String.format( "%d\n%s", uc.getResponseCode(), uc.getResponseMessage() ) );
+			}
+
+			logger.debug( uc.getContentType() );
+
+			if( uc.getContentType().contains( "text" ) ) {
+				text = HttpUtils.getTextFromConnection( uc );
+			}
+			else if( uc.getContentType().contains( "image" ) ) {
+				String ext = null;
+
+				if( uc.getContentType().contains( "jpeg" ) ) {
+					ext = "jpg";
+				}
+				else if( uc.getContentType().contains( "png" ) ) {
+					ext = "png";
+				}
+				else if( uc.getContentType().contains( "gif" ) ) {
+					ext = "gif";
+				}
+				else {
+					ext = "jpg";
+				}
+
+				String baseUrl = "C:\\Temp\\crawler";
+
+				Path baseDir = Paths.get( baseUrl );
+
+				if( Files.notExists( baseDir ) ) {
+					Files.createDirectory( baseDir );
+				}
+
+				Path imgDir = Paths.get( baseUrl, Long.toString(
+						providerUrl.getParentId() != null ? providerUrl.getParentId() : providerUrl.getId() ) );
+
+				if( Files.notExists( imgDir ) ) {
+					Files.createDirectory( imgDir );
+				}
+
+				Path imgFile = Paths.get( imgDir.toString(), Long.toString( providerUrl.getId() ) + "." + ext );
+
+				logger.debug( imgFile.toString() );
+
+				Files.copy( uc.getInputStream(), imgFile, REPLACE_EXISTING );
+			}
 
 			if( text != null ) {
 				Parser parser = new DorogaParser( text );
@@ -47,11 +117,8 @@ public class DorogaWorker implements Worker {
 					}
 				}
 
-				ProviderData item = new ProviderData();
-				item.setUrlId( providerUrl.getId() );
-				item.setLanguageId( "ru" );
-				item.setTypeId( providerUrl.getTypeId() );
-				item.setProviderId( providerUrl.getProviderId() );
+				ProviderData item = new ProviderData( providerUrl.getProviderId(), providerUrl.getId(),
+						providerUrl.getTypeId(), "ru" );
 
 				Map<String, String> data = item.getData();
 				data.put( "header", parser.header() );
@@ -73,33 +140,44 @@ public class DorogaWorker implements Worker {
 
 				crawler.getProviderService().saveProviderData( item );
 
-				// crawler.getProviderService().clearProviderDataCommentsByParentId( item.getId() );
+				crawler.getProviderService().clearProviderDataCommentsByParentId( item.getId() );
 
-				// for( Comment c : parser.comments() ) {
-				// System.err.println( c );
-				//
-				// ProviderData comment = new ProviderData();
-				// comment.setUrlId( item.getUrlId() );
-				// comment.setParentId( item.getId() );
-				// comment.setProviderId( providerUrl.getProviderId() );
-				// comment.setLanguageId( "ru" );
-				// comment.setTypeId( 7 ); // comment
-				//
-				// Map<String, String> cdata = item.getData();
-				// cdata.put( "header", c.getHeader() );
-				// cdata.put( "comment", c.getBody() );
-				//
-				// crawler.getProviderService().saveProviderData( comment );
-				// }
+				for( Comment c : parser.comments() ) {
+					System.err.println( c );
+					ProviderData comment = new ProviderData( providerUrl.getProviderId(), providerUrl.getId(), 7,
+							"ru" );
+					comment.setParentId( item.getId() );
 
-				// System.err.println( parser.comments() );
-				// System.err.println( parser.images() );
+					comment.getData().put( "date", c.getDate() );
+					comment.getData().put( "comment", c.getBody() );
+					comment.getData().put( "user", c.getUser().getName() );
+					comment.getData().put( "user_id", c.getUser().getExternalId() );
+					comment.getData().put( "user_img", c.getUser().getImageUri() );
 
+					crawler.getProviderService().createProviderData( comment );
+				}
 			}
+
+			providerUrl.setLog( null );
+			providerUrl.setTries( 0 );
+
+			if( providerUrl.getTypeId() == 1 ) { // feed
+				providerUrl.setStatusId( 1 ); // active
+			}
+			else {
+				providerUrl.setStatusId( 5 ); // downloaded
+			}
+
+			crawler.getProviderService().updateUrl( providerUrl );
 		}
-		catch( IOException e ) {
+		catch( Exception e ) {
+			providerUrl.setLog( e.toString() );
+			providerUrl.setStatusId( 3 );
+			providerUrl.setTries( providerUrl.getTries() + 1 );
+
+			crawler.getProviderService().updateUrl( providerUrl );
+			e.printStackTrace();
 			logger.debug( e.getMessage() );
-			logger.trace( e.getStackTrace().toString() );
 		}
 
 	}

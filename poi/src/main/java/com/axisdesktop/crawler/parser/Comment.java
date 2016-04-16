@@ -36,12 +36,12 @@ public class Comment {
 		}
 
 		public Builder extId( String id ) {
-			comment.setExtId( id );
+			comment.setExternalId( id );
 			return this;
 		}
 
 		public Builder extParentId( String id ) {
-			comment.setParentExtId( id );
+			comment.setParentExternalId( id );
 			return this;
 		}
 
@@ -86,20 +86,20 @@ public class Comment {
 		this.user = user;
 	}
 
-	public String getExtId() {
+	public String getExternalId() {
 		return externalId;
 	}
 
-	public void setExtId( String extId ) {
-		this.externalId = extId;
+	public void setExternalId( String externalId ) {
+		this.externalId = externalId;
 	}
 
-	public String getParentExtId() {
+	public String getParentExternalId() {
 		return parentExternalId;
 	}
 
-	public void setParentExtId( String parentExtId ) {
-		this.parentExternalId = parentExtId;
+	public void setParentExternalId( String parentExternalId ) {
+		this.parentExternalId = parentExternalId;
 	}
 
 	@Override

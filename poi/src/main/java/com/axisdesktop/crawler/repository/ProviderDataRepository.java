@@ -1,15 +1,17 @@
 package com.axisdesktop.crawler.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.axisdesktop.crawler.entity.ProviderData;
 
 public interface ProviderDataRepository extends JpaRepository<ProviderData, Long> {
-	@Query( name = "ProviderData.getIdByUrlId" )
-	Long getIdByUrlId( @Param( "urlId" ) long urlId );
+	@Query( name = "ProviderData.getIdByUrlIdAndTypeId" )
+	Long getIdByUrlIdAndTypeId( @Param( "urlId" ) long urlId, @Param( "typeId" ) int typeId );
 
-	@Query( name = "ProviderData.clearCommentsByParentId" )
+	@Modifying
+	@Query( value = "DELETE FROM crawler.provider_data WHERE parent_id = :parentId AND type_id = 7", nativeQuery = true )
 	void clearCommentsByParentId( @Param( "parentId" ) long parentId );
 }

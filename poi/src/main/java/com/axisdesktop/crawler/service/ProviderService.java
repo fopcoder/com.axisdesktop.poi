@@ -31,6 +31,8 @@ public interface ProviderService {
 
 	ProviderData saveProviderData( ProviderData data );
 
+	ProviderData createProviderData( ProviderData data );
+
 	void clearProviderDataCommentsByParentId( long parentId );
 
 }

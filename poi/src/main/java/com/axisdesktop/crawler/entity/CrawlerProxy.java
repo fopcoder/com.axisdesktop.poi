@@ -1,7 +1,5 @@
 package com.axisdesktop.crawler.entity;
 
-import static com.axisdesktop.utils.DateUtils.calendarToString;
-
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -16,6 +14,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.axisdesktop.base.entity.BaseEntity;
+import com.axisdesktop.base.utils.DateUtils;
 
 @Entity
 @Table( name = "proxy", schema = "crawler" )
@@ -118,7 +117,7 @@ public class CrawlerProxy extends BaseEntity<Integer> {
 	@Override
 	public String toString() {
 		return "CrawlerProxy [" + ", host=" + host + ", port=" + port + ", user=" + user + ", password=" + password
-				+ ", log=" + log + ", fetched=" + calendarToString( fetched ) + ", status_id=" + statusId + ", tries="
-				+ tries + "]";
+				+ ", log=" + log + ", fetched=" + DateUtils.calendarToString( fetched ) + ", status_id=" + statusId
+				+ ", tries=" + tries + "]";
 	}
 }

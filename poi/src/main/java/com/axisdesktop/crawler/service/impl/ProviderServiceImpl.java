@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.crawler.entity.Provider;
 import com.axisdesktop.crawler.entity.ProviderData;
@@ -116,18 +117,27 @@ public class ProviderServiceImpl implements ProviderService {
 
 	@Override
 	public ProviderData saveProviderData( ProviderData data ) {
-		Long id = provDataRepo.getIdByUrlId( data.getUrlId() );
+		Long id = provDataRepo.getIdByUrlIdAndTypeId( data.getUrlId(), data.getTypeId() );
 		if( id != null ) data.setId( id );
 
 		return provDataRepo.save( data );
 	}
 
 	@Override
+	@Transactional
 	public void clearProviderDataCommentsByParentId( long parentId ) {
 		provDataRepo.clearCommentsByParentId( parentId );
 		// provDataRepo.
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public ProviderData createProviderData( ProviderData data ) {
+		if( data == null ) throw new IllegalArgumentException( "ProviderData is null" );
+		if( data.getId() != null ) throw new IllegalArgumentException( "id must be null" );
+
+		return provDataRepo.save( data );
 	}
 
 }

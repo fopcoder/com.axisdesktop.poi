@@ -21,12 +21,12 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.axisdesktop.base.utils.DateUtils;
 import com.axisdesktop.crawler.parser.Comment;
 import com.axisdesktop.crawler.parser.Image;
 import com.axisdesktop.crawler.parser.Location;
 import com.axisdesktop.crawler.parser.Parser;
 import com.axisdesktop.crawler.parser.User;
-import com.axisdesktop.utils.DateUtils;
 
 public class DorogaParser extends Parser {
 	private static final Logger logger = LoggerFactory.getLogger( DorogaParser.class );
@@ -259,7 +259,7 @@ public class DorogaParser extends Parser {
 				Matcher um = userPattern.matcher( userEl.attr( "href" ) );
 
 				if( um.find() ) {
-					user.setExtId( um.group( 1 ) );
+					user.setExternalId( um.group( 1 ) );
 				}
 
 				user.setImageUri( "/" + tdEl.select( "img" ).attr( "src" ).replaceAll( "\\.\\.\\/", "" ) );

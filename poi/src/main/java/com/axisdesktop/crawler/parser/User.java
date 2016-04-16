@@ -21,11 +21,11 @@ public class User {
 		this.name = name;
 	}
 
-	public String getExtId() {
+	public String getExternalId() {
 		return externalId;
 	}
 
-	public void setExtId( String extId ) {
+	public void setExternalId( String extId ) {
 		this.externalId = extId;
 	}
 
