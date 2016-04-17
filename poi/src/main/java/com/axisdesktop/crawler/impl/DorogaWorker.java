@@ -64,6 +64,7 @@ public class DorogaWorker implements Worker {
 				text = HttpUtils.getTextFromConnection( uc );
 			}
 			else if( uc.getContentType().contains( "image" ) ) {
+				// TODO сделать нормально
 				String ext = null;
 
 				if( uc.getContentType().contains( "jpeg" ) ) {
@@ -79,6 +80,7 @@ public class DorogaWorker implements Worker {
 					ext = "jpg";
 				}
 
+				// TODO сделать параметром на сервере
 				String baseUrl = "C:\\Temp\\crawler";
 
 				Path baseDir = Paths.get( baseUrl );
@@ -108,8 +110,8 @@ public class DorogaWorker implements Worker {
 					if( !crawler.getProviderService().isUrlExist( providerUrl.getProviderId(), i.getUrl() ) ) {
 						ProviderUrl img = new ProviderUrl( providerUrl.getProviderId(), i.getUrl(), 4, 4 ); // image new
 						img.setParentId( providerUrl.getId() );
-						img.getParams().put( "width", i.getWidth() );
-						img.getParams().put( "height", i.getHeight() );
+						// img.getParams().put( "width", i.getWidth() );
+						// img.getParams().put( "height", i.getHeight() );
 						img.getParams().put( "external_id", i.getExternalId() );
 						img.getParams().put( "alt", i.getAlt() );
 
@@ -143,7 +145,6 @@ public class DorogaWorker implements Worker {
 				crawler.getProviderService().clearProviderDataCommentsByParentId( item.getId() );
 
 				for( Comment c : parser.comments() ) {
-					System.err.println( c );
 					ProviderData comment = new ProviderData( providerUrl.getProviderId(), providerUrl.getId(), 7,
 							"ru" );
 					comment.setParentId( item.getId() );
@@ -155,6 +156,14 @@ public class DorogaWorker implements Worker {
 					comment.getData().put( "user_img", c.getUser().getImageUri() );
 
 					crawler.getProviderService().createProviderData( comment );
+				}
+
+				if( !parser.tags().isEmpty() ) {
+					ProviderData tag = new ProviderData( providerUrl.getProviderId(), providerUrl.getId(), 8, "ru" );
+					tag.setParentId( item.getId() );
+					tag.getData().put( "tags", String.join( ",", parser.tags() ) );
+
+					crawler.getProviderService().saveProviderData( tag );
 				}
 			}
 

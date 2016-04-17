@@ -75,7 +75,7 @@ public class ProviderServiceImpl implements ProviderService {
 	@Override
 	public ProviderUrl createUrl( ProviderUrl pu ) {
 		if( pu == null ) throw new IllegalArgumentException( "ProviderUrl is null" );
-		if( pu.getId() != 0 ) throw new IllegalArgumentException( "id must be 0" );
+		if( pu.getId() != null ) throw new IllegalArgumentException( "id must be 0" );
 
 		return this.provUrlRepo.save( pu );
 	}
