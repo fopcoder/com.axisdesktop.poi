@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.axisdesktop.base.entity.SimpleEntity;
+
 @Entity
 @Table( name = "role", schema = "poi" )
 public class Role extends SimpleEntity<Integer> {
