@@ -56,8 +56,7 @@ public class PersistenceConf {
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter( vendorAdapter );
-		factory.setPackagesToScan( "com.axisdesktop.poi.entity", "com.axisdesktop.crawler.entity",
-				"com.axisdesktop.user" );
+		factory.setPackagesToScan( "com.axisdesktop.poi.entity", "com.axisdesktop.crawler.entity" );
 		factory.setDataSource( dataSource() );
 		factory.setPersistenceUnitName( "poi-jndi" );
 

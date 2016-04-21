@@ -56,4 +56,11 @@
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 		<nature>org.hibernate.eclipse.console.hibernateNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>com.axisdesktop.base</name>
+			<type>2</type>
+			<location>C:/Users/coder/Documents/eclipse_git/com.axisdesktop.base</location>
+		</link>
+	</linkedResources>
 </projectDescription>
