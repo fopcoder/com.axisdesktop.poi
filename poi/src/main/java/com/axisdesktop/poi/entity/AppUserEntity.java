@@ -1,4 +1,4 @@
-package com.axisdesktop.user;
+package com.axisdesktop.poi.entity;
 
 import java.util.Calendar;
 
@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.axisdesktop.user.AppUser;
 import com.axisdesktop.user.AppUser.Role;
 import com.axisdesktop.user.AppUser.SocialMediaService;
 

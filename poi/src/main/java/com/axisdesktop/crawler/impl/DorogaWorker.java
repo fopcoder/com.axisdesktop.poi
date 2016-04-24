@@ -138,7 +138,7 @@ public class DorogaWorker implements Worker {
 				data.put( "rating", parser.rating() );
 
 				data.put( "longitude", parser.location().getLongitude() );
-				data.put( "latitude", parser.location().getLongitude() );
+				data.put( "latitude", parser.location().getLatitude() );
 
 				crawler.getProviderService().saveProviderData( item );
 

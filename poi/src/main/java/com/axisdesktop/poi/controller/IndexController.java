@@ -2,12 +2,14 @@ package com.axisdesktop.poi.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,8 +51,8 @@ public class IndexController {
 
 	@RequestMapping( value = "/getdata", produces = "application/json" )
 	@ResponseBody
-	public List<String[]> data( @RequestBody Coords arr ) {
-		// System.out.println( arr );
+	public List<String[]> data( @RequestBody BBoxHelper arr ) {
+		System.out.println( arr );
 
 		// double south = 0, west = 0, north = 0, east = 0;
 
@@ -65,6 +67,13 @@ public class IndexController {
 		// List<Location> l = locService.findAll();
 
 		return res;
+	}
+
+	@RequestMapping( value = "/poidata/{id}", produces = "application/json" )
+	@ResponseBody
+	public Map<String, String> poiData( @PathVariable long id ) {
+		locService.getPoiData( id );
+		return null;
 	}
 
 }

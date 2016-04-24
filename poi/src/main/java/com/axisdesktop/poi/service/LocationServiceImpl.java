@@ -3,6 +3,7 @@ package com.axisdesktop.poi.service;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,12 @@ public class LocationServiceImpl implements LocationService {
 
 		// System.out.println( locRepo.findPointsInBoundingBox( south, west, north, east ) );
 		return res;
+	}
+
+	@Override
+	public Map<String, String> getPoiData( long id ) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

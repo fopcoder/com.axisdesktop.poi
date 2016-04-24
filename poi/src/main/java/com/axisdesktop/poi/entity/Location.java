@@ -1,45 +1,37 @@
 package com.axisdesktop.poi.entity;
 
-import java.util.Calendar;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import com.axisdesktop.base.utils.DateUtils;
+import com.axisdesktop.base.entity.BaseEntity;
 import com.vividsolutions.jts.geom.Point;
 
 @Entity
 @Table( name = "location", schema = "poi" )
-
-public class Location {
-	@Id
-	@GeneratedValue
-	private long id;
+public class Location extends BaseEntity<Long> {
 
 	private Point point;
 
-	@Column( updatable = false )
-	@Temporal( TemporalType.TIMESTAMP )
-	private Calendar created;
+	@Column( name = "status_id" )
+	private int statusId;
 
-	@PrePersist
-	private void prePersist() {
-		this.created = Calendar.getInstance();
-	}
+	@ManyToOne( fetch = FetchType.LAZY )
+	@JoinColumn( name = "status_id", insertable = false, updatable = false )
+	private RoleStatus status;
 
-	public long getId() {
-		return id;
-	}
+	private double rating;
 
-	public void setId( long id ) {
-		this.id = id;
-	}
+	private String link;
+
+	@OneToMany( fetch = FetchType.LAZY, mappedBy = "locationId" )
+	private List<LocationComment> comments;
 
 	public Point getPoint() {
 		return point;
@@ -49,16 +41,40 @@ public class Location {
 		this.point = point;
 	}
 
-	public Calendar getCreated() {
-		return created;
+	public int getStatusId() {
+		return statusId;
 	}
 
-	public void setCreated( Calendar created ) {
-		this.created = created;
+	public void setStatusId( int statusId ) {
+		this.statusId = statusId;
+	}
+
+	public RoleStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus( RoleStatus status ) {
+		this.status = status;
+	}
+
+	public double getRating() {
+		return rating;
+	}
+
+	public void setRating( double rating ) {
+		this.rating = rating;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink( String link ) {
+		this.link = link;
 	}
 
 	@Override
 	public String toString() {
-		return "Location [id=" + id + ", point=" + point + ", created=" + DateUtils.calendarToString( created ) + "]";
+		return "Location [" + ", point=" + point + ", created=" + "]";
 	}
 }

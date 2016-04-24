@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.axisdesktop.poi.entity.AppUserEntity;
+
 public class AppUserService implements UserDetailsService {
 
 	private AppUserRepository repository;
