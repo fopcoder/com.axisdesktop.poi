@@ -21,6 +21,7 @@
 	center="[48.8206639,31.2979349]" 
 	style="height:100%" 
 	on-idle="mc.onIdle()" 
+	on-click="mc.onClick()"
 	>
 	
 	<info-window id="info-window">
@@ -32,7 +33,41 @@
 		</div>
 		</form>
 	</info-window>
+	<custom-control position="TOP_RIGHT">
+		<button type="button" class="btn btn-default btn-lg" id="panel-button" ng-click="mc.sidebarToggle()"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
+	</custom-control>
 </ng-map>
+
+<style>
+#koko {
+
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                width: 300px;
+                background: #fff;
+}
+</style>
+
+<div ng-show="sidebarChecked"  id="koko">
+<button id="close" class="btn btn-default btn-sm pull-right"  ng-click="mc.sidebarToggle()"><span class="glyphicon glyphicon-remove"></span></button>
+<div>{{newPoint.val}}</div>
+</div>
+
+<!-- 
+<pageslide ps-open="sidebarChecked">
+	<button id="close" class="btn btn-default btn-sm pull-right"  ng-click="mc.sidebarToggle()"><span class="glyphicon glyphicon-remove"></span></button>
+
+    <div style="padding:20px" id="demo-right">
+        <h2>Hello Pageslide</h2>
+        <p>Put here whatever you want</p>
+        
+       	<div ng-bind="newPoint.val">{{}}</div>
+    </div>
+</pageslide>
+ -->
+
 
 </body>
 </html>

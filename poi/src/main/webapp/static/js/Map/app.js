@@ -1,1 +1,1 @@
-var MapApp = angular.module( "MapApp", ["ngMap","ngStorage"] );
+var MapApp = angular.module( "MapApp", ["ngMap","ngStorage","pageslide-directive"] );

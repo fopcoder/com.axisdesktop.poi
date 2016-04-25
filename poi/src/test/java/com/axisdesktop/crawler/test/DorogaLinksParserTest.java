@@ -1,5 +1,8 @@
 package com.axisdesktop.crawler.test;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,12 +42,12 @@ public class DorogaLinksParserTest {
 
 	@Test
 	public void testCategoryLinks() {
-		System.out.println( "categoryLinks: " + parser.categoryLinks().size() );
+		assertThat( "Not all category links parsed", parser.categoryLinks().size(), equalTo( 683 ) );
 	}
 
 	@Test
 	public void testItemLinks() {
-		System.out.println( "itemLinks: " + parser.itemLinks().size() );
+		assertThat( "Not all item links parsed", parser.itemLinks().size(), equalTo( 2064 ) );
 	}
 
 }

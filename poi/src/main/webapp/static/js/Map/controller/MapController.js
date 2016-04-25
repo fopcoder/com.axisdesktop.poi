@@ -4,9 +4,10 @@ MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap)
 	var markerClusterer;
 	var checkedPoints = {};
 	var defaultZoom = 6;
+	var currenrMarker;
 	
 	var checkedIcon = new google.maps.MarkerImage(
-	    "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|00D900",
+	    "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|0000ff",
 	    null, /* size is determined at runtime */
 	    null, /* origin is 0,0 */
 	    null, /* anchor is bottom center of the scaled image */
@@ -21,11 +22,52 @@ MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap)
 	    null //new google.maps.Size(12, 18)
 	);
 	
+	var currentIcon = new google.maps.MarkerImage(
+	    "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|00ff00",
+	    null, /* size is determined at runtime */
+	    null, /* origin is 0,0 */
+	    null, /* anchor is bottom center of the scaled image */
+	    null //new google.maps.Size(12, 18)
+	);
 	
+	$scope.newPoint = {};
+	
+	
+	// slidebar
+	$scope.sidebarChecked = false; 
+
+	mc.sidebarToggle = function()	{
+		$scope.sidebarChecked = !$scope.sidebarChecked;
+	}
 	
 	NgMap.getMap().then(function(map) {
 		mc.map = map;
 		markerClusterer = new MarkerClusterer( map );
+		/*
+		google.maps.event.addListener(map, "click", function(event) {
+			if( currenrMarker )	{
+				currenrMarker.setMap(null);
+			}
+			
+			$scope.newPoint.val = event.latLng.toString().replace("(","").replace(")","");
+			console.log( $scope.newPoint.val );
+			
+	        currenrMarker = new google.maps.Marker({
+	            position: event.latLng, 
+	            map: map,
+	            icon: currentIcon
+	        });
+	        
+	        google.maps.event.addListener( currenrMarker, 'click', function( event1 ) {
+//	        	if( !$scope.sidebarChecked )	{
+//	        		angular.element(document.querySelector('#close')).triggerHandler('click');
+//	        	}
+	        	//console.log(event1.latLng.toString().replace("(","").replace(")",""));
+	        	$scope.newPoint.val = event1.latLng.toString().replace("(","").replace(")","");
+			} );
+	        
+	    });
+	    */
 		
 		restoreCheckedPoints();
 		restoreZoom();
@@ -40,8 +82,31 @@ MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap)
 			saveCenterPoint();
 			saveZoom();
 		}
+		
+		mc.onClick = function(event) {
+			if( currenrMarker )	{
+				currenrMarker.setMap(null);
+			}
+			
+			currenrMarker = new google.maps.Marker({
+	            position: event.latLng, 
+	            map: map,
+	            icon: currentIcon
+	        });
+			
+			if( !$scope.sidebarChecked )	{
+        		angular.element(document.querySelector('#panel-button')).triggerHandler('click');
+        	}
+			
+			$scope.newPoint.val = event.latLng.lat().toFixed(6) + "=="+event.latLng.lng().toFixed(6);
+		}
 	});
 
+	
+	
+	
+	
+	
 	mc.loadPointsInBBox = function( bounds )	{
 		
 		$http
