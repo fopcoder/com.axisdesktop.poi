@@ -17,12 +17,12 @@ import org.springframework.core.io.ClassPathResource;
 import com.axisdesktop.crawler.parser.Parser;
 import com.axisdesktop.crawler.parser.impl.DorogaParser;
 
-public class DorogaLinksParserTest {
+public class DorogaHtmlLinksParserTest {
 	public static Parser parser;
 
 	@BeforeClass
 	public static void setup() throws IOException {
-		InputStream is = new ClassPathResource( "/doroga/sitemap_poi.xml" ).getInputStream();
+		InputStream is = new ClassPathResource( "/doroga/html_poi.html" ).getInputStream();
 		BufferedReader br = new BufferedReader( new InputStreamReader( is, StandardCharsets.UTF_8 ) );
 
 		StringBuilder buf = new StringBuilder();
@@ -41,13 +41,8 @@ public class DorogaLinksParserTest {
 	}
 
 	@Test
-	public void testCategoryLinks() {
-		assertThat( "Not all category links parsed", parser.categoryLinks().size(), equalTo( 683 ) );
-	}
-
-	@Test
 	public void testItemLinks() {
-		assertThat( "Not all item links parsed", parser.itemLinks().size(), equalTo( 2064 ) );
+		assertThat( "Not all item links parsed", parser.itemLinks().size(), equalTo( 13 ) );
 	}
 
 }

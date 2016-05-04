@@ -38,7 +38,7 @@ public class HttpUtils {
 		}
 	
 		if( properties.containsKey( "user-agent" ) ) {
-			uc.setRequestProperty( "AppUserEntity-Agent", properties.get( "user-agent" ) );
+			uc.setRequestProperty( "User-Agent", properties.get( "user-agent" ) );
 		}
 	
 		if( properties.containsKey( "referer" ) ) {

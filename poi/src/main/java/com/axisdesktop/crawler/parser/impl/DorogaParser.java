@@ -351,11 +351,29 @@ public class DorogaParser extends Parser {
 
 		Elements elts = doc.select( "loc:contains(/poi/)" );
 
-		for( Element e : elts ) {
-			String uri = e.text();
+		if( !elts.isEmpty() ) {
+			for( Element e : elts ) {
+				String uri = e.text();
 
-			if( !list.contains( uri ) ) {
-				list.add( uri );
+				if( !list.contains( uri ) ) {
+					list.add( uri );
+				}
+			}
+		}
+
+		elts = doc.select( "a[href*=/poi/]" );
+
+		if( !elts.isEmpty() ) {
+			for( Element e : elts ) {
+				String uri = e.attr( "href" );
+
+				if( uri != null ) {
+					uri = uri.split( "#" )[0];
+				}
+
+				if( !list.contains( uri ) ) {
+					list.add( uri );
+				}
 			}
 		}
 
