@@ -1,13 +1,7 @@
 package com.axisdesktop.crawler.base;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -68,8 +62,19 @@ public class CrawlerUtils {
 		return text;
 	}
 
-	public static InputStream urlInputStream( Crawler crawler, Proxy proxy, ProviderUrl providerUrl )
-			throws IOException {
+	public static HttpURLConnection fetchConnection( Crawler crawler, Proxy proxy, ProviderUrl providerUrl )
+			throws IOException, IllegalArgumentException {
+
+		if( crawler == null ) throw new IllegalArgumentException( "crawler is null" );
+		if( proxy == null ) throw new IllegalArgumentException( "proxy is null" );
+		if( providerUrl == null ) throw new IllegalArgumentException( "providerUrl is null" );
+
+		URL url = new URL( providerUrl.getUrl() );
+		HttpURLConnection conn = (HttpURLConnection)url.openConnection( proxy );
+
+		conn.setRequestProperty( "User-Agent", crawler.getUserAgent() );
+		conn.setRequestProperty( "Referer", crawler.getReferer() );
+		conn.setConnectTimeout( 20_000 );
 
 		Map<String, Object> params = providerUrl.getParams();
 
@@ -86,21 +91,13 @@ public class CrawlerUtils {
 
 			byte[] postDataBytes = postData.toString().getBytes( "UTF-8" );
 
-			URL url = new URL( "http://example.net/new-message.php" );
-			HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 			conn.setRequestMethod( "POST" );
+			conn.setDoOutput( true );
 			conn.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" );
 			conn.setRequestProperty( "Content-Length", String.valueOf( postDataBytes.length ) );
-			conn.setDoOutput( true );
 			conn.getOutputStream().write( postDataBytes );
-
-			return conn.getInputStream();
-
-		}
-		else {
-
 		}
 
-		return null;
+		return conn;
 	}
 }
