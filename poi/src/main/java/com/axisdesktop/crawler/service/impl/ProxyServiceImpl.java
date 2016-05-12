@@ -4,6 +4,7 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
+import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
 
@@ -18,15 +19,12 @@ import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
-import com.axisdesktop.utils.HttpUtils;
 
 @Service
 public class ProxyServiceImpl implements ProxyService {
 	private static final Logger logger = LoggerFactory.getLogger( ProxyServiceImpl.class );
 
-	// @Autowired
 	private ProxyRepository proxyRepo;
-	// @Autowired
 	private ProxyStatusRepository proxyStausRepo;
 
 	public ProxyServiceImpl() {
@@ -78,7 +76,9 @@ public class ProxyServiceImpl implements ProxyService {
 			proxy = new Proxy( Type.HTTP, new InetSocketAddress( crawlerProxy.getHost(), crawlerProxy.getPort() ) );
 
 			try {
-				HttpURLConnection uc = HttpUtils.getConnection( proxyTestDomain, proxy );
+				URL url = new URL( proxyTestDomain );
+				HttpURLConnection uc = (HttpURLConnection)url.openConnection( proxy );
+				uc.setConnectTimeout( 10_000 );
 				uc.setRequestMethod( "HEAD" );
 
 				logger.debug( "proxy: test url {} start {}", proxyTestDomain, crawlerProxy.getHost() );

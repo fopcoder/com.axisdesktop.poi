@@ -20,12 +20,11 @@ import com.axisdesktop.base.entity.BaseEntity;
 @Entity
 @Table( name = "provider_url", schema = "crawler" )
 @TypeDef( name = "hstore", typeClass = HstoreUserType.class )
-@NamedQueries( {
-		@NamedQuery( name = "ProviderUrl.findActiveFeedUrl", //
-				query = "SELECT u FROM ProviderUrl u " //
-						+ "WHERE providerId = :providerId " //
-						+ "AND ( statusId = 1 OR ( statusId = 3 AND tries < :maxTries ) ) " //
-						+ "AND modified < :waitFor AND typeId = 1" ),
+@NamedQueries( { @NamedQuery( name = "ProviderUrl.findActiveFeedUrl", //
+		query = "SELECT u FROM ProviderUrl u " //
+				+ "WHERE providerId = :providerId  AND typeId = 1 AND modified < :nextTime" //
+				+ "AND ( statusId = 1 OR ( statusId = 3 AND tries < :maxTries AND modified < :waitFor ) ) " //
+		),
 		@NamedQuery( name = "ProviderUrl.isExistByProviderIdAndUrl", //
 				query = "SELECT COUNT(*) > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ),
 		@NamedQuery( name = "ProviderUrl.findUrlForUpdate", //

@@ -21,7 +21,6 @@ import com.axisdesktop.crawler.parser.Comment;
 import com.axisdesktop.crawler.parser.Image;
 import com.axisdesktop.crawler.parser.Parser;
 import com.axisdesktop.crawler.parser.impl.DorogaParser;
-import com.axisdesktop.utils.HttpUtils;
 
 public class DorogaWorker implements Worker {
 	private static final Logger logger = LoggerFactory.getLogger( DorogaWorker.class );
@@ -37,21 +36,14 @@ public class DorogaWorker implements Worker {
 	@Override
 	public void run() {
 		try {
-			// String text = CrawlerUtils.getCrawlerUrlTextContent( crawler, providerUrl );
-
 			String text = null;
-
 			Proxy proxy = crawler.getProxyService().getRandomActiveProxy();
 
 			if( proxy == null ) {
 				throw new IOException( "active proxy not found!" );
 			}
 
-			Map<String, String> connProps = crawler.getConnectionProperties();
-			connProps.put( "user-agent", crawler.getUserAgent() );
-			connProps.put( "referer", crawler.getReferer() );
-
-			HttpURLConnection uc = HttpUtils.getConnection( providerUrl.getUrl(), proxy, connProps );
+			HttpURLConnection uc = crawler.getConnection( proxy, providerUrl );
 
 			if( uc.getResponseCode() != 200 ) {
 				throw new IllegalStateException(
@@ -61,7 +53,7 @@ public class DorogaWorker implements Worker {
 			logger.debug( uc.getContentType() );
 
 			if( uc.getContentType().contains( "text" ) ) {
-				text = HttpUtils.getTextFromConnection( uc );
+				text = crawler.getTextContent( uc );
 			}
 			else if( uc.getContentType().contains( "image" ) ) {
 				// TODO сделать нормально

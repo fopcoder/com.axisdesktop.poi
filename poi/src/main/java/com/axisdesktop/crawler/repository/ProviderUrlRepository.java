@@ -12,8 +12,8 @@ import com.axisdesktop.crawler.entity.ProviderUrl;
 
 public interface ProviderUrlRepository extends JpaRepository<ProviderUrl, Long> {
 	@Query( name = "ProviderUrl.findActiveFeedUrl" )
-	List<ProviderUrl> findActiveFeedUrl( @Param( "providerId" ) int providerId, @Param( "waitFor" ) Calendar cal,
-			@Param( "maxTries" ) int maxTries );
+	List<ProviderUrl> findActiveFeedUrl( @Param( "providerId" ) int providerId, @Param( "waitFor" ) Calendar waitFor,
+			@Param( "nextTime" ) Calendar nextTime, @Param( "maxTries" ) int maxTries );
 
 	List<ProviderUrl> findByProviderIdAndUrl( int providerId, String url, Pageable page );
 

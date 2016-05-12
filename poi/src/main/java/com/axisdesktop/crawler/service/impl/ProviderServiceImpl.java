@@ -18,16 +18,14 @@ import com.axisdesktop.crawler.service.ProviderService;
 
 @Service
 public class ProviderServiceImpl implements ProviderService {
-	@Autowired
 	private ProviderRepository provRepo;
-	@Autowired
 	private ProviderUrlRepository provUrlRepo;
-	@Autowired
 	private ProviderDataRepository provDataRepo;
 
 	public ProviderServiceImpl() {
 	}
 
+	@Autowired
 	public ProviderServiceImpl( ProviderRepository provRepo, ProviderUrlRepository provFeedUriRepo,
 			ProviderDataRepository provDataRepo ) {
 		this.provRepo = provRepo;
@@ -99,10 +97,13 @@ public class ProviderServiceImpl implements ProviderService {
 
 	@Override
 	public List<ProviderUrl> findActiveFeedUrl( int providerId ) {
-		Calendar cal = Calendar.getInstance();
-		cal.add( Calendar.MINUTE, -15 );
+		Calendar waitFor = Calendar.getInstance();
+		waitFor.add( Calendar.MINUTE, -15 );
 
-		return provUrlRepo.findActiveFeedUrl( providerId, cal, 10 );
+		Calendar nextTime = Calendar.getInstance();
+		nextTime.add( Calendar.DAY_OF_MONTH, -1 );
+
+		return provUrlRepo.findActiveFeedUrl( providerId, waitFor, nextTime, 10 );
 	}
 
 	@Override

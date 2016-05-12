@@ -41,7 +41,7 @@ public class DorogaCrawler extends WebCrawler {
 	public void run() {
 		try {
 			// TODO switsh on feed url
-			// this.getAndUpdateFeedUrls();
+			this.getAndUpdateFeedUrls();
 
 			// ExecutorService exec = Executors.newFixedThreadPool( 5 );
 
