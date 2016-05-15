@@ -104,11 +104,8 @@ public class DorogaWorker implements Worker {
 				for( Comment c : parser.comments() ) {
 					ProviderData comment = new ProviderData( providerUrl.getProviderId(), providerUrl.getId(), 7,
 							"ru" );
-
 					try {
-
 						comment.setParentId( item.getId() );
-
 						comment.getData().put( "date", c.getDate() );
 						comment.getData().put( "comment", c.getBody() );
 						comment.getData().put( "user", c.getUser().getName() );
@@ -118,7 +115,7 @@ public class DorogaWorker implements Worker {
 						crawler.getProviderService().createProviderData( comment );
 					}
 					catch( Exception e ) {
-						throw new Exception( String.format( "save comment error:\n%s", comment.toString() ) );
+						logger.error( String.format( "save comment error:\n%s", comment.toString() ) );
 					}
 				}
 
