@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.axisdesktop.crawler.base.CrawlerUtils;
@@ -33,8 +34,8 @@ public class DorogaCrawler extends WebCrawler {
 	public DorogaCrawler() {
 	}
 
-	public DorogaCrawler( ProxyService proxyService, ProviderService providerService ) {
-		super( proxyService, providerService );
+	public DorogaCrawler( ProxyService proxyService, ProviderService providerService, Environment env ) {
+		super( proxyService, providerService, env );
 	}
 
 	@Override
@@ -56,6 +57,7 @@ public class DorogaCrawler extends WebCrawler {
 
 			// exec.shutdown();
 		}
+
 		catch( Exception e ) {
 			e.printStackTrace();
 			// logger.error( e.getMessage() );

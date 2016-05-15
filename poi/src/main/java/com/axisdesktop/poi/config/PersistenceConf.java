@@ -24,8 +24,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 		"com.axisdesktop.user" } )
 @ComponentScan( { "com.axisdesktop.poi.service", "com.axisdesktop.crawler.service", "com.axisdesktop.user" } )
 public class PersistenceConf {
-	@Autowired
-	private Environment environment;
+	// @Autowired
+	// private Environment environment;
 
 	@Bean
 	DataSource dataSource() {

@@ -5,6 +5,8 @@ import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.util.Map;
 
+import org.springframework.core.env.Environment;
+
 import com.axisdesktop.crawler.entity.ProviderUrl;
 import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
@@ -29,4 +31,8 @@ public interface Crawler extends Runnable {
 	Map<String, String> getConnectionProperties();
 
 	int getProviderId();
+
+	Environment getEnvironment();
+
+	void setEnvironment( Environment env );
 }

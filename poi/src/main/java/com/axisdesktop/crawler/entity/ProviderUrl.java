@@ -22,8 +22,10 @@ import com.axisdesktop.base.entity.BaseEntity;
 @TypeDef( name = "hstore", typeClass = HstoreUserType.class )
 @NamedQueries( { @NamedQuery( name = "ProviderUrl.findActiveFeedUrl", //
 		query = "SELECT u FROM ProviderUrl u " //
-				+ "WHERE providerId = :providerId  AND typeId = 1 AND modified < :nextTime" //
-				+ "AND ( statusId = 1 OR ( statusId = 3 AND tries < :maxTries AND modified < :waitFor ) ) " //
+				+ "WHERE providerId = :providerId  AND typeId = 1 AND ( " //
+				+ "( statusId = 1 AND modified < :nextTime ) OR " //
+				+ "statusId = 4 OR" //
+				+ "( statusId = 3 AND tries < :maxTries AND modified < :waitFor ) ) ) " //
 		),
 		@NamedQuery( name = "ProviderUrl.isExistByProviderIdAndUrl", //
 				query = "SELECT COUNT(*) > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ),
@@ -150,9 +152,9 @@ public class ProviderUrl extends BaseEntity<Long> {
 
 	@Override
 	public String toString() {
-		return "ProviderUrl [" + ", providerId=" + providerId + ", statusId=" + statusId + ", url=" + url + ", log="
-				+ log + ", tries=" + tries + ", created=" + ", modified=" + ", typeId=" + typeId + ", parentId="
-				+ parentId + ", params=" + params + "]";
+		return "ProviderUrl [" + super.toString() + ", providerId=" + providerId + ", statusId=" + statusId
+				+ ", typeId=" + typeId + ", url=" + url + ", log=" + log + ", tries=" + tries + ", parentId=" + parentId
+				+ ", params=" + params + "]";
 	}
 
 }

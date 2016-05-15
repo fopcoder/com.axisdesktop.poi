@@ -78,7 +78,7 @@ public class ProxyServiceImpl implements ProxyService {
 			try {
 				URL url = new URL( proxyTestDomain );
 				HttpURLConnection uc = (HttpURLConnection)url.openConnection( proxy );
-				uc.setConnectTimeout( 10_000 );
+				uc.setConnectTimeout( 20_000 );
 				uc.setRequestMethod( "HEAD" );
 
 				logger.debug( "proxy: test url {} start {}", proxyTestDomain, crawlerProxy.getHost() );

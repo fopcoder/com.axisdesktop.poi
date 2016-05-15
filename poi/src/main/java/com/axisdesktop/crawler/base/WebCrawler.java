@@ -10,23 +10,29 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import com.axisdesktop.crawler.entity.ProviderUrl;
 import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
 
 public abstract class WebCrawler implements Crawler {
+	@Autowired
 	private ProxyService proxyService;
+	@Autowired
 	private ProviderService providerService;
+	@Autowired
+	private Environment env;
+
 	private int connectTimeout = 20_000;
 
 	public WebCrawler() {
 	}
 
-	@Autowired
-	public WebCrawler( ProxyService proxyService, ProviderService providerService ) {
+	public WebCrawler( ProxyService proxyService, ProviderService providerService, Environment env ) {
 		this.proxyService = proxyService;
 		this.providerService = providerService;
+		this.env = env;
 	}
 
 	@Override
@@ -114,6 +120,16 @@ public abstract class WebCrawler implements Crawler {
 		catch( IOException e ) { /* ignore */ }
 
 		return text;
+	}
+
+	@Override
+	public Environment getEnvironment() {
+		return env;
+	}
+
+	@Override
+	public void setEnvironment( Environment env ) {
+		this.env = env;
 	}
 
 }

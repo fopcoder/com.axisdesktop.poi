@@ -18,8 +18,11 @@ import com.axisdesktop.crawler.service.ProviderService;
 
 @Service
 public class ProviderServiceImpl implements ProviderService {
+	@Autowired
 	private ProviderRepository provRepo;
+	@Autowired
 	private ProviderUrlRepository provUrlRepo;
+	@Autowired
 	private ProviderDataRepository provDataRepo;
 
 	public ProviderServiceImpl() {

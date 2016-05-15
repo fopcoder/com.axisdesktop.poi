@@ -112,9 +112,9 @@ public class ProviderData extends BaseEntity<Long> {
 
 	@Override
 	public String toString() {
-		return "ProviderData [urlId=" + urlId + ", providerId=" + providerId + ", categoryId=" + categoryId
-				+ ", languageId=" + languageId + ", parentId=" + parentId + ", typeId=" + typeId + ", data=" + data
-				+ "]";
+		return "ProviderUrl [" + super.toString() + ", urlId=" + urlId + ", providerId=" + providerId + ", categoryId="
+				+ categoryId + ", languageId=" + languageId + ", parentId=" + parentId + ", typeId=" + typeId
+				+ ", data=" + data + "]";
 	}
 
 }
