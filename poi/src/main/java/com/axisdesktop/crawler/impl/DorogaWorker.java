@@ -68,36 +68,47 @@ public class DorogaWorker implements Worker {
 				for( Image i : parser.images() ) {
 					if( !crawler.getProviderService().isUrlExist( providerUrl.getProviderId(), i.getUrl() ) ) {
 						ProviderUrl img = new ProviderUrl( providerUrl.getProviderId(), i.getUrl(), 4, 4 ); // image new
-						img.setParentId( providerUrl.getId() );
-						img.getParams().put( "external_id", i.getExternalId() );
-						img.getParams().put( "alt", i.getAlt() );
+						try {
+							img.setParentId( providerUrl.getId() );
+							img.getParams().put( "external_id", i.getExternalId() );
+							img.getParams().put( "alt", i.getAlt() );
 
-						crawler.getProviderService().createUrl( img );
+							crawler.getProviderService().createUrl( img );
+						}
+						catch( Exception e ) {
+							throw new Exception( String.format( "create image url error:\n%s", img.toString() ), e );
+						}
 					}
 				}
 
 				ProviderData item = new ProviderData( providerUrl.getProviderId(), providerUrl.getId(),
 						providerUrl.getTypeId(), "ru" );
 
-				Map<String, String> data = item.getData();
-				data.put( "header", parser.header() );
-				data.put( "short_description", parser.shortDescription() );
-				data.put( "full_description", parser.fullDescription() );
+				try {
 
-				data.put( "status", parser.status() );
-				data.put( "status_text", parser.statusText() );
+					Map<String, String> data = item.getData();
+					data.put( "header", parser.header() );
+					data.put( "short_description", parser.shortDescription() );
+					data.put( "full_description", parser.fullDescription() );
 
-				data.put( "contact_address", parser.contactsAddress() );
-				data.put( "contact_phone", parser.contactsPhone() );
-				data.put( "contact_link", parser.contactsLink() );
-				data.put( "contact_worktime", parser.contactsWorktime() );
+					data.put( "status", parser.status() );
+					data.put( "status_text", parser.statusText() );
 
-				data.put( "rating", parser.rating() );
+					data.put( "contact_address", parser.contactsAddress() );
+					data.put( "contact_phone", parser.contactsPhone() );
+					data.put( "contact_link", parser.contactsLink() );
+					data.put( "contact_worktime", parser.contactsWorktime() );
 
-				data.put( "longitude", parser.location().getLongitude() );
-				data.put( "latitude", parser.location().getLatitude() );
+					data.put( "rating", parser.rating() );
 
-				crawler.getProviderService().saveProviderData( item );
+					data.put( "longitude", parser.location().getLongitude() );
+					data.put( "latitude", parser.location().getLatitude() );
+
+					crawler.getProviderService().saveProviderData( item );
+				}
+				catch( Exception e ) {
+					throw new Exception( String.format( "save url data error:\n%s", item.toString() ), e );
+				}
 
 				crawler.getProviderService().clearProviderDataCommentsByParentId( item.getId() );
 
@@ -115,16 +126,21 @@ public class DorogaWorker implements Worker {
 						crawler.getProviderService().createProviderData( comment );
 					}
 					catch( Exception e ) {
-						logger.error( String.format( "save comment error:\n%s", comment.toString() ) );
+						throw new Exception( String.format( "save comment error:\n%s", comment.toString() ), e );
 					}
 				}
 
 				if( !parser.tags().isEmpty() ) {
 					ProviderData tag = new ProviderData( providerUrl.getProviderId(), providerUrl.getId(), 8, "ru" );
-					tag.setParentId( item.getId() );
-					tag.getData().put( "tags", String.join( ",", parser.tags() ) );
+					try {
+						tag.setParentId( item.getId() );
+						tag.getData().put( "tags", String.join( ",", parser.tags() ) );
 
-					crawler.getProviderService().saveProviderData( tag );
+						crawler.getProviderService().saveProviderData( tag );
+					}
+					catch( Exception e ) {
+						throw new Exception( String.format( "save tag error:\n%s", tag.toString() ), e );
+					}
 				}
 			}
 			else if( uc.getContentType().contains( "image" ) ) {
@@ -163,7 +179,9 @@ public class DorogaWorker implements Worker {
 
 			crawler.getProviderService().updateUrl( providerUrl );
 		}
-		catch( IllegalStateException e ) {
+		catch(
+
+		IllegalStateException e ) {
 			logger.error( e.toString(), e.getMessage(), this.providerUrl.toString() );
 		}
 		catch( NoActiveProxyException e ) {
