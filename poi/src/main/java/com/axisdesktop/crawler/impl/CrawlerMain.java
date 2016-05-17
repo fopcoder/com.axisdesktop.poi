@@ -25,7 +25,6 @@ public class CrawlerMain {
 		// ctx.register( SocialConf.class );
 
 		ctx.refresh();
-
 		// ProviderService providerService = ctx.getBean( ProviderService.class );
 		// ProxyService proxyService = ctx.getBean( ProxyService.class );
 

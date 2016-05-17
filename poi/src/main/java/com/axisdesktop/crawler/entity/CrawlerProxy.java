@@ -19,7 +19,7 @@ import com.axisdesktop.base.utils.DateUtils;
 @Entity
 @Table( name = "proxy", schema = "crawler" )
 @NamedQueries( {
-		@NamedQuery( name = "CrawlerProxy.findActiveOrderByRandom", query = "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ORDER BY RANDOM()" ) } )
+		@NamedQuery( name = "CrawlerProxy.findActiveOrderByRandom", query = "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ORDER BY statusId, RANDOM()" ) } )
 public class CrawlerProxy extends BaseEntity<Integer> {
 
 	private String host;

@@ -34,5 +34,4 @@ public interface Crawler extends Runnable {
 
 	Environment getEnvironment();
 
-	void setEnvironment( Environment env );
 }

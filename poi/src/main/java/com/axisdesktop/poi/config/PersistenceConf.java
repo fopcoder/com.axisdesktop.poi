@@ -50,7 +50,7 @@ public class PersistenceConf {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		vendorAdapter.setGenerateDdl( false );
-		vendorAdapter.setShowSql( true );
+		// vendorAdapter.setShowSql( true );
 		vendorAdapter.setDatabasePlatform( "org.hibernate.spatial.dialect.postgis.PostgisDialect" );
 		// vendorAdapter.setDatabase( Database.POSTGRESQL );
 
@@ -61,7 +61,7 @@ public class PersistenceConf {
 		factory.setPersistenceUnitName( "poi-jndi" );
 
 		Properties jpaProperties = new Properties();
-		jpaProperties.put( "hibernate.format_sql", "true" );
+		// jpaProperties.put( "hibernate.format_sql", "true" );
 		jpaProperties.put( "hibernate.enable_lazy_load_no_trans", "true" );
 
 		factory.setJpaProperties( jpaProperties );

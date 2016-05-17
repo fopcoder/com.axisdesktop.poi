@@ -9,9 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import com.axisdesktop.crawler.base.Crawler;
 import com.axisdesktop.crawler.base.Worker;
@@ -30,9 +33,6 @@ public class DorogaWorker implements Worker {
 
 	private Crawler crawler;
 	private ProviderUrl providerUrl;
-
-	@Autowired
-	private AppConf appConf;
 
 	public DorogaWorker( Crawler crawler, ProviderUrl providerUrl ) {
 		this.crawler = crawler;
@@ -59,7 +59,7 @@ public class DorogaWorker implements Worker {
 			if( uc.getContentType().contains( "text" ) ) {
 				text = crawler.getTextContent( uc );
 
-				if( text == null || text.equals( "" ) ) {
+				if( text == null || text.length() == 0 ) {
 					throw new IllegalStateException( String.format( "received text is empty:" ) );
 				}
 
@@ -68,6 +68,7 @@ public class DorogaWorker implements Worker {
 				for( Image i : parser.images() ) {
 					if( !crawler.getProviderService().isUrlExist( providerUrl.getProviderId(), i.getUrl() ) ) {
 						ProviderUrl img = new ProviderUrl( providerUrl.getProviderId(), i.getUrl(), 4, 4 ); // image new
+
 						try {
 							img.setParentId( providerUrl.getId() );
 							img.getParams().put( "external_id", i.getExternalId() );
@@ -132,6 +133,7 @@ public class DorogaWorker implements Worker {
 
 				if( !parser.tags().isEmpty() ) {
 					ProviderData tag = new ProviderData( providerUrl.getProviderId(), providerUrl.getId(), 8, "ru" );
+
 					try {
 						tag.setParentId( item.getId() );
 						tag.getData().put( "tags", String.join( ",", parser.tags() ) );
@@ -146,25 +148,35 @@ public class DorogaWorker implements Worker {
 			else if( uc.getContentType().contains( "image" ) ) {
 				String ext = HttpUtils.mime2ext( uc.getContentType(), "jpg" );
 
-				String baseUrl = appConf.getCrawlerFileStorePath();
-				Path baseDir = Paths.get( baseUrl );
+				String baseUrl = null;
+				Path baseDir = null;
+				Path imgFile = null;
 
-				if( Files.notExists( baseDir ) ) {
-					Files.createDirectory( baseDir );
+				try {
+					baseUrl = "C:\\Temp\\crawler";
+					baseDir = Paths.get( baseUrl );
+
+					if( Files.notExists( baseDir ) ) {
+						Files.createDirectory( baseDir );
+					}
+
+					Path imgDir = Paths.get( baseUrl, Long.toString(
+							providerUrl.getParentId() != null ? providerUrl.getParentId() : providerUrl.getId() ) );
+
+					if( Files.notExists( imgDir ) ) {
+						Files.createDirectory( imgDir );
+					}
+
+					imgFile = Paths.get( imgDir.toString(), Long.toString( providerUrl.getId() ) + "." + ext );
+
+					logger.debug( imgFile.toString() );
+
+					Files.copy( uc.getInputStream(), imgFile, REPLACE_EXISTING );
 				}
-
-				Path imgDir = Paths.get( baseUrl, Long.toString(
-						providerUrl.getParentId() != null ? providerUrl.getParentId() : providerUrl.getId() ) );
-
-				if( Files.notExists( imgDir ) ) {
-					Files.createDirectory( imgDir );
+				catch( Exception e ) {
+					throw new Exception( String.format( "get file errof:\nappConf: %s\nbaseUrl: %s\nimgFile %s", "",
+							baseUrl, imgFile.toString() ), e );
 				}
-
-				Path imgFile = Paths.get( imgDir.toString(), Long.toString( providerUrl.getId() ) + "." + ext );
-
-				logger.debug( imgFile.toString() );
-
-				Files.copy( uc.getInputStream(), imgFile, REPLACE_EXISTING );
 			}
 
 			providerUrl.setLog( null );
@@ -179,23 +191,23 @@ public class DorogaWorker implements Worker {
 
 			crawler.getProviderService().updateUrl( providerUrl );
 		}
-		catch(
-
-		IllegalStateException e ) {
-			logger.error( e.toString(), e.getMessage(), this.providerUrl.toString() );
+		catch( IllegalStateException e ) {
+			logger.warn( String.format( "%s\n%s\n%s", e.toString(), e.getMessage(), this.providerUrl.toString() ) );
+			e.printStackTrace();
 		}
 		catch( NoActiveProxyException e ) {
-			logger.warn( e.toString(), e.getMessage(), this.providerUrl.toString() );
+			logger.warn( String.format( "%s\n%s\n%s", e.toString(), e.getMessage(), this.providerUrl.toString() ) );
+			e.printStackTrace();
 		}
 		catch( Exception e ) {
-			logger.error( e.toString(), e.getMessage(), this.providerUrl.toString() );
+			logger.warn( String.format( "%s\n%s\n%s", e.toString(), e.getMessage(), this.providerUrl.toString() ) );
+			e.printStackTrace();
 
 			providerUrl.setLog( e.toString() + "\n" + e.getMessage() );
 			providerUrl.setStatusId( 3 );
 			providerUrl.setTries( providerUrl.getTries() + 1 );
 
 			crawler.getProviderService().updateUrl( providerUrl );
-			e.printStackTrace();
 		}
 	}
 

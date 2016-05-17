@@ -104,7 +104,7 @@ public class ProviderServiceImpl implements ProviderService {
 		waitFor.add( Calendar.MINUTE, -15 );
 
 		Calendar nextTime = Calendar.getInstance();
-		nextTime.add( Calendar.DAY_OF_MONTH, -1 );
+		nextTime.add( Calendar.MONTH, -1 );
 
 		return provUrlRepo.findActiveFeedUrl( providerId, waitFor, nextTime, 10 );
 	}

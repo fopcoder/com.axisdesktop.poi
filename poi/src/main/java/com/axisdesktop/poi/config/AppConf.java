@@ -14,7 +14,7 @@ public class AppConf {
 	@Autowired
 	private Environment env;
 
-	@Bean
+	@Bean( name = "crawlerFileStorePath" )
 	public String getCrawlerFileStorePath() {
 		return env.getRequiredProperty( "crawler.file.store.path" );
 	}

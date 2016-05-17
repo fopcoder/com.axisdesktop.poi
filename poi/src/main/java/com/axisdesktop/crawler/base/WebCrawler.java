@@ -127,9 +127,4 @@ public abstract class WebCrawler implements Crawler {
 		return env;
 	}
 
-	@Override
-	public void setEnvironment( Environment env ) {
-		this.env = env;
-	}
-
 }
