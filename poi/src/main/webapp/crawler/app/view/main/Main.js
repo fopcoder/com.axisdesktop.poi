@@ -1,29 +1,25 @@
 Ext.define( 'Crawler.view.main.Main', {
     extend: 'Ext.panel.Panel',
     items: [ {
-        title: '1111',
-        id: 'koko',
+         id: 'koko',
         tbar: [ {
             text: 'Next',
             handler: function() {
-	            console.log( this );
-	            Ext.getCmp( 'koko' ).setActiveItem( 1 );
+	             console.log( this );
+	             Ext.getCmp( 'koko' ).setActiveItem( 1 );
             }
         } ],
         layout: 'card',
-        items: [ {
+        forceFut: true,
+        items: [ Ext.create( 'Crawler.proxy.Panel' ), {
 	        title: '2222'
-        }, {
-	        title: '3333'
-        } ]
+        }, ]
 
     }
 
     ],
-
-    // requires: [
-    // 'Ext.plugin.Viewport'
-    // ],
+layout: 'fit',
+    requires: [ 'Ext.plugin.Viewport' ],
 
     xtype: 'app-main',
 
