@@ -1,5 +1,7 @@
 package com.axisdesktop.crawler.service.impl;
 
+import static org.hamcrest.Matchers.instanceOf;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,12 +30,12 @@ public class ProxySpecification implements Specification<CrawlerProxy> {
 	public Predicate toPredicate( Root<CrawlerProxy> root, CriteriaQuery<?> query, CriteriaBuilder cb ) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		// System.err.println( Arrays.deepToString( req.getFilters().toArray() ) );
-		// for( Object f : req.getFilters().toArray() ) {
-		// Map m = (Map)f;
-		// System.err.println( m.get( "koko" ) );
-		// }
-
+		System.err.println( Arrays.deepToString( req.getFilters().toArray() ) );
+		for( Object f : req.getFilters().toArray() ) {
+			Map m = (Map)f;
+			System.err.println( m.get( "property" ) );
+		}
+		// req.getFirstFilterForField( "property" );
 		// if( req.getFirstFilterForField( "koko" ). ) {
 		//
 		// }
