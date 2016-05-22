@@ -11,7 +11,7 @@ Ext.define( 'Crawler.view.main.Main', {
         } ],
         layout: 'card',
         forceFut: true,
-        items: [ Ext.create( 'Crawler.proxy.Panel' ), {
+        items: [ Ext.create( 'Crawler.proxy.view.Panel' ), {
 	        title: '2222'
         }, ]
 

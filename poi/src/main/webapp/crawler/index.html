@@ -1,9 +1,12 @@
 <html>
 <head>
 <title>Crawler</title>
-<link rel="stylesheet" href="/poi/static/extjs/classic/theme-neptune/resources/theme-neptune-all.css">
-<script src="/poi/static/extjs/ext-all.js"></script>
-<script src="/poi/crawler/app.js"></script>
+<link rel="stylesheet" href="/static/extjs/classic/theme-neptune/resources/theme-neptune-all.css">
+<script src="/static/extjs/ext-all.js"></script>
+<script src="/api.js"></script>
+<script>Ext.direct.Manager.addProvider( Ext.app.REMOTING_API );</script>
+<script src="/crawler/models.js"></script>
+<script src="/crawler/app.js"></script>
 
 
 </head>

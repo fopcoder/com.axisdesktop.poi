@@ -204,6 +204,18 @@
 			<version>1.0.0</version>
 		</dependency>
 
+<!-- http://mvnrepository.com/artifact/ch.ralscha/extdirectspring -->
+<dependency>
+    <groupId>ch.ralscha</groupId>
+    <artifactId>extdirectspring</artifactId>
+    <version>1.6.1</version>
+</dependency>
+<!-- http://mvnrepository.com/artifact/ch.rasc/extclassgenerator -->
+<dependency>
+    <groupId>ch.rasc</groupId>
+    <artifactId>extclassgenerator</artifactId>
+    <version>1.0.9</version>
+</dependency>
 
 
 

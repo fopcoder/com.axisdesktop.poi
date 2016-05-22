@@ -42,7 +42,7 @@ MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap)
 	
 	NgMap.getMap().then(function(map) {
 		mc.map = map;
-		markerClusterer = new MarkerClusterer( map );
+		markerClusterer = new MarkerClusterer( map, null, { imagePath: '/static/js/markerclusterer/images/m' } );
 		/*
 		google.maps.event.addListener(map, "click", function(event) {
 			if( currenrMarker )	{
@@ -110,7 +110,7 @@ MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap)
 	mc.loadPointsInBBox = function( bounds )	{
 		
 		$http
-			.post( "/poi/getdata", bounds )
+			.post( "/getdata", bounds )
 			.then(
 					function( res ) {
 						for( var i = 0; i < markers.length; i++ ){

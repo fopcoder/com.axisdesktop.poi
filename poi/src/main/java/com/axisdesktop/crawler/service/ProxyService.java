@@ -6,8 +6,13 @@ import java.util.List;
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 
+import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
+import ch.ralscha.extdirectspring.bean.ExtDirectStoreResult;
+
 public interface ProxyService {
 	List<CrawlerProxy> findAll();
+
+	ExtDirectStoreResult<CrawlerProxy> findAll( ExtDirectStoreReadRequest readRequest );
 
 	CrawlerProxy create( CrawlerProxy proxy );
 

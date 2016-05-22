@@ -15,7 +15,7 @@ public class WebWorker implements Worker {
 		// String msg = null;
 		//
 		// CrawlerProxy crawlerProxy = this.getProxyService().getRandomActiveProxy();
-		// Proxy proxy = this.getProxy( crawlerProxy );
+		// ProxyContoller proxy = this.getProxy( crawlerProxy );
 		//
 		// try {
 		// HttpURLConnection uc = this.getConnection( uri, proxy );

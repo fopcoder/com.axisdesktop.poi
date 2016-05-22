@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,15 +16,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.axisdesktop.poi.service.LocationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import ch.ralscha.extdirectspring.util.ExtDirectSpringUtil;
 
 @Controller
 public class IndexController {
 	@Autowired
 	private LocationService locService;
 
+	@Autowired
+	private ApplicationContext ctx;
+
 	@RequestMapping( "/" )
-	public String index() {
+	public String index() throws JsonProcessingException {
 		// System.out.println( locService.findAll() );
+
+		String extDirectConfig = ExtDirectSpringUtil.generateApiString( ctx );
+		String userDir = System.getProperty( "user.dir" );
+
+		System.err.println( extDirectConfig );
 
 		return "/index";
 	}
@@ -49,7 +61,7 @@ public class IndexController {
 		return "/index";
 	}
 
-	@RequestMapping( value = "/getdata", produces = "application/json" )
+	@RequestMapping( value = "/getdata1", produces = "application/json" )
 	@ResponseBody
 	public List<String[]> data( @RequestBody BBoxHelper arr ) {
 		System.out.println( arr );

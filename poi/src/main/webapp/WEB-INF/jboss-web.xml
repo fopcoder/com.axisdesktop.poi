@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<jboss-web>
+    <session-config>
+        <cookie-config>
+            <path>/</path>
+        </cookie-config>
+    </session-config>
+    <context-root>/</context-root>
+    <virtual-host>poi</virtual-host>
+</jboss-web>

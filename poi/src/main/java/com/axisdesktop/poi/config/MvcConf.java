@@ -19,7 +19,7 @@ import org.thymeleaf.templateresolver.TemplateResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan( "com.axisdesktop.poi.controller" )
+@ComponentScan( basePackages = { "com.axisdesktop.poi.controller", "com.axisdesktop.crawler.controller" } )
 public class MvcConf extends WebMvcConfigurerAdapter {
 	@Autowired
 	private Environment environment;
@@ -66,4 +66,5 @@ public class MvcConf extends WebMvcConfigurerAdapter {
 	public void configureDefaultServletHandling( DefaultServletHandlerConfigurer configurer ) {
 		configurer.enable();
 	}
+
 }

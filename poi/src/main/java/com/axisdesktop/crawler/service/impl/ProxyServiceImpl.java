@@ -1,5 +1,7 @@
 package com.axisdesktop.crawler.service.impl;
 
+import static ch.ralscha.extdirectspring.annotation.ExtDirectMethodType.STORE_READ;
+
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -7,11 +9,14 @@ import java.net.Proxy.Type;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
@@ -19,8 +24,13 @@ import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
+import com.axisdesktop.utils.HttpUtils;
 
-@Service
+import ch.ralscha.extdirectspring.annotation.ExtDirectMethod;
+import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
+import ch.ralscha.extdirectspring.bean.ExtDirectStoreResult;
+
+@Service( "ProxyService" )
 public class ProxyServiceImpl implements ProxyService {
 	private static final Logger logger = LoggerFactory.getLogger( ProxyServiceImpl.class );
 
@@ -39,6 +49,21 @@ public class ProxyServiceImpl implements ProxyService {
 	@Override
 	public List<CrawlerProxy> findAll() {
 		return proxyRepo.findAll();
+	}
+
+	@Override
+	@ExtDirectMethod( STORE_READ )
+	public ExtDirectStoreResult<CrawlerProxy> findAll( ExtDirectStoreReadRequest readRequest ) {
+		System.err.println( readRequest );
+
+		ProxySpecification pr = new ProxySpecification( readRequest );
+		System.err.println( "3333333" );
+		Page<CrawlerProxy> pageResult;
+		Pageable pageRequest = HttpUtils.createPageable( readRequest );
+		pageResult = this.proxyRepo.findAll( pr, pageRequest );
+
+		return new ExtDirectStoreResult<>( pageResult.getTotalElements(), pageResult.getContent() );
+
 	}
 
 	@Override
@@ -93,7 +118,6 @@ public class ProxyServiceImpl implements ProxyService {
 				crawlerProxy.setStatusId( 1 );
 				crawlerProxy.setLog( null );
 				crawlerProxy.setTries( 0 );
-				crawlerProxy.setFetched( Calendar.getInstance() );
 
 				this.update( crawlerProxy );
 				break;
@@ -106,7 +130,6 @@ public class ProxyServiceImpl implements ProxyService {
 				crawlerProxy.setStatusId( 3 );
 				crawlerProxy.setLog( e.getMessage() );
 				crawlerProxy.setTries( crawlerProxy.getTries() + 1 );
-				crawlerProxy.setFetched( Calendar.getInstance() );
 
 				this.update( crawlerProxy );
 			}

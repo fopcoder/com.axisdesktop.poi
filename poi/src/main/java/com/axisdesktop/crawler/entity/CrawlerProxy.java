@@ -1,7 +1,5 @@
 package com.axisdesktop.crawler.entity;
 
-import java.util.Calendar;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,18 +8,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.axisdesktop.base.entity.BaseEntity;
-import com.axisdesktop.base.utils.DateUtils;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import ch.rasc.extclassgenerator.Model;
 
 @Entity
 @Table( name = "proxy", schema = "crawler" )
-@NamedQueries( {
-		@NamedQuery( name = "CrawlerProxy.findActiveOrderByRandom", query = "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND fetched < :waitFor AND tries < :maxTries ) ORDER BY statusId, RANDOM()" ) } )
-public class CrawlerProxy extends BaseEntity<Integer> {
+@NamedQueries( { @NamedQuery( name = "CrawlerProxy.findActiveOrderByRandom", //
+		query = "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND modified < :waitFor AND tries < :maxTries ) ORDER BY statusId, RANDOM()" ) } )
+@JsonIgnoreProperties( { "proxyStatus" } )
+@Model( value = "Crawler.proxy.model.Proxy", rootProperty = "records", totalProperty = "total", successProperty = "success", //
+		readMethod = "ProxyService.findAll" )
 
+public class CrawlerProxy extends BaseEntity<Integer> {
 	private String host;
 	private int port;
 
@@ -31,9 +32,6 @@ public class CrawlerProxy extends BaseEntity<Integer> {
 	private String password;
 	private String log;
 	private int tries;
-
-	@Temporal( TemporalType.TIMESTAMP )
-	private Calendar fetched;
 
 	@ManyToOne( fetch = FetchType.LAZY )
 	@JoinColumn( name = "status_id", insertable = false, updatable = false )
@@ -98,14 +96,6 @@ public class CrawlerProxy extends BaseEntity<Integer> {
 		this.log = log;
 	}
 
-	public Calendar getFetched() {
-		return fetched;
-	}
-
-	public void setFetched( Calendar fetched ) {
-		this.fetched = fetched;
-	}
-
 	public int getTries() {
 		return tries;
 	}
@@ -116,8 +106,7 @@ public class CrawlerProxy extends BaseEntity<Integer> {
 
 	@Override
 	public String toString() {
-		return "CrawlerProxy [" + ", host=" + host + ", port=" + port + ", user=" + user + ", password=" + password
-				+ ", log=" + log + ", fetched=" + DateUtils.calendarToString( fetched ) + ", status_id=" + statusId
-				+ ", tries=" + tries + "]";
+		return "CrawlerProxy [" + super.toString() + ", host=" + host + ", port=" + port + ", user=" + user
+				+ ", password=" + password + ", log=" + log + ", status_id=" + statusId + ", tries=" + tries + "]";
 	}
 }
