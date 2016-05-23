@@ -5,8 +5,8 @@ Ext.define( 'Axis.ux.view.FormView', {
     bodyPadding: 10,
     // margin: 10,
     defaults: {
-        anchor: '100%',
-        //margin: 5
+	    anchor: '100%',
+    // margin: 5
     },
 
     constructor: function( config ) {
@@ -28,16 +28,35 @@ Ext.define( 'Axis.ux.view.FormView', {
     },
 
     submitForm: function() {
-    	console.log(this.getValues());
-    	
+	    console.log( this.getValues() );
+
 	    this.submit( {
-	    	scope: this,
-	        //params: this.getValues(),
+	        scope: this,
+	        // params: this.getValues(),
 	        success: function() {
 		        this.fireEvent( 'submitsuccess', this );
 	        },
-	        failure: function() {
+	        failure: function( form, action ) {
 		        console.log( 'form failure' );
+
+		        this.getFields().findBy( function( field ) {
+			        var hasActiveError = Ext.isEmpty( field.getActiveError() );
+			        console.log( field, 'has error: ' + ( hasActiveError ? 'NO' : 'YES' ) );
+		        } );
+
+		        // success: function(form, action) {
+		        // console.log(form.isValid());
+		        // var values = form.getValues();
+		        // console.log(values);
+		        // },
+		        // failure: function(form, action) {
+		        // form.getFields().findBy(function(field) {
+		        // var hasActiveError = Ext.isEmpty(field.getActiveError());
+		        // console.log(field, 'has error: ' + (hasActiveError ? 'NO' :
+				// 'YES'));
+		        // });
+		        // }
+
 	        }
 	    } );
     },

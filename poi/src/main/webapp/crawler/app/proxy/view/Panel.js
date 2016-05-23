@@ -51,7 +51,7 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 	    	paramsAsHash: true,
 	        items: [ {
 	            xtype: 'textarea',
-	            name: 'proxy_text',
+	            name: 'proxyText',
 	            height: 300
 	        } ],
 	        listeners: {

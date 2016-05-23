@@ -7,7 +7,8 @@ import java.net.Proxy.Type;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
+import com.axisdesktop.crawler.helper.BatchProxyHelper;
 import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
@@ -67,11 +71,17 @@ public class ProxyServiceImpl implements ProxyService {
 	}
 
 	@ExtDirectMethod( ExtDirectMethodType.FORM_POST )
-	public ExtDirectFormPostResult batchCreate( Map<String, String> res ) {
-		System.err.println( res );
+	public ExtDirectFormPostResult batchCreate( @Valid BatchProxyHelper info, BindingResult result ) {
+		System.err.println( info );
+		System.err.println( result );
 
-		return new ExtDirectFormPostResult();
+		if( !result.hasErrors() ) {
+			// if (info.getEmail().equals("aaron@extjs.com")) {
+			// result.rejectValue( "proxy_text", null, "email already taken" );
+			// }
+		}
 
+		return new ExtDirectFormPostResult( result );
 	}
 
 	@Override
