@@ -1,7 +1,5 @@
 package com.axisdesktop.crawler.service.impl;
 
-import static ch.ralscha.extdirectspring.annotation.ExtDirectMethodType.STORE_READ;
-
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -9,7 +7,7 @@ import java.net.Proxy.Type;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +25,8 @@ import com.axisdesktop.crawler.service.ProxyService;
 import com.axisdesktop.utils.HttpUtils;
 
 import ch.ralscha.extdirectspring.annotation.ExtDirectMethod;
+import ch.ralscha.extdirectspring.annotation.ExtDirectMethodType;
+import ch.ralscha.extdirectspring.bean.ExtDirectFormPostResult;
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreResult;
 
@@ -52,7 +52,7 @@ public class ProxyServiceImpl implements ProxyService {
 	}
 
 	@Override
-	@ExtDirectMethod( STORE_READ )
+	@ExtDirectMethod( ExtDirectMethodType.STORE_READ )
 	public ExtDirectStoreResult<CrawlerProxy> findAll( ExtDirectStoreReadRequest readRequest ) {
 		System.err.println( readRequest );
 
@@ -63,6 +63,14 @@ public class ProxyServiceImpl implements ProxyService {
 		pageResult = this.proxyRepo.findAll( pr, pageRequest );
 
 		return new ExtDirectStoreResult<>( pageResult.getTotalElements(), pageResult.getContent() );
+
+	}
+
+	@ExtDirectMethod( ExtDirectMethodType.FORM_POST )
+	public ExtDirectFormPostResult batchCreate( Map<String, String> res ) {
+		System.err.println( res );
+
+		return new ExtDirectFormPostResult();
 
 	}
 

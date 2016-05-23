@@ -8,7 +8,7 @@ Ext.define( 'Axis.ux.store.GridStore', {
     constructor: function( config ) {
 	    config = config || {};
 
-	    Ext.apply( config, {
+	    Ext.apply( this, {
 	    	
 	    // proxy: this.createProxy()
 	    } );
