@@ -43,29 +43,6 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 
     addBatch: function() {
 	    var win = Ext.create( 'Crawler.proxy.view.AddBatchWindow' );
-
-	    // var form = Ext.create( 'Axis.ux.view.FormView', {
-	    // api: {
-	    // submit: ProxyService.batchCreate
-	    // },
-	    // paramsAsHash: true,
-	    // items: [ {
-	    // xtype: 'textarea',
-	    // name: 'proxyText',
-	    // height: 300
-	    // } ],
-	    // listeners: {
-	    // formclose: function() {
-	    // win.destroy();
-	    // },
-	    // submitsuccess: function() {
-	    // win.destroy();
-	    // }
-	    // }
-	    // } );
-	    //
-	    // win.add( form );
-	    win.show();
     }
 
 } )

@@ -54,6 +54,5 @@ Ext.define( 'Crawler.proxy.view.AddBatchWindow', {
 	    } );
 
 	    this.callParent();
-    },
-
+    }
 } )
