@@ -21,7 +21,11 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 
     storeConfig: {
         model: Crawler.proxy.model.Proxy,
-        pageSize: 25
+        pageSize: 25,
+        sorters: [ {
+            property: 'id',
+            direction: 'desc'
+        } ]
     },
 
     constructor: function( config ) {
@@ -40,27 +44,27 @@ Ext.define( 'Crawler.proxy.view.Panel', {
     addBatch: function() {
 	    var win = Ext.create( 'Crawler.proxy.view.AddBatchWindow' );
 
-//	    var form = Ext.create( 'Axis.ux.view.FormView', {
-//	    	api: {
-//	    		submit: ProxyService.batchCreate
-//	    	},
-//	    	paramsAsHash: true,
-//	        items: [ {
-//	            xtype: 'textarea',
-//	            name: 'proxyText',
-//	            height: 300
-//	        } ],
-//	        listeners: {
-//		        formclose: function() {
-//			        win.destroy();
-//		        },
-//		        submitsuccess: function()	{
-//		        	win.destroy();
-//		        }
-//	        }
-//	    } );
-//
-//	    win.add( form );
+	    // var form = Ext.create( 'Axis.ux.view.FormView', {
+	    // api: {
+	    // submit: ProxyService.batchCreate
+	    // },
+	    // paramsAsHash: true,
+	    // items: [ {
+	    // xtype: 'textarea',
+	    // name: 'proxyText',
+	    // height: 300
+	    // } ],
+	    // listeners: {
+	    // formclose: function() {
+	    // win.destroy();
+	    // },
+	    // submitsuccess: function() {
+	    // win.destroy();
+	    // }
+	    // }
+	    // } );
+	    //
+	    // win.add( form );
 	    win.show();
     }
 

@@ -12,6 +12,7 @@ public class ExtDirectConf {
 		ch.ralscha.extdirectspring.controller.Configuration config = new ch.ralscha.extdirectspring.controller.Configuration();
 		// config.setMaxRetries( 0 );
 		// config.setApiNs( "Ext" );
+		config.setActionNs( "Crawler" );
 		return config;
 	}
 }

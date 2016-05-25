@@ -24,7 +24,7 @@ import ch.ralscha.extdirectspring.bean.ExtDirectFormPostResult;
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreResult;
 
-@Service( "Crawler.proxyService" )
+@Service( "proxyService" )
 public class ExtProxyService {
 	@Autowired
 	private ProxyRepository proxyRepo;

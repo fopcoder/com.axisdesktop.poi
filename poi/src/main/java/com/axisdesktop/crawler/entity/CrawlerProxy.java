@@ -19,7 +19,7 @@ import ch.rasc.extclassgenerator.Model;
 @NamedQueries( { @NamedQuery( name = "CrawlerProxy.findActiveOrderByRandom", //
 		query = "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND modified < :waitFor AND tries < :maxTries ) ORDER BY statusId, RANDOM()" ) } )
 @JsonIgnoreProperties( { "proxyStatus" } )
-@Model( value = "Crawler.proxy.model.Proxy", rootProperty = "records", totalProperty = "total", successProperty = "success", //
+@Model( value = "Crawler.proxy.model.Proxy", totalProperty = "total", rootProperty = "records", successProperty = "success", //
 		readMethod = "Crawler.proxyService.list", destroyMethod = "Crawler.proxyService.delete" )
 
 public class CrawlerProxy extends BaseEntity<Integer> {
