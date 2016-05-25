@@ -33,7 +33,7 @@ Ext.define( 'Axis.ux.view.GridView', {
 
 		    if( this.enableReloadButton ) {
 			    tbar.add( {
-			        text: 'Обновить',
+			        text: 'Reload',
 			        itemId: 'reload',
 			        handler: this.reloadGrid,
 			        scope: this
@@ -42,7 +42,7 @@ Ext.define( 'Axis.ux.view.GridView', {
 
 		    if( this.enableAddButton ) {
 			    tbar.add( {
-			        text: 'Добавить',
+			        text: 'Add',
 			        itemId: 'add',
 			        handler: this.addRow,
 			        scope: this
@@ -51,7 +51,7 @@ Ext.define( 'Axis.ux.view.GridView', {
 
 		    if( this.enableDelButton ) {
 			    tbar.add( {
-			        text: 'Удалить',
+			        text: 'Delete',
 			        itemId: 'delete',
 			        handler: this.delRow,
 			        scope: this
@@ -81,6 +81,23 @@ Ext.define( 'Axis.ux.view.GridView', {
 
     delRow: function() {
 	    var sel = this.getSelectionModel().getSelection();
+
+	    if( sel.length == 0 ) {
+		    Ext.Msg.alert( 'Selection is empty!' );
+		    return;
+	    }
+
+	    Ext.Msg.confirm( 'Delete row', 'Delete selected rows?', function( but ) {
+		    if( but == 'yes' ) {
+			    if( this.delRowHandler ) {
+				    this.delRowHandler
+			    }
+			    else {
+				    this.store.remove( sel );
+			    }
+		    }
+	    }, this );
+
     }
 
 } )

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
-import com.axisdesktop.crawler.helper.BatchProxyHelper;
+import com.axisdesktop.crawler.helper.ProxyBatchValidator;
 import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
@@ -53,35 +53,6 @@ public class ProxyServiceImpl implements ProxyService {
 	@Override
 	public List<CrawlerProxy> findAll() {
 		return proxyRepo.findAll();
-	}
-
-	@Override
-	@ExtDirectMethod( ExtDirectMethodType.STORE_READ )
-	public ExtDirectStoreResult<CrawlerProxy> findAll( ExtDirectStoreReadRequest readRequest ) {
-		System.err.println( readRequest );
-
-		ProxySpecification pr = new ProxySpecification( readRequest );
-		System.err.println( "3333333" );
-		Page<CrawlerProxy> pageResult;
-		Pageable pageRequest = HttpUtils.createPageable( readRequest );
-		pageResult = this.proxyRepo.findAll( pr, pageRequest );
-
-		return new ExtDirectStoreResult<>( pageResult.getTotalElements(), pageResult.getContent() );
-
-	}
-
-	@ExtDirectMethod( ExtDirectMethodType.FORM_POST )
-	public ExtDirectFormPostResult batchCreate( @Valid BatchProxyHelper info, BindingResult result ) {
-		System.err.println( info );
-		System.err.println( result );
-
-		if( !result.hasErrors() ) {
-			// if (info.getEmail().equals("aaron@extjs.com")) {
-			// result.rejectValue( "proxy_text", null, "email already taken" );
-			// }
-		}
-
-		return new ExtDirectFormPostResult( result );
 	}
 
 	@Override

@@ -1,49 +1,52 @@
 Ext.define( 'Axis.ux.view.FormView', {
     extend: 'Ext.form.Panel',
 
+    alias: 'widget.axis.formview',
+
     border: false,
     bodyPadding: 10,
-    // margin: 10,
     defaults: {
 	    anchor: '100%',
-    // margin: 5
     },
+    hideSaveButton: false,
+    hideCloseButton: false,
 
     constructor: function( config ) {
 	    config = config || {};
+	    Ext.apply( this, config );
 
-	    Ext.apply( this, config, {
+	    Ext.apply( this, {
 		    buttons: [ {
-		        text: 'Сохранить',
+		        text: 'Save',
 		        handler: this.submitForm,
-		        scope: this
-		    }, {
-		        text: 'Закрыть',
 		        scope: this,
-		        handler: this.closeForm
-		    } ],
+		        hidden: this.hideSaveButton
+		    }, {
+		        text: 'Close',
+		        scope: this,
+		        handler: this.closeForm,
+		        hidden: this.hideCloseButton
+		    } ]
 	    } );
 
 	    this.callParent();
     },
 
     submitForm: function() {
-	    console.log( this.getValues() );
-
 	    this.submit( {
 	        scope: this,
-	        // params: this.getValues(),
 	        success: function() {
 		        this.fireEvent( 'submitsuccess', this );
 	        },
 	        failure: function( form, action ) {
 		        console.log( 'form failure' );
-
-		        this.getFields().findBy( function( field ) {
-			        var hasActiveError = Ext.isEmpty( field.getActiveError() );
-			        console.log( field, 'has error: ' + ( hasActiveError ? 'NO' : 'YES' ) );
-		        } );
-
+		        console.log( arguments );
+		        if( this.getFields ) {
+			        this.getFields().findBy( function( field ) {
+				        var hasActiveError = Ext.isEmpty( field.getActiveError() );
+				        console.log( field, 'has error: ' + ( hasActiveError ? 'NO' : 'YES' ) );
+			        } );
+		        }
 		        // success: function(form, action) {
 		        // console.log(form.isValid());
 		        // var values = form.getValues();
@@ -53,7 +56,7 @@ Ext.define( 'Axis.ux.view.FormView', {
 		        // form.getFields().findBy(function(field) {
 		        // var hasActiveError = Ext.isEmpty(field.getActiveError());
 		        // console.log(field, 'has error: ' + (hasActiveError ? 'NO' :
-				// 'YES'));
+		        // 'YES'));
 		        // });
 		        // }
 

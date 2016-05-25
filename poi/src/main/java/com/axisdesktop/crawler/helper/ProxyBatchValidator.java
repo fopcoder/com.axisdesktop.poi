@@ -2,7 +2,7 @@ package com.axisdesktop.crawler.helper;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class BatchProxyHelper {
+public class ProxyBatchValidator {
 	@NotEmpty
 	public String proxyText;
 
@@ -16,7 +16,7 @@ public class BatchProxyHelper {
 
 	@Override
 	public String toString() {
-		return "BatchProxyHelper [proxyText=" + proxyText + "]";
+		return "ProxyBatchValidator [proxyText=" + proxyText + "]";
 	}
 
 }

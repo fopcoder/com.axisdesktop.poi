@@ -1,7 +1,7 @@
 Ext.define( 'Crawler.proxy.view.Panel', {
     extend: 'Axis.ux.view.GridView',
 
-    title: 'Прокси сервера',
+    title: 'Proxy servers',
     enableAddButton: true,
     enableDelButton: true,
 
@@ -29,7 +29,7 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 	    Ext.apply( this, config );
 
 	    this.appendToolbar = [ {
-	        text: 'Добавить список',
+	        text: 'Add batch',
 	        handler: this.addBatch,
 	        scope: this
 	    } ];
@@ -38,33 +38,29 @@ Ext.define( 'Crawler.proxy.view.Panel', {
     },
 
     addBatch: function() {
-	    var win = Ext.create( 'Ext.Window', {
-	        layout: 'fit',
-	        title: 'Добавление списка прокси серверов',
-	        width: 500
-	    } );
+	    var win = Ext.create( 'Crawler.proxy.view.AddBatchWindow' );
 
-	    var form = Ext.create( 'Axis.ux.view.FormView', {
-	    	api: {
-	    		submit: ProxyService.batchCreate
-	    	},
-	    	paramsAsHash: true,
-	        items: [ {
-	            xtype: 'textarea',
-	            name: 'proxyText',
-	            height: 300
-	        } ],
-	        listeners: {
-		        formclose: function() {
-			        win.destroy();
-		        },
-		        submitsuccess: function()	{
-		        	win.destroy();
-		        }
-	        }
-	    } );
-
-	    win.add( form );
+//	    var form = Ext.create( 'Axis.ux.view.FormView', {
+//	    	api: {
+//	    		submit: ProxyService.batchCreate
+//	    	},
+//	    	paramsAsHash: true,
+//	        items: [ {
+//	            xtype: 'textarea',
+//	            name: 'proxyText',
+//	            height: 300
+//	        } ],
+//	        listeners: {
+//		        formclose: function() {
+//			        win.destroy();
+//		        },
+//		        submitsuccess: function()	{
+//		        	win.destroy();
+//		        }
+//	        }
+//	    } );
+//
+//	    win.add( form );
 	    win.show();
     }
 

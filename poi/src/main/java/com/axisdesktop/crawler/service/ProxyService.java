@@ -12,8 +12,6 @@ import ch.ralscha.extdirectspring.bean.ExtDirectStoreResult;
 public interface ProxyService {
 	List<CrawlerProxy> findAll();
 
-	ExtDirectStoreResult<CrawlerProxy> findAll( ExtDirectStoreReadRequest readRequest );
-
 	CrawlerProxy create( CrawlerProxy proxy );
 
 	CrawlerProxy load( int id );

@@ -10,7 +10,8 @@ public class ExtDirectConf {
 	@Bean
 	public ch.ralscha.extdirectspring.controller.Configuration configuration() {
 		ch.ralscha.extdirectspring.controller.Configuration config = new ch.ralscha.extdirectspring.controller.Configuration();
-		config.setMaxRetries( 0 );
+		// config.setMaxRetries( 0 );
+		// config.setApiNs( "Ext" );
 		return config;
 	}
 }

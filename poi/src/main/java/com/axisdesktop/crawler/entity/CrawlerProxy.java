@@ -20,7 +20,7 @@ import ch.rasc.extclassgenerator.Model;
 		query = "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND modified < :waitFor AND tries < :maxTries ) ORDER BY statusId, RANDOM()" ) } )
 @JsonIgnoreProperties( { "proxyStatus" } )
 @Model( value = "Crawler.proxy.model.Proxy", rootProperty = "records", totalProperty = "total", successProperty = "success", //
-		readMethod = "ProxyService.findAll" )
+		readMethod = "Crawler.proxyService.list", destroyMethod = "Crawler.proxyService.delete" )
 
 public class CrawlerProxy extends BaseEntity<Integer> {
 	private String host;
@@ -39,6 +39,15 @@ public class CrawlerProxy extends BaseEntity<Integer> {
 
 	@Column( name = "status_id" )
 	private int statusId;
+
+	public CrawlerProxy() {
+	}
+
+	public CrawlerProxy( String host, int port ) {
+		this.host = host;
+		this.port = port;
+		this.statusId = 1;
+	}
 
 	public String getHost() {
 		return host;

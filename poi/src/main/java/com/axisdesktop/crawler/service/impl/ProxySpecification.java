@@ -1,7 +1,5 @@
 package com.axisdesktop.crawler.service.impl;
 
-import static org.hamcrest.Matchers.instanceOf;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +15,6 @@ import org.springframework.data.jpa.domain.Specification;
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
-import ch.ralscha.extdirectspring.filter.StringFilter;
 
 public class ProxySpecification implements Specification<CrawlerProxy> {
 	ExtDirectStoreReadRequest req;
