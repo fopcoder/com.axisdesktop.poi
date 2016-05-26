@@ -15,4 +15,7 @@ public interface ProxyRepository extends JpaRepository<CrawlerProxy, Integer>, J
 	@Query( name = "CrawlerProxy.findActiveOrderByRandom" )
 	List<CrawlerProxy> getRandomActiveProxy( @Param( "waitFor" ) Calendar date, @Param( "maxTries" ) int maxTries,
 			Pageable pageable );
+
+	@Query( "SELECT COUNT(*) > 0 FROM CrawlerProxy p WHERE host LIKE :host AND port = :port" )
+	boolean isExistByHostAndPort( @Param( "host" ) String host, @Param( "port" ) int port );
 }

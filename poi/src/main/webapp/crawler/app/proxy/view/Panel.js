@@ -2,7 +2,6 @@ Ext.define( 'Crawler.proxy.view.Panel', {
     extend: 'Axis.ux.view.GridView',
 
     title: 'Proxy servers',
-    enableAddButton: true,
     enableDelButton: true,
 
     columns: [ {
@@ -42,7 +41,10 @@ Ext.define( 'Crawler.proxy.view.Panel', {
     },
 
     addBatch: function() {
-	    var win = Ext.create( 'Crawler.proxy.view.AddBatchWindow' );
+    	var me = this;
+	    var win = Ext.create( 'Crawler.proxy.view.AddBatchWindow', {
+	    	batchSuccessHandler: function() { me.store.reload() }
+	    } );
     }
 
 } )

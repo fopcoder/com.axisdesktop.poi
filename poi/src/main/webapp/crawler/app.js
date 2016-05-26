@@ -1,3 +1,4 @@
+Ext.tip.QuickTipManager.init();
 Ext.Loader.setPath( 'Axis', '../share/Axis' );
 Ext.application( {
     extend: 'Ext.app.Application',

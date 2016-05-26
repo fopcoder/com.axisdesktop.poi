@@ -13,6 +13,7 @@ public class ExtDirectConf {
 		// config.setMaxRetries( 0 );
 		// config.setApiNs( "Ext" );
 		config.setActionNs( "Crawler" );
+		config.setSendExceptionMessage( true );
 		return config;
 	}
 }

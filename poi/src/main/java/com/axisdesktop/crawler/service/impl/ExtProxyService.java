@@ -56,6 +56,8 @@ public class ExtProxyService {
 
 	@ExtDirectMethod( ExtDirectMethodType.FORM_POST )
 	public ExtDirectFormPostResult batchCreate( @Valid ProxyBatchValidator info, BindingResult result ) {
+		StringBuilder sb = new StringBuilder();
+
 		if( !result.hasErrors() ) {
 			String[] rows = info.proxyText.split( "\n" );
 
@@ -72,13 +74,29 @@ public class ExtProxyService {
 					if( portMatcher.find() ) {
 						int port = Integer.parseInt( portMatcher.group( 0 ) );
 
-						CrawlerProxy cp = new CrawlerProxy( host, port );
-						this.proxyRepo.save( cp );
+						if( this.proxyRepo.isExistByHostAndPort( host, port ) ) {
+							sb.append( String.format( "%s:%d - EXISTS\n", host, port ) );
+						}
+						else {
+							try {
+								CrawlerProxy cp = new CrawlerProxy( host, port );
+								this.proxyRepo.save( cp );
+								sb.append( String.format( "%s:%d - OK\n", host, port ) );
+							}
+							catch( Exception e ) {
+								sb.append( String.format( "%s:%d - ERROR (%s)\n", host, port, e.getMessage() ) );
+								e.printStackTrace();
+							}
+						}
+
 					}
 				}
 			}
 		}
 
-		return new ExtDirectFormPostResult( result );
+		ExtDirectFormPostResult res = new ExtDirectFormPostResult( result );
+		res.addResultProperty( "data", sb.toString() );
+
+		return res;
 	}
 }
