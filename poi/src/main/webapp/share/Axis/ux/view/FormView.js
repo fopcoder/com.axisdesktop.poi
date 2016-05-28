@@ -23,12 +23,12 @@ Ext.define( 'Axis.ux.view.FormView', {
 
 	    Ext.apply( this, {
 		    buttons: [ this.statusBar, '->', {
-		        text: 'Save',
+		        text: 'Сохранить',
 		        handler: this.submitForm,
 		        scope: this,
 		        hidden: this.hideSaveButton
 		    }, {
-		        text: 'Close',
+		        text: 'Закрыть',
 		        scope: this,
 		        handler: this.closeForm,
 		        hidden: this.hideCloseButton
@@ -72,7 +72,7 @@ Ext.define( 'Axis.ux.view.FormView', {
 		    this.statusBar.setStatus( { text: 'OK', iconCls: 'x-status-valid' } );
 	    }
 	    else {
-		    this.statusBar.setStatus( { text: 'Failure', iconCls: 'x-status-error' }  );
+		    this.statusBar.setStatus( { text: 'Ошибка', iconCls: 'x-status-error' }  );
 	    }
 	    // this.statusBar.
 	    // var st = this.down( '#statusBar' );

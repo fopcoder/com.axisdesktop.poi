@@ -16,6 +16,9 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import com.axisdesktop.base.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import ch.rasc.extclassgenerator.Model;
 
 @Entity
 @Table( name = "provider_url", schema = "crawler" )
@@ -31,6 +34,11 @@ import com.axisdesktop.base.entity.BaseEntity;
 				query = "SELECT COUNT(*) > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ),
 		@NamedQuery( name = "ProviderUrl.findUrlForUpdate", //
 				query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND typeId IN(2,3,4) AND statusId IN(4,6)" ) } )
+
+@JsonIgnoreProperties( { "status" } )
+@Model( value = "Crawler.url.model.Url", totalProperty = "total", rootProperty = "records", successProperty = "success", //
+		readMethod = "Crawler.urlService.list", destroyMethod = "Crawler.urlService.delete" )
+
 public class ProviderUrl extends BaseEntity<Long> {
 
 	@Column( name = "provider_id" )

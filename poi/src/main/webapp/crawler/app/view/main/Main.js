@@ -1,27 +1,40 @@
 Ext.define( 'Crawler.view.main.Main', {
     extend: 'Ext.panel.Panel',
-    items: [ {
-         id: 'koko',
-        tbar: [ {
-            text: 'Next',
-            handler: function() {
-	             console.log( this );
-	             Ext.getCmp( 'koko' ).setActiveItem( 1 );
-            }
-        } ],
-        layout: 'card',
-        forceFut: true,
-        items: [ Ext.create( 'Crawler.proxy.view.Panel' ), {
-	        title: '2222'
-        }, ]
 
-    }
-
-    ],
-layout: 'fit',
     requires: [ 'Ext.plugin.Viewport' ],
 
-    xtype: 'app-main',
+    constructor: function() {
+	    Ext.apply( this, {
+	        layout: 'fit',
+	        items: [ {
+	            layout: 'card',
+	            tbar: [ {
+	                text: 'Прокси',
+	                handler: function() {
+		                this.up( 'panel' ).setActiveItem( 'proxy' );
+	                }
+	            }, {
+	                text: 'Ссылки',
+	                handler: function() {
+		                this.up( 'panel' ).setActiveItem( 'url' );
+	                }
+	            } ],
+
+	            forceFut: true,
+	            items: [ Ext.create( 'Crawler.proxy.view.Panel', {
+		            itemId: 'proxy'
+	            } ), Ext.create( 'Crawler.url.view.Panel', {
+		            itemId: 'url'
+	            } ) ]
+
+	        }
+
+	        ],
+
+	    } )
+
+	    this.callParent( arguments );
+    },
 
 // requires : [ 'Ext.MessageBox', 'MyApp.view.main.MainController',
 // 'MyApp.view.main.MainModel', 'MyApp.view.main.List' ],

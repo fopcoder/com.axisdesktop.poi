@@ -14,7 +14,7 @@ Ext.define( 'Axis.ux.view.GridView', {
 	    config = config || {};
 	    Ext.apply( this, config );
 
-	    this.store = Ext.create( 'Axis.ux.store.GridStore', this.storeConfig || {} );
+	    this.store = Ext.create( 'Axis.ux.store.GridStore', this.storeConfig );
 	  
 	    var cfg = {
 		    dockedItems: []
@@ -34,7 +34,7 @@ Ext.define( 'Axis.ux.view.GridView', {
 
 		    if( this.enableReloadButton ) {
 			    tbar.add( {
-			        text: 'Reload',
+			        text: 'Обновить',
 			        itemId: 'reload',
 			        handler: this.reloadGrid,
 			        scope: this
@@ -43,7 +43,7 @@ Ext.define( 'Axis.ux.view.GridView', {
 
 		    if( this.enableAddButton ) {
 			    tbar.add( {
-			        text: 'Add',
+			        text: 'Добавить',
 			        itemId: 'add',
 			        handler: this.addRow,
 			        scope: this
@@ -52,7 +52,7 @@ Ext.define( 'Axis.ux.view.GridView', {
 
 		    if( this.enableDelButton ) {
 			    tbar.add( {
-			        text: 'Delete',
+			        text: 'Удалить',
 			        itemId: 'delete',
 			        handler: this.delRow,
 			        scope: this

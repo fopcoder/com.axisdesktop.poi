@@ -18,4 +18,5 @@ public interface ProxyRepository extends JpaRepository<CrawlerProxy, Integer>, J
 
 	@Query( "SELECT COUNT(*) > 0 FROM CrawlerProxy p WHERE host LIKE :host AND port = :port" )
 	boolean isExistByHostAndPort( @Param( "host" ) String host, @Param( "port" ) int port );
+
 }

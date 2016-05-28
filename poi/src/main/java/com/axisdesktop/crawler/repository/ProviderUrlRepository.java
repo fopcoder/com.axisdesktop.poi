@@ -5,12 +5,13 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.axisdesktop.crawler.entity.ProviderUrl;
 
-public interface ProviderUrlRepository extends JpaRepository<ProviderUrl, Long> {
+public interface ProviderUrlRepository extends JpaRepository<ProviderUrl, Long>, JpaSpecificationExecutor<ProviderUrl> {
 	@Query( name = "ProviderUrl.findActiveFeedUrl" )
 	List<ProviderUrl> findActiveFeedUrl( @Param( "providerId" ) int providerId, @Param( "waitFor" ) Calendar waitFor,
 			@Param( "nextTime" ) Calendar nextTime, @Param( "maxTries" ) int maxTries );

@@ -12,22 +12,22 @@ import javax.persistence.criteria.Root;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.domain.Specification;
 
-import com.axisdesktop.crawler.entity.CrawlerProxy;
+import com.axisdesktop.crawler.entity.ProviderUrl;
 
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
 import ch.ralscha.extdirectspring.filter.Filter;
 
-public class ProxySpecification implements Specification<CrawlerProxy> {
+public class UrlSpecification implements Specification<ProviderUrl> {
 	private ExtDirectStoreReadRequest req;
 	private Environment env;
 
-	public ProxySpecification( ExtDirectStoreReadRequest req, Environment env ) {
+	public UrlSpecification( ExtDirectStoreReadRequest req, Environment env ) {
 		this.req = req;
 		this.env = env;
 	}
 
 	@Override
-	public Predicate toPredicate( Root<CrawlerProxy> root, CriteriaQuery<?> query, CriteriaBuilder cb ) {
+	public Predicate toPredicate( Root<ProviderUrl> root, CriteriaQuery<?> query, CriteriaBuilder cb ) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
 		for( Filter f : req.getFilters() ) {

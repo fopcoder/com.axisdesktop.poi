@@ -9,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
+import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
+import com.axisdesktop.crawler.entity.ProviderUrl;
+import com.axisdesktop.crawler.entity.ProviderUrlStatus;
 
 import ch.rasc.extclassgenerator.ModelGenerator;
 import ch.rasc.extclassgenerator.OutputFormat;
@@ -18,7 +21,14 @@ import ch.rasc.extclassgenerator.OutputFormat;
 public class CrawlerController {
 	@RequestMapping( "models.js" )
 	public void user( HttpServletRequest request, HttpServletResponse response ) throws IOException {
-		ModelGenerator.writeModel( request, response, CrawlerProxy.class, OutputFormat.EXTJS5 );
+		StringBuilder sb = new StringBuilder();
+		sb.append( ModelGenerator.generateJavascript( CrawlerProxy.class, OutputFormat.EXTJS5, false ) );
+		sb.append( ModelGenerator.generateJavascript( CrawlerProxyStatus.class, OutputFormat.EXTJS5, false ) );
+
+		sb.append( ModelGenerator.generateJavascript( ProviderUrl.class, OutputFormat.EXTJS5, false ) );
+		sb.append( ModelGenerator.generateJavascript( ProviderUrlStatus.class, OutputFormat.EXTJS5, false ) );
+
+		response.getWriter().println( sb.toString() );
 	}
 
 }

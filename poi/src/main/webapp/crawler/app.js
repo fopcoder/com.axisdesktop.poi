@@ -7,7 +7,8 @@ Ext.application( {
 
     autoCreateViewport: 'Crawler.view.main.Main',
 
-    stores: [],
+    stores: [ 'Crawler.proxy.store.ProxyStatusStore', 'Crawler.url.store.UrlStatusStore' ],
     launch: function() {
+
     }
 } );

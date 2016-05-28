@@ -2,7 +2,7 @@ Ext.define( 'Crawler.proxy.view.AddBatchWindow', {
     extend: 'Ext.Window',
 
     layout: 'fit',
-    title: 'Add proxy server list',
+    title: 'Добавление прокси серверов',
     width: 500,
     autoShow: true,
 
@@ -40,7 +40,7 @@ Ext.define( 'Crawler.proxy.view.AddBatchWindow', {
 		            }
 		        }, {
 		        	xtype: 'axis.formview',
-		            title: 'Result',
+		            title: 'Результат',
 		            hideSaveButton: true,
 		            items: [ {
 			            xtype: 'textarea',

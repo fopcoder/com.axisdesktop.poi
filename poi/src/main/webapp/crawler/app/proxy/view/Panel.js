@@ -1,37 +1,50 @@
 Ext.define( 'Crawler.proxy.view.Panel', {
     extend: 'Axis.ux.view.GridView',
 
-    title: 'Proxy servers',
+    title: 'Прокси',
     enableDelButton: true,
 
     columns: [ {
-        text: 'ID',
+        text: 'Код',
         dataIndex: 'id',
         width: 80
     }, {
-        text: 'Host',
+        text: 'Хост',
         dataIndex: 'host',
         width: 200
     }, {
-        text: 'Port',
+        text: 'Порт',
         dataIndex: 'port',
         width: 70
     }, {
-        text: 'Tries',
+        text: 'Попыток',
         dataIndex: 'tries',
         width: 70
     }, {
-        text: 'Created',
+        text: 'Создан',
         dataIndex: 'created',
         xtype: 'datecolumn',
         format: 'Y-m-d H:i',
         width: 150
     }, {
-        text: 'Modified',
+        text: 'Изменен',
         dataIndex: 'modified',
         width: 150,
         format: 'Y-m-d H:i',
         xtype: 'datecolumn'
+    }, {
+        text: 'Статус',
+        dataIndex: 'statusId',
+        width: 100,
+        renderer: function( val, meta, rec ) {
+	        var store = Ext.data.StoreManager.lookup( 'proxyStatusStore' );
+	        return store.getById( val ).get( "name" );
+        }
+    }, {
+        text: 'Лог',
+        dataIndex: 'log',
+        flex: 1
+
     } ],
 
     storeConfig: {
@@ -41,13 +54,17 @@ Ext.define( 'Crawler.proxy.view.Panel', {
             beforeload: function( store ) {
 	            // console.log(111);
 	            // store.proxy.extraParams.filters = [{ property: 'id', value: 1
-				// } ];
+	            // } ];
             }
         },
         filters: [ {
             property: 'active',
             value: 1,
             id: 'activeFilter'
+        } ],
+        sorters: [ {
+            property: 'id',
+            direction: 'desc'
         } ]
     },
 
@@ -56,7 +73,7 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 	    Ext.apply( this, config );
 
 	    this.appendToolbar = [ {
-	        text: 'Add batch',
+	        text: 'Добавить список',
 	        handler: this.addBatch,
 	        scope: this
 	    }, '-', {

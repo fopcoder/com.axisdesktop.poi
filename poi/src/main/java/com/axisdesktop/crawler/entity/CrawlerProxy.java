@@ -14,7 +14,7 @@ import ch.rasc.extclassgenerator.Model;
 
 @Entity
 @Table( name = "proxy", schema = "crawler" )
-@JsonIgnoreProperties( { "proxyStatus" } )
+@JsonIgnoreProperties( { "crawlerProxyStatus" } )
 @Model( value = "Crawler.proxy.model.Proxy", totalProperty = "total", rootProperty = "records", successProperty = "success", //
 		readMethod = "Crawler.proxyService.list", destroyMethod = "Crawler.proxyService.delete" )
 
@@ -61,11 +61,11 @@ public class CrawlerProxy extends BaseEntity<Integer> {
 		this.port = port;
 	}
 
-	public CrawlerProxyStatus getProxyStatus() {
+	public CrawlerProxyStatus getCrawlerProxyStatus() {
 		return crawlerProxyStatus;
 	}
 
-	public void setProxyStatus( CrawlerProxyStatus crawlerProxyStatus ) {
+	public void setCrawlerProxyStatus( CrawlerProxyStatus crawlerProxyStatus ) {
 		this.crawlerProxyStatus = crawlerProxyStatus;
 	}
 

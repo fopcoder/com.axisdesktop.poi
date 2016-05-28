@@ -14,9 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
+import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 import com.axisdesktop.crawler.helper.ProxyBatchValidator;
 import com.axisdesktop.crawler.helper.ProxySpecification;
 import com.axisdesktop.crawler.repository.ProxyRepository;
+import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
 import com.axisdesktop.utils.HttpUtils;
 
@@ -31,28 +33,28 @@ public class ExtProxyService {
 	private ProxyRepository proxyRepo;
 	private ProxyService proxyService;
 	private Environment env;
+	private ProxyStatusRepository statusRepo;
 
 	public ExtProxyService() {
 	}
 
 	@Autowired
-	public ExtProxyService( ProxyRepository proxyRepo, ProxyService proxyService, Environment env ) {
+	public ExtProxyService( ProxyRepository proxyRepo, ProxyService proxyService, Environment env,
+			ProxyStatusRepository statusRepo ) {
 		this.proxyRepo = proxyRepo;
 		this.proxyService = proxyService;
 		this.env = env;
+		this.statusRepo = statusRepo;
 	}
 
 	@ExtDirectMethod( ExtDirectMethodType.STORE_READ )
 	public ExtDirectStoreResult<CrawlerProxy> list( ExtDirectStoreReadRequest readRequest ) {
-		System.err.println( readRequest );
-
 		ProxySpecification pr = new ProxySpecification( readRequest, env );
 		Page<CrawlerProxy> pageResult;
 		Pageable pageRequest = HttpUtils.createPageable( readRequest );
 		pageResult = this.proxyRepo.findAll( pr, pageRequest );
 
 		return new ExtDirectStoreResult<>( pageResult.getTotalElements(), pageResult.getContent() );
-
 	}
 
 	@ExtDirectMethod( ExtDirectMethodType.STORE_MODIFY )
@@ -94,7 +96,6 @@ public class ExtProxyService {
 								e.printStackTrace();
 							}
 						}
-
 					}
 				}
 			}
@@ -104,5 +105,13 @@ public class ExtProxyService {
 		res.addResultProperty( "data", sb.toString() );
 
 		return res;
+	}
+
+	@ExtDirectMethod( ExtDirectMethodType.STORE_READ )
+	public ExtDirectStoreResult<CrawlerProxyStatus> statusList( ExtDirectStoreReadRequest readRequest ) {
+		Pageable pageRequest = HttpUtils.createPageable( readRequest );
+		Page<CrawlerProxyStatus> pageResult = this.statusRepo.findAll( pageRequest );
+
+		return new ExtDirectStoreResult<>( pageResult.getTotalElements(), pageResult.getContent() );
 	}
 }
