@@ -12,8 +12,8 @@ import org.springframework.data.repository.query.Param;
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 
 public interface ProxyRepository extends JpaRepository<CrawlerProxy, Integer>, JpaSpecificationExecutor<CrawlerProxy> {
-	@Query( name = "CrawlerProxy.findActiveOrderByRandom" )
-	List<CrawlerProxy> getRandomActiveProxy( @Param( "waitFor" ) Calendar date, @Param( "maxTries" ) int maxTries,
+	@Query( "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND modified < :waitFor AND tries < :maxTries ) ORDER BY statusId, RANDOM()" )
+	List<CrawlerProxy> findRandomActiveProxy( @Param( "waitFor" ) Calendar date, @Param( "maxTries" ) int maxTries,
 			Pageable pageable );
 
 	@Query( "SELECT COUNT(*) > 0 FROM CrawlerProxy p WHERE host LIKE :host AND port = :port" )

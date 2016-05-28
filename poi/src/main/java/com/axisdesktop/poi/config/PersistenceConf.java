@@ -24,8 +24,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 		"com.axisdesktop.user" } )
 @ComponentScan( { "com.axisdesktop.poi.service", "com.axisdesktop.crawler.service", "com.axisdesktop.user" } )
 public class PersistenceConf {
-	// @Autowired
-	// private Environment environment;
+	@Autowired
+	private Environment env;
 
 	@Bean
 	DataSource dataSource() {
@@ -50,7 +50,7 @@ public class PersistenceConf {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		vendorAdapter.setGenerateDdl( false );
-		// vendorAdapter.setShowSql( true );
+		vendorAdapter.setShowSql( Boolean.valueOf( env.getRequiredProperty( "hibernate.show.sql" ) ) );
 		vendorAdapter.setDatabasePlatform( "org.hibernate.spatial.dialect.postgis.PostgisDialect" );
 		// vendorAdapter.setDatabase( Database.POSTGRESQL );
 
@@ -61,7 +61,7 @@ public class PersistenceConf {
 		factory.setPersistenceUnitName( "poi-jndi" );
 
 		Properties jpaProperties = new Properties();
-		// jpaProperties.put( "hibernate.format_sql", "true" );
+		jpaProperties.put( "hibernate.format_sql", env.getRequiredProperty( "hibernate.format.sql" ) );
 		jpaProperties.put( "hibernate.enable_lazy_load_no_trans", "true" );
 
 		factory.setJpaProperties( jpaProperties );

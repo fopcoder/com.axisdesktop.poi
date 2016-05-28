@@ -11,8 +11,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
@@ -20,20 +22,22 @@ import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
 
-@Service( "ProxyService" )
+@Service
 public class ProxyServiceImpl implements ProxyService {
 	private static final Logger logger = LoggerFactory.getLogger( ProxyServiceImpl.class );
 
 	private ProxyRepository proxyRepo;
 	private ProxyStatusRepository proxyStausRepo;
+	private Environment env;
 
 	public ProxyServiceImpl() {
 	}
 
 	@Autowired
-	public ProxyServiceImpl( ProxyRepository proxyRepo, ProxyStatusRepository proxyStausRepo ) {
+	public ProxyServiceImpl( ProxyRepository proxyRepo, ProxyStatusRepository proxyStausRepo, Environment env ) {
 		this.proxyRepo = proxyRepo;
 		this.proxyStausRepo = proxyStausRepo;
+		this.env = env;
 	}
 
 	@Override
@@ -59,7 +63,9 @@ public class ProxyServiceImpl implements ProxyService {
 
 	@Override
 	public Proxy getRandomActiveProxy() {
-		return getRandomActiveProxy( -15, 10, "http://google.com/" );
+		return getRandomActiveProxy( Integer.valueOf( env.getRequiredProperty( "crawler.proxy.waitfor" ) ),
+				Integer.valueOf( env.getRequiredProperty( "crawler.proxy.maxtries" ) ),
+				env.getRequiredProperty( "crawler.proxy.test.domain" ) );
 	}
 
 	@Override
@@ -67,10 +73,10 @@ public class ProxyServiceImpl implements ProxyService {
 		Proxy proxy = null;
 
 		Calendar cal = Calendar.getInstance();
-		cal.add( Calendar.MINUTE, proxyTimeout );
+		cal.add( Calendar.MINUTE, -proxyTimeout );
 		List<CrawlerProxy> proxyList;
 
-		while( !( proxyList = proxyRepo.getRandomActiveProxy( cal, proxyMaxTries, new PageRequest( 0, 1 ) ) )
+		while( !( proxyList = proxyRepo.findRandomActiveProxy( cal, proxyMaxTries, new PageRequest( 0, 1 ) ) )
 				.isEmpty() ) {
 			CrawlerProxy crawlerProxy = proxyList.get( 0 );
 			proxy = new Proxy( Type.HTTP, new InetSocketAddress( crawlerProxy.getHost(), crawlerProxy.getPort() ) );
@@ -78,7 +84,8 @@ public class ProxyServiceImpl implements ProxyService {
 			try {
 				URL url = new URL( proxyTestDomain );
 				HttpURLConnection uc = (HttpURLConnection)url.openConnection( proxy );
-				uc.setConnectTimeout( 20_000 );
+				uc.setConnectTimeout( Integer
+						.valueOf( env.getRequiredProperty( "crawler.proxy.check.timeout" ).replaceAll( "_", "" ) ) );
 				uc.setRequestMethod( "HEAD" );
 
 				logger.debug( "proxy: test url {} start {}", proxyTestDomain, crawlerProxy.getHost() );
@@ -125,9 +132,16 @@ public class ProxyServiceImpl implements ProxyService {
 	}
 
 	@Override
-	public CrawlerProxy delete( int id ) {
-		// TODO Auto-generated method stub
-		return null;
+	public void delete( int id ) {
+		this.proxyRepo.delete( id );
+	}
+
+	@Override
+	@Transactional
+	public void delete( List<CrawlerProxy> proxyList ) {
+		for( CrawlerProxy proxy : proxyList ) {
+			this.proxyRepo.delete( proxy );
+		}
 	}
 
 }

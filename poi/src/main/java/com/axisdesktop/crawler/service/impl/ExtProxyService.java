@@ -7,15 +7,17 @@ import java.util.regex.Pattern;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.helper.ProxyBatchValidator;
+import com.axisdesktop.crawler.helper.ProxySpecification;
 import com.axisdesktop.crawler.repository.ProxyRepository;
+import com.axisdesktop.crawler.service.ProxyService;
 import com.axisdesktop.utils.HttpUtils;
 
 import ch.ralscha.extdirectspring.annotation.ExtDirectMethod;
@@ -26,15 +28,25 @@ import ch.ralscha.extdirectspring.bean.ExtDirectStoreResult;
 
 @Service( "proxyService" )
 public class ExtProxyService {
-	@Autowired
 	private ProxyRepository proxyRepo;
+	private ProxyService proxyService;
+	private Environment env;
+
+	public ExtProxyService() {
+	}
+
+	@Autowired
+	public ExtProxyService( ProxyRepository proxyRepo, ProxyService proxyService, Environment env ) {
+		this.proxyRepo = proxyRepo;
+		this.proxyService = proxyService;
+		this.env = env;
+	}
 
 	@ExtDirectMethod( ExtDirectMethodType.STORE_READ )
 	public ExtDirectStoreResult<CrawlerProxy> list( ExtDirectStoreReadRequest readRequest ) {
 		System.err.println( readRequest );
 
-		ProxySpecification pr = new ProxySpecification( readRequest );
-		System.err.println( "3333333" );
+		ProxySpecification pr = new ProxySpecification( readRequest, env );
 		Page<CrawlerProxy> pageResult;
 		Pageable pageRequest = HttpUtils.createPageable( readRequest );
 		pageResult = this.proxyRepo.findAll( pr, pageRequest );
@@ -43,15 +55,9 @@ public class ExtProxyService {
 
 	}
 
-	@Transactional
 	@ExtDirectMethod( ExtDirectMethodType.STORE_MODIFY )
-	public ExtDirectStoreResult<CrawlerProxy> delete( List<CrawlerProxy> proxyList ) {
-
-		for( CrawlerProxy proxy : proxyList ) {
-			this.proxyRepo.delete( proxy );
-		}
-
-		return new ExtDirectStoreResult<>();
+	public void delete( List<CrawlerProxy> proxyList ) {
+		this.proxyService.delete( proxyList );
 	}
 
 	@ExtDirectMethod( ExtDirectMethodType.FORM_POST )

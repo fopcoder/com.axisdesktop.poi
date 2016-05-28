@@ -14,15 +14,16 @@ Ext.define( 'Axis.ux.view.GridView', {
 	    config = config || {};
 	    Ext.apply( this, config );
 
+	    this.store = Ext.create( 'Axis.ux.store.GridStore', this.storeConfig || {} );
+	  
 	    var cfg = {
-	        store: Ext.create( 'Axis.ux.store.GridStore', this.storeConfig || {} ),
-	        dockedItems: []
+		    dockedItems: []
 	    };
 
 	    if( this.enablePaging ) {
 		    cfg.dockedItems.push( {
 		        xtype: 'pagingtoolbar',
-		        store: cfg.store,
+		        store: this.store,
 		        dock: 'bottom',
 		        displayInfo: true,
 		    } );

@@ -15,20 +15,14 @@ Ext.define( 'Axis.ux.view.FormView', {
 	    config = config || {};
 	    Ext.apply( this, config );
 
+	    this.statusBar = Ext.create( 'Ext.ux.StatusBar', {
+	    	itemId: 'statusBar',
+	        text: 'Ready',
+	        iconCls: 'x-status-text',
+	    } )
+
 	    Ext.apply( this, {
-		    buttons: [ {
-		        xtype: 'label',
-		        text: '',
-		        itemId: 'statusBar',
-		        listeners: {
-			        afterrender: function( obj ) {
-				        Ext.tip.QuickTipManager.register( {
-				            target: obj.getId(),
-				            text: ''
-				        } );
-			        }
-		        }
-		    }, '->', {
+		    buttons: [ this.statusBar, '->', {
 		        text: 'Save',
 		        handler: this.submitForm,
 		        scope: this,
@@ -38,7 +32,7 @@ Ext.define( 'Axis.ux.view.FormView', {
 		        scope: this,
 		        handler: this.closeForm,
 		        hidden: this.hideCloseButton
-		    }, ]
+		    } ]
 	    } );
 
 	    this.callParent();
@@ -50,16 +44,16 @@ Ext.define( 'Axis.ux.view.FormView', {
 	        success: function( form, action ) {
 		        if( action.result && action.result.success ) {
 			        this.fireEvent( 'submitsuccess', action.result.data );
-			        this.setStatusBar( 'OK', { color: 'green', 'text-decoration': 'none' }, null );
+			        this.setStatusBar( 1, null );
 		        }
 		        else {
 			        this.fireEvent( 'submitfailure', action.result.data );
-			        this.setStatusBar( 'Failure', { color: 'red', 'text-decoration': 'underline' }, action.result.data );
+			        this.setStatusBar( 0, action.result.data );
 		        }
 	        },
 	        failure: function( form, action ) {
-	        	this.fireEvent( 'submitfailure', action.result.data );
-		        this.setStatusBar( 'Failure', { color: 'red', 'text-decoration': 'underline' }, action.result.data );
+		        this.fireEvent( 'submitfailure', action.result.data );
+		        this.setStatusBar( 0, action.result.data );
 
 		        form.getFields().findBy( function( field ) {
 			        var hasActiveError = Ext.isEmpty( field.getActiveError() );
@@ -72,11 +66,18 @@ Ext.define( 'Axis.ux.view.FormView', {
     closeForm: function() {
 	    this.fireEvent( 'formclose' );
     },
-    
-    setStatusBar: function( text, style, tip ) {
-    	var st = this.down( '#statusBar' );
-    	st.setText( text );
-    	st.setStyle( style );
-        Ext.QuickTips.getQuickTip().targets[ st.getEl().id ].text = tip;
+
+    setStatusBar: function( status, tip ) {
+	    if( status == 1 ) {
+		    this.statusBar.setStatus( { text: 'OK', iconCls: 'x-status-valid' } );
+	    }
+	    else {
+		    this.statusBar.setStatus( { text: 'Failure', iconCls: 'x-status-error' }  );
+	    }
+	    // this.statusBar.
+	    // var st = this.down( '#statusBar' );
+	    // st.setText( text );
+	    // st.setStyle( style );
+	    // Ext.QuickTips.getQuickTip().targets[ st.getEl().id ].text = tip;
     }
 } )

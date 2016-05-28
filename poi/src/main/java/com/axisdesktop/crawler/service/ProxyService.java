@@ -6,9 +6,6 @@ import java.util.List;
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 
-import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
-import ch.ralscha.extdirectspring.bean.ExtDirectStoreResult;
-
 public interface ProxyService {
 	List<CrawlerProxy> findAll();
 
@@ -18,7 +15,9 @@ public interface ProxyService {
 
 	CrawlerProxy update( CrawlerProxy crawlerProxy );
 
-	CrawlerProxy delete( int id );
+	void delete( int id );
+
+	void delete( List<CrawlerProxy> list );
 
 	CrawlerProxyStatus getProxyStatusById( int id );
 

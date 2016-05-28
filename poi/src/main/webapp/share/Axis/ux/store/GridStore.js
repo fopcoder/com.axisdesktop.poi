@@ -4,21 +4,17 @@ Ext.define( 'Axis.ux.store.GridStore', {
     autoLoad: true,
     autoSync: true,
     remoteSort: true,
-
+    remoteFilter: true,
+    pageSize: 25,
+    sorters: [ {
+        property: 'id',
+        direction: 'desc'
+    } ],
+    
     constructor: function( config ) {
 	    config = config || {};
-
-	    Ext.apply( this, {
-	    	
-	    // proxy: this.createProxy()
-	    } );
-
+	    
 	    this.callParent( [ config ] );
-
-	    this.proxy.extraParams.filters = [ {
-	        property: 'port',
-	        value: '8080'
-	    } ];
     }
 
 } )

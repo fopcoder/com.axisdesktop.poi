@@ -31,8 +31,10 @@ Ext.define( 'Crawler.proxy.view.AddBatchWindow', {
 			                this.up('window').destroy();
 		                },
 		                submitsuccess: function( data ) {
-			                this.up('tabpanel').setActiveTab(1);
-			                this.up('tabpanel').getActiveTab().down('#result').setValue( data );
+		                	var tab = this.up('tabpanel');
+			                tab.setActiveTab(1);
+			                tab.getActiveTab().down('#result').setValue( data );
+			                tab.getActiveTab().down('#statusBar').setStatus( 1 );
 			                this.up('window').batchSuccessHandler();
 		                }
 		            }

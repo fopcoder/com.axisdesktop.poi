@@ -1,38 +1,53 @@
-package com.axisdesktop.crawler.service.impl;
+package com.axisdesktop.crawler.helper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
+import ch.ralscha.extdirectspring.filter.Filter;
 
 public class ProxySpecification implements Specification<CrawlerProxy> {
-	ExtDirectStoreReadRequest req;
+	private ExtDirectStoreReadRequest req;
+	private Environment env;
 
-	public ProxySpecification( ExtDirectStoreReadRequest req ) {
+	public ProxySpecification( ExtDirectStoreReadRequest req, Environment env ) {
 		this.req = req;
+		this.env = env;
 	}
 
 	@Override
 	public Predicate toPredicate( Root<CrawlerProxy> root, CriteriaQuery<?> query, CriteriaBuilder cb ) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		System.err.println( Arrays.deepToString( req.getFilters().toArray() ) );
-		for( Object f : req.getFilters().toArray() ) {
-			Map m = (Map)f;
-			System.err.println( m.get( "property" ) );
+		// System.err.println( Arrays.deepToString( req.getFilters().toArray() ) );
+		for( Filter f : req.getFilters() ) {
+			System.err.println( f.getField() );
+			if( f.getField().equals( "active" ) ) {
+				Calendar cal = Calendar.getInstance();
+				cal.add( Calendar.MINUTE, -Integer.valueOf( env.getRequiredProperty( "crawler.proxy.waitfor" ) ) );
+
+				predicates.add( cb.lessThan( root.get( "tries" ),
+						Integer.valueOf( env.getRequiredProperty( "crawler.proxy.maxtries" ) ) ) );
+				predicates.add( cb.lessThan( root.get( "modified" ), cal ) );
+
+			}
+			// // Ma p m = (Map)f;
+			// System.err.println( f );
 		}
-		// req.getFirstFilterForField( "property" );
+
+		Filter f = req.getFirstFilterForField( "active" );
+
 		// if( req.getFirstFilterForField( "koko" ). ) {
 		//
 		// }
