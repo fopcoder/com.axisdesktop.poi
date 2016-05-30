@@ -35,7 +35,7 @@ import ch.rasc.extclassgenerator.Model;
 		@NamedQuery( name = "ProviderUrl.findUrlForUpdate", //
 				query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND typeId IN(2,3,4) AND statusId IN(4,6)" ) } )
 
-@JsonIgnoreProperties( { "status" } )
+@JsonIgnoreProperties( { "status", "type" } )
 @Model( value = "Crawler.url.model.Url", totalProperty = "total", rootProperty = "records", successProperty = "success", //
 		readMethod = "Crawler.urlService.list", destroyMethod = "Crawler.urlService.delete" )
 

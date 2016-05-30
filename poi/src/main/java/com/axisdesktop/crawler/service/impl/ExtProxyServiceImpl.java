@@ -29,22 +29,22 @@ import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreResult;
 
 @Service( "proxyService" )
-public class ExtProxyService {
+public class ExtProxyServiceImpl {
 	private ProxyRepository proxyRepo;
-	private ProxyService proxyService;
 	private Environment env;
 	private ProxyStatusRepository statusRepo;
+	private ProxyService proxyService;
 
-	public ExtProxyService() {
+	public ExtProxyServiceImpl() {
 	}
 
 	@Autowired
-	public ExtProxyService( ProxyRepository proxyRepo, ProxyService proxyService, Environment env,
-			ProxyStatusRepository statusRepo ) {
+	public ExtProxyServiceImpl( ProxyRepository proxyRepo, Environment env, ProxyStatusRepository statusRepo,
+			ProxyService proxyService ) {
 		this.proxyRepo = proxyRepo;
-		this.proxyService = proxyService;
 		this.env = env;
 		this.statusRepo = statusRepo;
+		this.proxyService = proxyService;
 	}
 
 	@ExtDirectMethod( ExtDirectMethodType.STORE_READ )
@@ -114,4 +114,12 @@ public class ExtProxyService {
 
 		return new ExtDirectStoreResult<>( pageResult.getTotalElements(), pageResult.getContent() );
 	}
+
+	@ExtDirectMethod( ExtDirectMethodType.STORE_MODIFY )
+	public void deactivate( int id ) {
+		CrawlerProxy t = this.proxyRepo.findOne( id );
+		t.setStatusId( 2 );
+		this.proxyRepo.save( t );
+	}
+
 }

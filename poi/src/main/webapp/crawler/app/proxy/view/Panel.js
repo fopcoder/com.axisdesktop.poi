@@ -73,6 +73,10 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 	    Ext.apply( this, config );
 
 	    this.appendToolbar = [ {
+	        text: 'Деактивировать',
+	        handler: this.deactivate,
+	        scope: this
+	    }, {
 	        text: 'Добавить список',
 	        handler: this.addBatch,
 	        scope: this
@@ -108,6 +112,18 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 			    me.store.reload()
 		    }
 	    } );
+    },
+
+    deactivate: function() {
+	    var sel = this.getSelectionModel().getSelection();
+	    if( sel ) {
+		    Ext.Msg.confirm( 'Деактивировать', 'Деактивировать', function( but ) {
+			    Ext.each( sel, function( r ) {
+			    	Crawler.proxyService.deactivate( r.get('id') );	
+			    }, this )
+			    
+		    }, this );
+	    }
     }
 
 } )

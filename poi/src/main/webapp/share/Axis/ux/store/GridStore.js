@@ -16,5 +16,4 @@ Ext.define( 'Axis.ux.store.GridStore', {
 	    
 	    this.callParent( [ config ] );
     }
-
 } )

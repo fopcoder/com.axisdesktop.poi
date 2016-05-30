@@ -1,4 +1,4 @@
-package com.axisdesktop.crawler.component;
+package com.axisdesktop.crawler.impl;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,6 @@ import com.axisdesktop.crawler.base.CrawlerUtils;
 import com.axisdesktop.crawler.base.WebCrawler;
 import com.axisdesktop.crawler.base.Worker;
 import com.axisdesktop.crawler.entity.ProviderUrl;
-import com.axisdesktop.crawler.impl.DorogaWorker;
 import com.axisdesktop.crawler.parser.Parser;
 import com.axisdesktop.crawler.parser.impl.DorogaParser;
 import com.axisdesktop.crawler.service.ProviderService;
@@ -34,6 +34,7 @@ public class DorogaCrawler extends WebCrawler {
 	public DorogaCrawler() {
 	}
 
+	@Autowired
 	public DorogaCrawler( ProxyService proxyService, ProviderService providerService, Environment env ) {
 		super( proxyService, providerService, env );
 	}
