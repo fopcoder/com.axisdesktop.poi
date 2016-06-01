@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
+import com.axisdesktop.crawler.entity.ProviderDataType;
 import com.axisdesktop.crawler.entity.ProviderUrl;
 import com.axisdesktop.crawler.entity.ProviderUrlStatus;
+import com.axisdesktop.crawler.service.impl.ProviderDataTypeServiceImpl;
 
 import ch.rasc.extclassgenerator.ModelGenerator;
 import ch.rasc.extclassgenerator.OutputFormat;
@@ -27,6 +29,8 @@ public class CrawlerController {
 
 		sb.append( ModelGenerator.generateJavascript( ProviderUrl.class, OutputFormat.EXTJS5, false ) );
 		sb.append( ModelGenerator.generateJavascript( ProviderUrlStatus.class, OutputFormat.EXTJS5, false ) );
+
+		// sb.append( ModelGenerator.generateJavascript( ProviderDataType.class, OutputFormat.EXTJS5, false ) );
 
 		response.getWriter().println( sb.toString() );
 	}

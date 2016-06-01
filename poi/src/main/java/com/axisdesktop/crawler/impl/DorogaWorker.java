@@ -56,7 +56,9 @@ public class DorogaWorker implements Worker {
 						String.format( "status != 200:\n%d\n%s", uc.getResponseCode(), uc.getResponseMessage() ) );
 			}
 
-			if( providerUrl.getTypeId() == 1 || providerUrl.getTypeId() == 3 ) {
+			//
+			if( uc.getContentType().contains( "text" )
+					&& ( providerUrl.getTypeId() == 1 || providerUrl.getTypeId() == 3 ) ) {
 				text = crawler.getTextContent( uc );
 
 				if( text == null || text.length() == 0 ) {
@@ -145,7 +147,7 @@ public class DorogaWorker implements Worker {
 					}
 				}
 			}
-			else if( uc.getContentType().contains( "image" ) ) {
+			else if( uc.getContentType().contains( "image" ) && providerUrl.getTypeId() == 4 ) {
 				String ext = HttpUtils.mime2ext( uc.getContentType(), "jpg" );
 
 				String baseUrl = null;

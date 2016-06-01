@@ -6,7 +6,7 @@ import java.util.List;
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
 
-public interface ProxyService {
+public interface ProxyService extends BaseService<CrawlerProxy, Integer> {
 	List<CrawlerProxy> findAll();
 
 	CrawlerProxy create( CrawlerProxy proxy );
@@ -15,9 +15,7 @@ public interface ProxyService {
 
 	CrawlerProxy update( CrawlerProxy crawlerProxy );
 
-	void delete( int id );
-
-	void delete( List<CrawlerProxy> list );
+	void deactivate( int id );
 
 	CrawlerProxyStatus getProxyStatusById( int id );
 

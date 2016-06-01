@@ -14,16 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 import com.axisdesktop.crawler.entity.CrawlerProxyStatus;
+import com.axisdesktop.crawler.repository.BaseRepository;
 import com.axisdesktop.crawler.repository.ProxyRepository;
 import com.axisdesktop.crawler.repository.ProxyStatusRepository;
 import com.axisdesktop.crawler.service.ProxyService;
 
 @Service
-public class ProxyServiceImpl implements ProxyService {
+public class ProxyServiceImpl extends BaseServiceImpl<CrawlerProxy, Integer> implements ProxyService {
 	private static final Logger logger = LoggerFactory.getLogger( ProxyServiceImpl.class );
 
 	private ProxyRepository proxyRepo;
@@ -131,17 +131,35 @@ public class ProxyServiceImpl implements ProxyService {
 		return null;
 	}
 
+	// @Override
+	// public void delete( int id ) {
+	// this.proxyRepo.delete( id );
+	// }
+	//
+	// @Override
+	// public void delete( CrawlerProxy proxy ) {
+	// this.proxyRepo.delete( proxy );
+	// }
+	//
+	// @Override
+	// @Transactional
+	// public void delete( List<CrawlerProxy> proxyList ) {
+	// this.proxyRepo.delete( proxyList );
+	// }
+
 	@Override
-	public void delete( int id ) {
-		this.proxyRepo.delete( id );
+	public void deactivate( int id ) {
+		CrawlerProxy t = this.proxyRepo.findOne( id );
+
+		if( t != null ) {
+			t.setStatusId( 2 );
+			this.proxyRepo.save( t );
+		}
 	}
 
 	@Override
-	@Transactional
-	public void delete( List<CrawlerProxy> proxyList ) {
-		for( CrawlerProxy proxy : proxyList ) {
-			this.proxyRepo.delete( proxy );
-		}
+	public BaseRepository<CrawlerProxy, Integer> getRepository() {
+		return this.proxyRepo;
 	}
 
 }

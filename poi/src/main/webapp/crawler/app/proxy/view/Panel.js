@@ -1,5 +1,5 @@
 Ext.define( 'Crawler.proxy.view.Panel', {
-    extend: 'Axis.ux.view.GridView',
+    extend: 'Axis.ux.view.GridPanel',
 
     title: 'Прокси',
     enableDelButton: true,
@@ -90,7 +90,7 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 	            change: function( obj, newValue, oldValue, eOpts ) {
 		            if( newValue ) {
 			            this.store.addFilter( {
-			                property: 'id',
+			                property: 'active',
 			                value: 1,
 			                id: 'activeFilter'
 			            } );

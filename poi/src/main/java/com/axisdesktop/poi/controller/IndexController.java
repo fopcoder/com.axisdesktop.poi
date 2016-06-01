@@ -61,7 +61,7 @@ public class IndexController {
 		return "/index";
 	}
 
-	@RequestMapping( value = "/getdata1", produces = "application/json" )
+	@RequestMapping( value = "/getdata", produces = "application/json" )
 	@ResponseBody
 	public List<String[]> data( @RequestBody BBoxHelper arr ) {
 		System.out.println( arr );

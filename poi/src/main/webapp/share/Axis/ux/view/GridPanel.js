@@ -1,7 +1,7 @@
-Ext.define( 'Axis.ux.view.GridView', {
+Ext.define( 'Axis.ux.view.GridPanel', {
     extend: 'Ext.grid.Panel',
 
-    title: 'Axis.ux.view.GridView',
+    title: 'Axis.ux.view.GridPanel',
 
     enablePaging: true,
     enableToolbar: true,
@@ -9,13 +9,18 @@ Ext.define( 'Axis.ux.view.GridView', {
     enableAddButton: false,
     enableDelButton: false,
     border: false,
+    enableColumnMove: false,
+
+    viewConfig: {
+	    enableTextSelection: true
+    },
 
     constructor: function( config ) {
 	    config = config || {};
 	    Ext.apply( this, config );
 
 	    this.store = Ext.create( 'Axis.ux.store.GridStore', this.storeConfig );
-	  
+
 	    var cfg = {
 		    dockedItems: []
 	    };
@@ -69,7 +74,7 @@ Ext.define( 'Axis.ux.view.GridView', {
 
 	    Ext.apply( this, cfg );
 
-	    this.callParent();
+	    this.callParent( arguments );
     },
 
     reloadGrid: function() {

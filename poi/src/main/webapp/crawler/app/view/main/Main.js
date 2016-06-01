@@ -4,26 +4,65 @@ Ext.define( 'Crawler.view.main.Main', {
     requires: [ 'Ext.plugin.Viewport' ],
 
     constructor: function() {
+	    var me = this;
+
 	    Ext.apply( this, {
 	        layout: 'fit',
 	        items: [ {
+	            itemId: 'cardPanel',
 	            layout: 'card',
+	            
 	            tbar: [ {
 	                text: 'Прокси',
-	                handler: function() {
-		                this.up( 'panel' ).setActiveItem( 'proxy' );
-	                }
+	                handler: me.switchCard,
+	                itemId: 'proxy'
 	            }, {
 	                text: 'Ссылки',
-	                handler: function() {
-		                this.up( 'panel' ).setActiveItem( 'url' );
-	                }
+	                handler: me.switchCard,
+	                itemId: 'url'
+	            }, {
+	                text: 'Справочники',
+	                menu: [ {
+	                    text: 'Статусы прокси',
+	                    handler: me.switchCard,
+	                    itemId: 'proxyStatus'
+	                }, {
+	                    text: 'Статусы ссылок',
+	                    handler: me.switchCard,
+	                    itemId: 'urlStatus'
+	                }, {
+	                    text: 'Типы данных',
+	                    handler: me.switchCard,
+	                    itemId: 'dataType'
+	                } ]
 	            } ],
-
-	            forceFut: true,
-	            items: [ Ext.create( 'Crawler.proxy.view.Panel', {
+	            
+	            items: [ //
+	            Ext.create( 'Crawler.proxy.view.Panel', {
 		            itemId: 'proxy'
-	            } ), Ext.create( 'Crawler.url.view.Panel', {
+	            } ), //
+	            Ext.create( 'Crawler.simple.view.Panel', {
+	                title: 'Статусы прокси',
+	                itemId: 'proxyStatus',
+	                storeConfig: {
+		                model: 'Crawler.proxy.model.ProxyStatus',
+	                }
+	            } ), //
+	            Ext.create( 'Crawler.simple.view.Panel', {
+	                title: 'Статусы ссылок',
+	                itemId: 'urlStatus',
+	                storeConfig: {
+		                model: 'Crawler.url.model.UrlStatus',
+	                }
+	            } ), //
+	            Ext.create( 'Crawler.simple.view.Panel', {
+	                title: 'Типы данных',
+	                itemId: 'dataType',
+	            // storeConfig: {
+	            // model: 'Crawler.data.model.DataType',
+	            // }
+	            } ), //
+	            Ext.create( 'Crawler.url.view.Panel', {
 		            itemId: 'url'
 	            } ) ]
 
@@ -36,42 +75,8 @@ Ext.define( 'Crawler.view.main.Main', {
 	    this.callParent( arguments );
     },
 
-// requires : [ 'Ext.MessageBox', 'MyApp.view.main.MainController',
-// 'MyApp.view.main.MainModel', 'MyApp.view.main.List' ],
-//
-// controller : 'main',
-// viewModel : 'main',
-//
-// defaults : {
-// styleHtmlContent : true
-// },
+    switchCard: function() {
+	    this.up( '#cardPanel' ).setActiveItem( this.itemId );
+    }
 
-// tabBarPosition : 'bottom',
-
-// items : [ {
-// title : 'Home',
-// iconCls : 'fa-home',
-// layout : 'fit',
-// items : [ {
-// xtype : 'mainlist'
-// } ]
-// }, {
-// title : 'Users',
-// iconCls : 'fa-user',
-// bind : {
-// html : '{loremIpsum}'
-// }
-// }, {
-// title : 'Groups',
-// iconCls : 'fa-users',
-// bind : {
-// html : '{loremIpsum}'
-// }
-// }, {
-// title : 'Settings',
-// iconCls : 'fa-cog',
-// bind : {
-// html : '{loremIpsum}'
-// }
-// } ]
 } );

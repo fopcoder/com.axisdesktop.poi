@@ -4,14 +4,12 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.axisdesktop.crawler.entity.CrawlerProxy;
 
-public interface ProxyRepository extends JpaRepository<CrawlerProxy, Integer>, JpaSpecificationExecutor<CrawlerProxy> {
+public interface ProxyRepository extends BaseRepository<CrawlerProxy, Integer> {
 	@Query( "SELECT p FROM CrawlerProxy p WHERE statusId = 1 OR ( statusId = 3 AND modified < :waitFor AND tries < :maxTries ) ORDER BY statusId, RANDOM()" )
 	List<CrawlerProxy> findRandomActiveProxy( @Param( "waitFor" ) Calendar date, @Param( "maxTries" ) int maxTries,
 			Pageable pageable );

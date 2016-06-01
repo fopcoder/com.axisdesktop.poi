@@ -1,5 +1,5 @@
 Ext.define( 'Crawler.url.view.Panel', {
-	extend: 'Axis.ux.view.GridView',
+	extend: 'Axis.ux.view.GridPanel',
 	
 	title: 'Ссылки',
 	

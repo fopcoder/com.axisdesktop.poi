@@ -62,6 +62,11 @@ public class ExtProxyServiceImpl {
 		this.proxyService.delete( proxyList );
 	}
 
+	@ExtDirectMethod( ExtDirectMethodType.STORE_MODIFY )
+	public void deactivate( int id ) {
+		this.proxyService.deactivate( id );
+	}
+
 	@ExtDirectMethod( ExtDirectMethodType.FORM_POST )
 	public ExtDirectFormPostResult batchCreate( @Valid ProxyBatchValidator info, BindingResult result ) {
 		StringBuilder sb = new StringBuilder();
@@ -113,13 +118,6 @@ public class ExtProxyServiceImpl {
 		Page<CrawlerProxyStatus> pageResult = this.statusRepo.findAll( pageRequest );
 
 		return new ExtDirectStoreResult<>( pageResult.getTotalElements(), pageResult.getContent() );
-	}
-
-	@ExtDirectMethod( ExtDirectMethodType.STORE_MODIFY )
-	public void deactivate( int id ) {
-		CrawlerProxy t = this.proxyRepo.findOne( id );
-		t.setStatusId( 2 );
-		this.proxyRepo.save( t );
 	}
 
 }

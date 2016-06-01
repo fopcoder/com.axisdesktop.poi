@@ -35,10 +35,13 @@ public class ProxySpecification implements Specification<CrawlerProxy> {
 				Calendar cal = Calendar.getInstance();
 				cal.add( Calendar.MINUTE, -Integer.valueOf( env.getRequiredProperty( "crawler.proxy.waitfor" ) ) );
 
-				predicates.add( cb.lessThan( root.get( "tries" ),
-						Integer.valueOf( env.getRequiredProperty( "crawler.proxy.maxtries" ) ) ) );
-				predicates.add( cb.lessThan( root.get( "modified" ), cal ) );
-
+				int maxTries = Integer.valueOf( env.getRequiredProperty( "crawler.proxy.maxtries" ) );
+				Predicate status1 = cb.equal( root.get( "statusId" ), 1 );
+				Predicate status2 = cb.notEqual( root.get( "statusId" ), 2 );
+				Predicate status3 = cb.and( cb.lessThan( root.get( "tries" ), maxTries ), //
+						cb.lessThan( root.get( "modified" ), cal ) );
+				predicates.add( cb.or( status1, status3 ) );
+				predicates.add( status2 );
 			}
 		}
 

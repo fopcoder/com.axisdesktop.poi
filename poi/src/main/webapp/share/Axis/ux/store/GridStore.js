@@ -8,7 +8,7 @@ Ext.define( 'Axis.ux.store.GridStore', {
     pageSize: 25,
     sorters: [ {
         property: 'id',
-        direction: 'desc'
+        direction: 'asc'
     } ],
     
     constructor: function( config ) {

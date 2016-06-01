@@ -1,10 +1,11 @@
 package com.axisdesktop.crawler.service;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface BaseSerivce<E> {
+public interface BaseService<E, ID extends Serializable> {
 
-	void delete( int id );
+	void delete( ID id );
 
 	void delete( E entity );
 
