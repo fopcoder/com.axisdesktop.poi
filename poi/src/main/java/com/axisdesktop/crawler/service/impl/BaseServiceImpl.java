@@ -7,8 +7,6 @@ import com.axisdesktop.crawler.repository.BaseRepository;
 import com.axisdesktop.crawler.service.BaseService;
 
 public abstract class BaseServiceImpl<E, ID extends Serializable> implements BaseService<E, ID> {
-	protected BaseRepository<E, ID> repo;
-
 	@Override
 	public void delete( ID id ) {
 		this.getRepository().delete( id );
@@ -25,5 +23,4 @@ public abstract class BaseServiceImpl<E, ID extends Serializable> implements Bas
 	}
 
 	public abstract BaseRepository<E, ID> getRepository();
-
 }

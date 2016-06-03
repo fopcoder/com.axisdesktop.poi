@@ -1,7 +1,7 @@
-Ext.define( 'Axis.ux.view.FormView', {
+Ext.define( 'Axis.ux.form.Panel', {
     extend: 'Ext.form.Panel',
 
-    alias: 'widget.axis.formview',
+    alias: 'widget.axis.formpanel',
 
     border: false,
     bodyPadding: 10,

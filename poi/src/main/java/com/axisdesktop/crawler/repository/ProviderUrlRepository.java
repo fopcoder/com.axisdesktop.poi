@@ -18,9 +18,9 @@ public interface ProviderUrlRepository extends JpaRepository<ProviderUrl, Long>,
 
 	List<ProviderUrl> findByProviderIdAndUrl( int providerId, String url, Pageable page );
 
-	@Query( name = "ProviderUrl.isExistByProviderIdAndUrl" )
+	@Query( "SELECT COUNT(*) > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" )
 	boolean isExist( @Param( "providerId" ) int providerId, @Param( "url" ) String url );
 
-	@Query( name = "ProviderUrl.findUrlForUpdate" )
-	List<ProviderUrl> findUrlForUpdate( @Param( "providerId" ) int providerId );
+	@Query( "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND typeId IN(2,3,4) AND ( statusId IN(4,6) OR ( statusId = 3 AND modified < :waitFor ) )" )
+	List<ProviderUrl> findUrlForUpdate( @Param( "providerId" ) int providerId, @Param( "waitFor" ) Calendar waitFor );
 }

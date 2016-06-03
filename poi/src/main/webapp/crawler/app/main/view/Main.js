@@ -1,4 +1,4 @@
-Ext.define( 'Crawler.view.main.Main', {
+Ext.define( 'Crawler.main.view.Main', {
     extend: 'Ext.panel.Panel',
 
     requires: [ 'Ext.plugin.Viewport' ],
@@ -20,6 +20,10 @@ Ext.define( 'Crawler.view.main.Main', {
 	                text: 'Ссылки',
 	                handler: me.switchCard,
 	                itemId: 'url'
+	            }, {
+	                text: 'Источники',
+	                handler: me.switchCard,
+	                itemId: 'provider'
 	            }, {
 	                text: 'Справочники',
 	                menu: [ {
@@ -44,27 +48,25 @@ Ext.define( 'Crawler.view.main.Main', {
 	            Ext.create( 'Crawler.simple.view.Panel', {
 	                title: 'Статусы прокси',
 	                itemId: 'proxyStatus',
-	                storeConfig: {
-		                model: 'Crawler.proxy.model.ProxyStatus',
-	                }
+	            	storeId: 'proxyStatusStore'
 	            } ), //
 	            Ext.create( 'Crawler.simple.view.Panel', {
 	                title: 'Статусы ссылок',
 	                itemId: 'urlStatus',
-	                storeConfig: {
-		                model: 'Crawler.url.model.UrlStatus',
-	                }
+	                storeId: 'urlStatusStore'
 	            } ), //
 	            Ext.create( 'Crawler.simple.view.Panel', {
 	                title: 'Типы данных',
 	                itemId: 'dataType',
-	            // storeConfig: {
-	            // model: 'Crawler.data.model.DataType',
-	            // }
+	                storeId: 'dataTypeStore'
 	            } ), //
 	            Ext.create( 'Crawler.url.view.Panel', {
 		            itemId: 'url'
-	            } ) ]
+	            } ),//
+	            Ext.create( 'Crawler.provider.view.Panel', {
+		            itemId: 'provider'
+	            } )
+	            ]
 
 	        }
 

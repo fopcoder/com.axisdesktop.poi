@@ -19,8 +19,13 @@ Ext.define( 'Axis.ux.view.GridPanel', {
 	    config = config || {};
 	    Ext.apply( this, config );
 
-	    this.store = Ext.create( 'Axis.ux.store.GridStore', this.storeConfig );
-
+	    if( this.storeId )	{
+	    	this.store = Ext.StoreManager.lookup( this.storeId );
+	    }
+	    else	{
+	    	this.store = Ext.create( 'Axis.ux.store.GridStore', this.storeConfig );	
+	    }
+	    
 	    var cfg = {
 		    dockedItems: []
 	    };

@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,8 @@ public class ProviderServiceImpl implements ProviderService {
 	private ProviderUrlRepository provUrlRepo;
 	@Autowired
 	private ProviderDataRepository provDataRepo;
+	@Autowired
+	private Environment env;
 
 	public ProviderServiceImpl() {
 	}
@@ -116,7 +119,10 @@ public class ProviderServiceImpl implements ProviderService {
 
 	@Override
 	public List<ProviderUrl> findUrlForUpdate( int providerId ) {
-		return provUrlRepo.findUrlForUpdate( providerId );
+		Calendar waitFor = Calendar.getInstance();
+		waitFor.add( Calendar.MINUTE, -Integer.valueOf( env.getRequiredProperty( "crawler.proxy.waitfor" ) ) );
+
+		return provUrlRepo.findUrlForUpdate( providerId, waitFor );
 	}
 
 	@Override

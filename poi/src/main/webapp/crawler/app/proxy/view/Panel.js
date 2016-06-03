@@ -72,35 +72,55 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 	    config = config || {};
 	    Ext.apply( this, config );
 
-	    this.appendToolbar = [ {
-	        text: 'Деактивировать',
-	        handler: this.deactivate,
-	        scope: this
-	    }, {
-	        text: 'Добавить список',
-	        handler: this.addBatch,
-	        scope: this
-	    }, '-', {
-	        xtype: 'checkbox',
-	        fieldLabel: 'только активные',
-	        labelWidth: 110,
-	        value: true,
-	        listeners: {
-	            scope: this,
-	            change: function( obj, newValue, oldValue, eOpts ) {
-		            if( newValue ) {
-			            this.store.addFilter( {
-			                property: 'active',
-			                value: 1,
-			                id: 'activeFilter'
-			            } );
-		            }
-		            else {
-			            this.store.removeFilter( 'activeFilter' );
-		            }
-	            }
-	        }
-	    } ];
+	    this.appendToolbar = [
+            {
+                text: 'Деактивировать',
+                handler: this.deactivate,
+                scope: this
+            },
+            {
+                text: 'Добавить список',
+                handler: this.addBatch,
+                scope: this
+            },
+            '-',
+            {
+                xtype: 'combo',
+                fieldLabel: 'Cостояние',
+                labelWidth: 70,
+                width: 200,
+                value: 'active',
+                store: [ [ '0', 'все' ], [ 'active', 'активные' ], [ 'inactive', 'неактивные' ],
+                        [ 'blocked', 'заблокированые' ] ],
+                listeners: {
+                    scope: this,
+                    select: function( obj, rec ) {
+	                    this.store.clearFilter( false );
+
+	                    if( rec.get( 'field1' ) == 'active' ) {
+		                    this.store.addFilter( {
+		                        property: 'active',
+		                        value: 1,
+		                        id: 'activeFilter'
+		                    } );
+	                    }
+	                    else if( rec.get( 'field1' ) == 'inactive' ) {
+		                    this.store.addFilter( {
+		                        property: 'inactive',
+		                        value: 1,
+		                        id: 'inactiveFilter'
+		                    } );
+	                    }
+	                    else if( rec.get( 'field1' ) == 'blocked' ) {
+		                    this.store.addFilter( {
+		                        property: 'blocked',
+		                        value: 1,
+		                        id: 'blockedFilter'
+		                    } );
+	                    }
+                    }
+                }
+            } ];
 
 	    this.callParent();
     },
@@ -119,9 +139,9 @@ Ext.define( 'Crawler.proxy.view.Panel', {
 	    if( sel ) {
 		    Ext.Msg.confirm( 'Деактивировать', 'Деактивировать', function( but ) {
 			    Ext.each( sel, function( r ) {
-			    	Crawler.proxyService.deactivate( r.get('id') );	
+				    Crawler.proxyService.deactivate( r.get( 'id' ) );
 			    }, this )
-			    
+
 		    }, this );
 	    }
     }

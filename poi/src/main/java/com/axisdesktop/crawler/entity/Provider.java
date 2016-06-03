@@ -11,11 +11,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.axisdesktop.base.entity.SimpleEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import ch.rasc.extclassgenerator.Model;
 
 @Entity
 @Table( name = "provider", schema = "crawler" )
-// @NamedQueries( {
-// @NamedQuery( name = "Provider.findByStatusId", query = "SELECT p FROM Provider p WHERE statusId = :statusId" ) } )
+@JsonIgnoreProperties( { "status", "providerUrl" } )
+@Model( value = "Crawler.provider.model.Provider", totalProperty = "total", rootProperty = "records", successProperty = "success", //
+		readMethod = "Crawler.providerService.list", destroyMethod = "Crawler.providerService.delete" )
 public class Provider extends SimpleEntity<Integer> {
 
 	@Column( name = "status_id" )
@@ -52,9 +56,17 @@ public class Provider extends SimpleEntity<Integer> {
 		this.providerUrl = providerUrl;
 	}
 
+	public Set<ProviderUrl> getProviderUrl() {
+		return providerUrl;
+	}
+
+	public void setProviderUrl( Set<ProviderUrl> providerUrl ) {
+		this.providerUrl = providerUrl;
+	}
+
 	@Override
 	public String toString() {
-		return "Provider [" + ", status_id=" + statusId + "]";
+		return "Provider [" + super.toString() + ", status_id=" + statusId + "]";
 	}
 
 }

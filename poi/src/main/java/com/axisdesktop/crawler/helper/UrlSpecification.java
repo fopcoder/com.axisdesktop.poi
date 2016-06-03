@@ -1,7 +1,6 @@
 package com.axisdesktop.crawler.helper;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,7 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.axisdesktop.crawler.entity.ProviderUrl;
 
 import ch.ralscha.extdirectspring.bean.ExtDirectStoreReadRequest;
-import ch.ralscha.extdirectspring.filter.Filter;
+import ch.ralscha.extdirectspring.filter.NumericFilter;
 
 public class UrlSpecification implements Specification<ProviderUrl> {
 	private ExtDirectStoreReadRequest req;
@@ -30,16 +29,14 @@ public class UrlSpecification implements Specification<ProviderUrl> {
 	public Predicate toPredicate( Root<ProviderUrl> root, CriteriaQuery<?> query, CriteriaBuilder cb ) {
 		List<Predicate> predicates = new ArrayList<Predicate>();
 
-		for( Filter f : req.getFilters() ) {
-			if( f.getField().equals( "active" ) ) {
-				Calendar cal = Calendar.getInstance();
-				cal.add( Calendar.MINUTE, -Integer.valueOf( env.getRequiredProperty( "crawler.proxy.waitfor" ) ) );
+		NumericFilter typeIdFilter = req.getFirstFilterForField( "typeId" );
+		if( typeIdFilter != null ) {
+			predicates.add( cb.equal( root.get( "typeId" ), typeIdFilter.getValue() ) );
+		}
 
-				predicates.add( cb.lessThan( root.get( "tries" ),
-						Integer.valueOf( env.getRequiredProperty( "crawler.proxy.maxtries" ) ) ) );
-				predicates.add( cb.lessThan( root.get( "modified" ), cal ) );
-
-			}
+		NumericFilter statusIdFilter = req.getFirstFilterForField( "statusId" );
+		if( statusIdFilter != null ) {
+			predicates.add( cb.equal( root.get( "statusId" ), statusIdFilter.getValue() ) );
 		}
 
 		return cb.and( predicates.toArray( new Predicate[predicates.size()] ) );

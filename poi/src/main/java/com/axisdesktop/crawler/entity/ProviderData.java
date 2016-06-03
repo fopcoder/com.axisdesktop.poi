@@ -14,6 +14,8 @@ import org.hibernate.annotations.TypeDef;
 
 import com.axisdesktop.base.entity.BaseEntity;
 
+import ch.rasc.extclassgenerator.Model;
+
 @Entity
 @Table( name = "provider_data", schema = "crawler" )
 @TypeDef( name = "hstore", typeClass = HstoreUserType.class )
@@ -21,6 +23,9 @@ import com.axisdesktop.base.entity.BaseEntity;
 		@NamedQuery( name = "ProviderData.getIdByUrlIdAndTypeId", query = "SELECT d.id FROM ProviderData d WHERE urlId = :urlId AND typeId = :typeId" ),
 		@NamedQuery( name = "ProviderData.clearCommentsByParentId", query = "DELETE FROM ProviderData WHERE parentId = :parentId" ),
 		@NamedQuery( name = "ProviderData.findCommentsByParentId", query = "SELECT d FROM ProviderData d WHERE parentId = :parentId AND typeId = 7" ) } )
+// @JsonIgnoreProperties( { "status", "providerUrl" } )
+@Model( value = "Crawler.data.model.Data", totalProperty = "total", rootProperty = "records", successProperty = "success", //
+		readMethod = "Crawler.dataService.list", destroyMethod = "Crawler.dataService.delete" )
 public class ProviderData extends BaseEntity<Long> {
 
 	@Column( name = "url_id" )

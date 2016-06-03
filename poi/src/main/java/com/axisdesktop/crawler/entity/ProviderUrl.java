@@ -29,11 +29,7 @@ import ch.rasc.extclassgenerator.Model;
 				+ "( statusId = 1 AND modified < :nextTime ) OR " //
 				+ "statusId = 4 OR" //
 				+ "( statusId = 3 AND tries < :maxTries AND modified < :waitFor ) ) ) " //
-		),
-		@NamedQuery( name = "ProviderUrl.isExistByProviderIdAndUrl", //
-				query = "SELECT COUNT(*) > 0 FROM ProviderUrl WHERE providerId = :providerId AND url LIKE :url" ),
-		@NamedQuery( name = "ProviderUrl.findUrlForUpdate", //
-				query = "SELECT u FROM ProviderUrl u WHERE providerId = :providerId AND typeId IN(2,3,4) AND statusId IN(4,6)" ) } )
+		) } )
 
 @JsonIgnoreProperties( { "status", "type" } )
 @Model( value = "Crawler.url.model.Url", totalProperty = "total", rootProperty = "records", successProperty = "success", //

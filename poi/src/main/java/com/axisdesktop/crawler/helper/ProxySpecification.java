@@ -43,6 +43,22 @@ public class ProxySpecification implements Specification<CrawlerProxy> {
 				predicates.add( cb.or( status1, status3 ) );
 				predicates.add( status2 );
 			}
+			else if( f.getField().equals( "inactive" ) ) {
+				Calendar cal = Calendar.getInstance();
+				cal.add( Calendar.MINUTE, -Integer.valueOf( env.getRequiredProperty( "crawler.proxy.waitfor" ) ) );
+
+				int maxTries = Integer.valueOf( env.getRequiredProperty( "crawler.proxy.maxtries" ) );
+				Predicate status3 = cb.and( cb.lessThan( root.get( "tries" ), maxTries ), //
+						cb.greaterThan( root.get( "modified" ), cal ) );
+				predicates.add( status3 );
+			}
+			else if( f.getField().equals( "blocked" ) ) {
+				int maxTries = Integer.valueOf( env.getRequiredProperty( "crawler.proxy.maxtries" ) );
+				Predicate status2 = cb.equal( root.get( "statusId" ), 2 );
+				Predicate tries = cb.greaterThan( root.get( "tries" ), maxTries );
+
+				predicates.add( cb.or( status2, tries ) );
+			}
 		}
 
 		return cb.and( predicates.toArray( new Predicate[predicates.size()] ) );

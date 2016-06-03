@@ -30,7 +30,7 @@ public class CrawlerController {
 		sb.append( ModelGenerator.generateJavascript( ProviderUrl.class, OutputFormat.EXTJS5, false ) );
 		sb.append( ModelGenerator.generateJavascript( ProviderUrlStatus.class, OutputFormat.EXTJS5, false ) );
 
-		// sb.append( ModelGenerator.generateJavascript( ProviderDataType.class, OutputFormat.EXTJS5, false ) );
+		sb.append( ModelGenerator.generateJavascript( ProviderDataType.class, OutputFormat.EXTJS5, false ) );
 
 		response.getWriter().println( sb.toString() );
 	}

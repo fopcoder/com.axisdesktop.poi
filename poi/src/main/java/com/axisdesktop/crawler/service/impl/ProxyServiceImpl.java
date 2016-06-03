@@ -131,22 +131,6 @@ public class ProxyServiceImpl extends BaseServiceImpl<CrawlerProxy, Integer> imp
 		return null;
 	}
 
-	// @Override
-	// public void delete( int id ) {
-	// this.proxyRepo.delete( id );
-	// }
-	//
-	// @Override
-	// public void delete( CrawlerProxy proxy ) {
-	// this.proxyRepo.delete( proxy );
-	// }
-	//
-	// @Override
-	// @Transactional
-	// public void delete( List<CrawlerProxy> proxyList ) {
-	// this.proxyRepo.delete( proxyList );
-	// }
-
 	@Override
 	public void deactivate( int id ) {
 		CrawlerProxy t = this.proxyRepo.findOne( id );

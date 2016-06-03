@@ -6,7 +6,7 @@ Ext.define( 'Crawler.proxy.view.AddBatchWindow', {
     width: 500,
     autoShow: true,
 
-    uses: [ 'Axis.ux.view.FormView' ],
+    uses: [ 'Axis.ux.form.Panel' ],
 
     constructor: function( config ) {
 	    config = config || {};
@@ -16,7 +16,7 @@ Ext.define( 'Crawler.proxy.view.AddBatchWindow', {
 		        xtype: 'tabpanel',
 		        items: [ {
 		            title: 'Proxy list',
-		            xtype: 'axis.formview',
+		            xtype: 'axis.formpanel',
 		            api: {
 			            submit: Crawler.proxyService.batchCreate
 		            },
@@ -39,7 +39,7 @@ Ext.define( 'Crawler.proxy.view.AddBatchWindow', {
 		                }
 		            }
 		        }, {
-		        	xtype: 'axis.formview',
+		        	xtype: 'axis.formpanel',
 		            title: 'Результат',
 		            hideSaveButton: true,
 		            items: [ {
