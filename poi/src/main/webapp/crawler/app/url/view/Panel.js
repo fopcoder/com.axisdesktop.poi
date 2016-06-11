@@ -1,5 +1,5 @@
 Ext.define( 'Crawler.url.view.Panel', {
-    extend: 'Axis.ux.view.GridPanel',
+    extend: 'Axis.ux.grid.Panel',
 
     title: 'Ссылки',
 
@@ -63,7 +63,10 @@ Ext.define( 'Crawler.url.view.Panel', {
     }, {
         text: 'params',
         dataIndex: 'params',
-        width: 80
+        width: 80,
+//        renderer: function(val){
+//        	return Ext.decode( val );
+//        }
     }, {
         text: 'parentId',
         dataIndex: 'parentId',

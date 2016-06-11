@@ -43,7 +43,7 @@ public class ProxySpecification implements Specification<CrawlerProxy> {
 				predicates.add( cb.or( status1, status3 ) );
 				predicates.add( status2 );
 			}
-			else if( f.getField().equals( "inactive" ) ) {
+			else if( f.getField().equals( "inactive" ) ) { // ?????
 				Calendar cal = Calendar.getInstance();
 				cal.add( Calendar.MINUTE, -Integer.valueOf( env.getRequiredProperty( "crawler.proxy.waitfor" ) ) );
 
