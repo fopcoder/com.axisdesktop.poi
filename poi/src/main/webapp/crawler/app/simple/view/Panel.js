@@ -1,5 +1,5 @@
 Ext.define( 'Crawler.simple.view.Panel', {
-    extend: 'Axis.ux.view.GridPanel',
+    extend: 'Axis.ux.grid.Panel',
 
     enablePaging: false,
     enableToolbar: false,

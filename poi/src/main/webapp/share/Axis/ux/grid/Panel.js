@@ -1,4 +1,4 @@
-Ext.define( 'Axis.ux.view.GridPanel', {
+Ext.define( 'Axis.ux.grid.Panel', {
     extend: 'Ext.grid.Panel',
 
     title: 'Axis.ux.view.GridPanel',
@@ -15,17 +15,27 @@ Ext.define( 'Axis.ux.view.GridPanel', {
 	    enableTextSelection: true
     },
 
+    columns: [ {
+        text: 'ID',
+        dataIndex: 'id',
+        width: 100
+    }, {
+        text: 'Name',
+        dataIndex: 'name',
+        flex: 1
+    } ],
+
     constructor: function( config ) {
 	    config = config || {};
 	    Ext.apply( this, config );
 
-	    if( this.storeId )	{
-	    	this.store = Ext.StoreManager.lookup( this.storeId );
+	    if( this.storeId ) {
+		    this.store = Ext.StoreManager.lookup( this.storeId );
 	    }
-	    else	{
-	    	this.store = Ext.create( 'Axis.ux.store.GridStore', this.storeConfig );	
+	    else {
+		    this.store = Ext.create( 'Axis.ux.store.GridStore', this.storeConfig );
 	    }
-	    
+
 	    var cfg = {
 		    dockedItems: []
 	    };

@@ -1,5 +1,5 @@
 Ext.define( 'Crawler.proxy.view.Panel', {
-    extend: 'Axis.ux.view.GridPanel',
+    extend: 'Axis.ux.grid.Panel',
 
     title: 'Прокси',
     enableDelButton: true,

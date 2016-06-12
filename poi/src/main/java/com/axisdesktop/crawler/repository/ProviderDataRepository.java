@@ -1,13 +1,12 @@
 package com.axisdesktop.crawler.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.axisdesktop.crawler.entity.ProviderData;
 
-public interface ProviderDataRepository extends JpaRepository<ProviderData, Long> {
+public interface ProviderDataRepository extends BaseRepository<ProviderData, Long> {
 	@Query( name = "ProviderData.getIdByUrlIdAndTypeId" )
 	Long getIdByUrlIdAndTypeId( @Param( "urlId" ) long urlId, @Param( "typeId" ) int typeId );
 

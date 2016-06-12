@@ -11,7 +11,7 @@ Ext.define( 'Crawler.main.view.Main', {
 	        items: [ {
 	            itemId: 'cardPanel',
 	            layout: 'card',
-	            
+
 	            tbar: [ {
 	                text: 'Прокси',
 	                handler: me.switchCard,
@@ -24,6 +24,10 @@ Ext.define( 'Crawler.main.view.Main', {
 	                text: 'Источники',
 	                handler: me.switchCard,
 	                itemId: 'provider'
+	            }, {
+	                text: 'Данные',
+	                handler: me.switchCard,
+	                itemId: 'data'
 	            }, {
 	                text: 'Справочники',
 	                menu: [ {
@@ -40,7 +44,7 @@ Ext.define( 'Crawler.main.view.Main', {
 	                    itemId: 'dataType'
 	                } ]
 	            } ],
-	            
+
 	            items: [ //
 	            Ext.create( 'Crawler.proxy.view.Panel', {
 		            itemId: 'proxy'
@@ -48,7 +52,7 @@ Ext.define( 'Crawler.main.view.Main', {
 	            Ext.create( 'Crawler.simple.view.Panel', {
 	                title: 'Статусы прокси',
 	                itemId: 'proxyStatus',
-	            	storeId: 'proxyStatusStore'
+	                storeId: 'proxyStatusStore'
 	            } ), //
 	            Ext.create( 'Crawler.simple.view.Panel', {
 	                title: 'Статусы ссылок',
@@ -65,8 +69,10 @@ Ext.define( 'Crawler.main.view.Main', {
 	            } ),//
 	            Ext.create( 'Crawler.provider.view.Panel', {
 		            itemId: 'provider'
-	            } )
-	            ]
+	            } ), //
+	            Ext.create( 'Crawler.data.view.Panel', {
+		            itemId: 'data'
+	            } ) ]
 
 	        }
 

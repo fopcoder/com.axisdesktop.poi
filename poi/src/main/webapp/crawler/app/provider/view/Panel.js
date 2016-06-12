@@ -1,5 +1,5 @@
 Ext.define( 'Crawler.provider.view.Panel', {
-    extend: 'Axis.ux.view.GridPanel',
+    extend: 'Axis.ux.grid.Panel',
 
     title: 'Источники',
 

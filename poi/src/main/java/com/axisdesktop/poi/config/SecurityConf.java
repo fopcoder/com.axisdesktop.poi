@@ -36,17 +36,22 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 		// @formatter:off
 		http
         .authorizeRequests()
+//        	
+//            //.antMatchers("/favicon.ico", "/resources/**", "/static/**").permitAll()
+//            .antMatchers("/porom/**").authenticated()
+//            //.antMatchers("/auth/**").permitAll()
+//            .anyRequest().permitAll()
         	
-            //.antMatchers("/favicon.ico", "/resources/**", "/static/**").permitAll()
-            .antMatchers("/porom/**").authenticated()
-            .anyRequest().permitAll()
-            //.antMatchers("/getdata/**").permitAll()
-            //.antMatchers("/porom/**").hasRole( "USER" )
+            .antMatchers("/porom/**").hasRole( "USER" )
+            .antMatchers("/getdata*","/getdata/**","/getdata").permitAll()
             .and()
 		.formLogin()
             .loginPage("/login")
-            //.loginProcessingUrl("/login/auth")
+            .loginProcessingUrl("/login/authenticate")
             .failureUrl("/login?param.error=bad_credentials")
+            .permitAll()
+        .and()
+            .rememberMe()
 	    .and()
 	        .logout()
 	            .logoutUrl("/logout")
@@ -88,10 +93,11 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 		// @formatter:on
 	}
 
-	@Override
-	public void configure( WebSecurity web ) throws Exception {
-		web.ignoring().antMatchers( "/getdata/**" );
-	}
+	// @Override
+	// public void configure( WebSecurity web ) throws Exception {
+	// // web.ignoring().antMatchers( "/getdata/**" );
+	// // web.ignoring().antMatchers( "/auth/**" );
+	// }
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {

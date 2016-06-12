@@ -8,7 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
 @Configuration
-@ComponentScan( { "com.axisdesktop.crawler.impl", "com.axisdesktop.crawler.component", "com.axisdesktop.user1" } )
+@ComponentScan( { "com.axisdesktop.crawler.impl", "com.axisdesktop.user" } )
 @PropertySource( "classpath:application.properties" )
 public class AppConf {
 	@Autowired

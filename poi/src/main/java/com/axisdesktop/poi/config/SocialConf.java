@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
@@ -16,10 +17,9 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ConnectController;
+import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
-import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
-import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 @Configuration
 @EnableSocial
@@ -29,12 +29,12 @@ public class SocialConf implements SocialConfigurer {
 
 	@Override
 	public void addConnectionFactories( ConnectionFactoryConfigurer cfConfig, Environment env ) {
-		cfConfig.addConnectionFactory( new TwitterConnectionFactory( env.getProperty( "poiroute.twitter.key" ),
-				env.getProperty( "poiroute.twitter.secret" ) ) );
+		// cfConfig.addConnectionFactory( new TwitterConnectionFactory( env.getProperty( "poiroute.twitter.key" ),
+		// env.getProperty( "poiroute.twitter.secret" ) ) );
 		cfConfig.addConnectionFactory( new FacebookConnectionFactory( env.getProperty( "poiroute.facebook.key" ),
 				env.getProperty( "poiroute.facebook.secret" ) ) );
-		cfConfig.addConnectionFactory( new GoogleConnectionFactory( env.getProperty( "poiroute.google.key" ),
-				env.getProperty( "poiroute.google.secret" ) ) );
+		// cfConfig.addConnectionFactory( new GoogleConnectionFactory( env.getProperty( "poiroute.google.key" ),
+		// env.getProperty( "poiroute.google.secret" ) ) );
 	}
 
 	@Override
@@ -57,4 +57,11 @@ public class SocialConf implements SocialConfigurer {
 		return controller;
 
 	}
+
+	// @Bean
+	// public ProviderSignInController providerSignInController( ConnectionFactoryLocator connectionFactoryLocator,
+	// UsersConnectionRepository usersConnectionRepository ) {
+	// return new ProviderSignInController( connectionFactoryLocator, usersConnectionRepository,
+	// new SimpleSignInAdapter( new HttpSessionRequestCache() ) );
+	// }
 }
