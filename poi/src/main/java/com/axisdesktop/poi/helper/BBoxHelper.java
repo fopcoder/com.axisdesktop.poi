@@ -1,4 +1,4 @@
-package com.axisdesktop.poi.controller;
+package com.axisdesktop.poi.helper;
 
 public class BBoxHelper {
 	public double south, west, north, east;

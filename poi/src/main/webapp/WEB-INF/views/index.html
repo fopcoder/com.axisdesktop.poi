@@ -50,9 +50,53 @@
 }
 </style>
 
-<div ng-show="sidebarChecked"  id="koko">
-<button id="close" class="btn btn-default btn-sm pull-right"  ng-click="mc.sidebarToggle()"><span class="glyphicon glyphicon-remove"></span></button>
-<div>{{newPoint.val}}</div>
+<div data-ng-show="sidebarChecked"  id="koko" class="container">
+<div class="row">
+<div class="pull-left" th:text="${username}" />
+<button id="close" class="btn btn-default btn-sm pull-right"  data-ng-click="mc.sidebarToggle()"><span class="glyphicon glyphicon-remove"></span></button>
+</div>
+
+
+
+<div data-ng-controller="NewPointController as npc" id="new-point-block" class="row">
+
+<div class="form-group form-group-sm">
+	{{newPoint.value}} 
+	<button type="button" class="btn btn-success btn-sm" data-ng-click="npc.formToggle()"><span class="glyphicon" data-ng-class="{ 'glyphicon-plus': !npc.showForm, 'glyphicon-minus': npc.showForm }"></span></button>
+</div>
+<div data-ng-show="npc.showForm">
+	<form role="form" data-ng-submit="npc.createNewPoint( newPoint )">
+		<input type="hidden" class="form-control" name="latitude" data-ng-model="newPoint.latitude" />
+		<input type="hidden" class="form-control" name="longitude" data-ng-model="newPoint.longitude"/>
+		<div class="form-group form-group-sm">
+			<label>Название:</label>
+			<input type="text" class="form-control" name="name" data-ng-model="newPoint.name" required="required" /> 
+		</div>
+		<div class="form-group form-group-sm">
+			<label>Описание:</label>
+			<textarea name="description" class="form-control" data-ng-model="newPoint.description"></textarea>
+		</div>
+		<button type="submit" class="btn btn-primary">Add</button>
+	</form>
+</div>
+</div>
+
+<uib-tabset active="activeJustified" justified="true" class="row">
+	<uib-tab index="0" heading="Поездки">
+		<th:block th:include="include/trips :: trips" />
+	</uib-tab>
+	<uib-tab index="1" heading="Точки">
+		Short Labeled Justified content
+	</uib-tab>
+ </uib-tabset>
+
+
+
+
+
+
+
+
 </div>
 
 <!-- 

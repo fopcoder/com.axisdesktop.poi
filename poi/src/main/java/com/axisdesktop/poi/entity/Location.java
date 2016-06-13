@@ -22,9 +22,9 @@ public class Location extends BaseEntity<Long> {
 	@Column( name = "status_id" )
 	private int statusId;
 
-	@ManyToOne( fetch = FetchType.LAZY )
-	@JoinColumn( name = "status_id", insertable = false, updatable = false )
-	private RoleStatus status;
+	// @ManyToOne( fetch = FetchType.LAZY )
+	// @JoinColumn( name = "status_id", insertable = false, updatable = false )
+	// private RoleStatus status;
 
 	private double rating;
 
@@ -49,13 +49,13 @@ public class Location extends BaseEntity<Long> {
 		this.statusId = statusId;
 	}
 
-	public RoleStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus( RoleStatus status ) {
-		this.status = status;
-	}
+	// public RoleStatus getStatus() {
+	// return status;
+	// }
+	//
+	// public void setStatus( RoleStatus status ) {
+	// this.status = status;
+	// }
 
 	public double getRating() {
 		return rating;

@@ -30,10 +30,10 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		return new String[] { "/" };
 	}
 
-	@Override
-	protected Filter[] getServletFilters() {
-		return new Filter[] { new DelegatingFilterProxy( "springSecurityFilterChain" ) };
-	}
+	// @Override
+	// protected Filter[] getServletFilters() {
+	// return new Filter[] { new DelegatingFilterProxy( "springSecurityFilterChain" ) };
+	// }
 
 	@Override
 	public void onStartup( ServletContext servletContext ) throws ServletException {

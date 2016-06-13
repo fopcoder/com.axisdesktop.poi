@@ -1,4 +1,5 @@
-MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap) {
+MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$controller', 'TripService', 'NgMap', 
+            function($scope, $http, $localStorage, $controller, TripService, NgMap) {
 	var mc = this;
 	var markers = [];
 	var markerClusterer;
@@ -30,7 +31,13 @@ MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap)
 	    null //new google.maps.Size(12, 18)
 	);
 	
-	$scope.newPoint = {};
+	$scope.newPoint = {
+		value: '',
+		latitude: '',
+		longitude: '',
+		name: '',
+		description: ''
+	};
 	
 	
 	// slidebar
@@ -98,19 +105,42 @@ MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap)
         		angular.element(document.querySelector('#panel-button')).triggerHandler('click');
         	}
 			
-			$scope.newPoint.val = event.latLng.lat().toFixed(6) + "=="+event.latLng.lng().toFixed(6);
+			$scope.newPoint.value = event.latLng.lat().toFixed(6) + ", " + event.latLng.lng().toFixed(6);
+			$scope.newPoint.latitude = event.latLng.lat();
+			$scope.newPoint.longitude = event.latLng.lng();
+			$scope.newPoint.name = '';
+			$scope.newPoint.description = '';
+			
+			$scope.tab = 1;
+			
 		}
+//		TripService.findTrip().then(
+//			function( data ) {
+//				console.log(data);
+//			},
+//			function( data ) {
+//				console.log(data);
+//			}
+//		);
+		
+//		$http.get( '/trip/list' ).then( 
+//				function( data )	{
+//					console.log('success  '+arguments);
+//				},
+//				function( data )	{
+//					console.log('failure  '+arguments);
+//				}
+//		);
+		
 	});
 
-	
-	
 	
 	
 	
 	mc.loadPointsInBBox = function( bounds )	{
 		
 		$http
-			.post( "/getdata", bounds )
+			.post( "/point/list", bounds )
 			.then(
 					function( res ) {
 						for( var i = 0; i < markers.length; i++ ){
@@ -222,4 +252,4 @@ MapApp.controller("MapController", function($scope, $http, $localStorage, NgMap)
 	}
 	
 	
-})
+}])

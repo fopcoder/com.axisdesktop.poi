@@ -29,7 +29,7 @@ public class LocationServiceImpl implements LocationService {
 
 		System.out.println( l.size() + " ======================" );
 		for( Object[] s : l ) {
-			System.out.println( Arrays.toString( s ) );
+			// System.out.println( Arrays.toString( s ) );
 			res.add( new String[] { s[0].toString(), s[1].toString(), s[2].toString(), (String)s[3] } );
 		}
 

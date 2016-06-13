@@ -37,6 +37,13 @@ public class PersistenceConf {
 			ds = new SimpleDriverDataSource( new org.postgresql.Driver(), "jdbc:postgresql://127.0.0.1/poi", "webadmin",
 					"webadmin" );
 
+			// Class.forName("org.postgresql.Driver");
+			// String url = "jdbc:postgresql://localhost:5432/gis_data";
+			// conn = DriverManager.getConnection(url, "postgres", "");
+			//
+			// ((org.postgresql.PGConnection)conn).addDataType("geometry",Class.forName("org.postgis.PGgeometry"));
+			// ((org.postgresql.PGConnection)conn).addDataType("box3d",Class.forName("org.postgis.PGbox3d"));
+
 		}
 		catch( Exception e /* IllegalStateException | NamingException e */ ) {
 			// TODO log all exceptions

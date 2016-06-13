@@ -5,11 +5,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.social.security.SpringSocialConfigurer;
 
@@ -42,12 +44,15 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 //            //.antMatchers("/auth/**").permitAll()
 //            .anyRequest().permitAll()
         	
-            .antMatchers("/porom/**").hasRole( "USER" )
-            .antMatchers("/getdata*","/getdata/**","/getdata").permitAll()
+        	.antMatchers("/getdata/**").permitAll()
+            .antMatchers("/porom/**").hasAnyRole( "USER", "ADMIN" )
+            .and()
+            .csrf().csrfTokenRepository(csrfTokenRepository())
+            
             .and()
 		.formLogin()
             .loginPage("/login")
-            .loginProcessingUrl("/login/authenticate")
+            //.loginProcessingUrl("/login/authenticate")
             .failureUrl("/login?param.error=bad_credentials")
             .permitAll()
         .and()
@@ -62,9 +67,11 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 	    .and()
 	        .apply(new SpringSocialConfigurer()
 	            .postLoginUrl("/")
-	            .alwaysUsePostLoginUrl(true));
+	            .alwaysUsePostLoginUrl(true))
 		
-		
+		.and()
+        
+        .addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class);
 		
 //		http
 //		.and()
@@ -107,6 +114,12 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 	@Bean
 	public SocialUserDetailsService socialUserDetailsService() {
 		return new AppSocialUserService( userService );
+	}
+
+	private CsrfTokenRepository csrfTokenRepository() {
+		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+		repository.setHeaderName( "X-XSRF-TOKEN" );
+		return repository;
 	}
 
 	// @Override
