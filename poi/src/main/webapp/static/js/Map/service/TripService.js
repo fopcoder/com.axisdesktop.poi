@@ -16,8 +16,21 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 		);
 	};
 	
-	self.findDays = function( params )	{
-		return $http.post( '/trip/days', params ).then(
+	self.findDay = function( params )	{
+		return $http.post( '/trip/day/list', params ).then(
+			function(res) {
+				console.log(res);
+				return res.data;
+			},
+			function(res) {
+				console.log(res);
+				return $q.reject(res);
+			}
+		);
+	};
+	
+	self.findPoint = function( params )	{
+		return $http.post( '/trip/day/list', params ).then(
 			function(res) {
 				console.log(res);
 				return res.data;

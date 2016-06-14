@@ -1,4 +1,4 @@
-MapApp.controller( 'TripController', [ 'TripService', function( TripService ) {
+MapApp.controller( 'TripController', [ '$scope', '$routeParams', 'TripService', function( $scope, $routeParams, TripService ) {
 	var self = this;
 
 	self.tripList = function( params ) {
@@ -11,14 +11,15 @@ MapApp.controller( 'TripController', [ 'TripService', function( TripService ) {
 	};
 
 	self.dayList = function( params ) {
-		TripService.findDays( params ).then( //
+		params = params || {};
+		params.tripId = $routeParams.id;
+		
+		TripService.findDay( params ).then( //
 		function( data ) {
 			self.days = data;
 		}, function( err ) {
 			console.log( err )
 		} );
 	};
-
-	self.tripList();
 
 } ] );

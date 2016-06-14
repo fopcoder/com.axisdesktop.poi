@@ -17,7 +17,7 @@ public interface TripService {
 
 	void deleteTrip( long id );
 
-	List<Trip> findDay();
+	List<Trip> findDay( Specification<Trip> spec );
 
 	Trip createDay( Trip day );
 

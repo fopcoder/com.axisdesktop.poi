@@ -1,7 +1,13 @@
 package com.axisdesktop.poi.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.axisdesktop.base.entity.SimpleEntity;
@@ -16,6 +22,12 @@ public class Trip extends SimpleEntity<Long> {
 	private long userId;
 
 	private int ord;
+
+	@OneToMany( fetch = FetchType.LAZY )
+	@JoinTable( name = "user_point2trip", schema = "poi", joinColumns = {
+			@JoinColumn( name = "trip_id", referencedColumnName = "id" ) }, inverseJoinColumns = {
+					@JoinColumn( name = "point_id", referencedColumnName = "id" ) } )
+	List<UserPoint> points;
 
 	public Long getParentId() {
 		return parentId;
@@ -39,6 +51,14 @@ public class Trip extends SimpleEntity<Long> {
 
 	public void setOrd( int ord ) {
 		this.ord = ord;
+	}
+
+	public List<UserPoint> getPoints() {
+		return points;
+	}
+
+	public void setPoints( List<UserPoint> points ) {
+		this.points = points;
 	}
 
 	@Override

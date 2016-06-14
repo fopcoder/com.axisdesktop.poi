@@ -48,8 +48,8 @@ public class TripServiceImpl implements TripService {
 	}
 
 	@Override
-	public List<Trip> findDay() {
-		return tripRepo.findAll();
+	public List<Trip> findDay( Specification<Trip> spec ) {
+		return tripRepo.findAll( spec );
 	}
 
 	@Override

@@ -21,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.axisdesktop.poi.entity.Trip;
 import com.axisdesktop.poi.entity.UserPoint;
 import com.axisdesktop.poi.helper.BBoxHelper;
+import com.axisdesktop.poi.helper.DayListRequestBody;
+import com.axisdesktop.poi.helper.DayPointListRequestBody;
 import com.axisdesktop.poi.helper.NewUserPointHelper;
-import com.axisdesktop.poi.helper.Rq;
+import com.axisdesktop.poi.helper.TripDaySpecification;
 import com.axisdesktop.poi.helper.TripSpecification;
 import com.axisdesktop.poi.service.CustomUserDetails;
 import com.axisdesktop.poi.service.LocationService;
@@ -84,8 +86,6 @@ public class MapController {
 
 	@RequestMapping( value = "/trip/list" )
 	public ResponseEntity<List<Trip>> tripList( HttpServletRequest req, Principal user ) {
-		List<Trip> res = null;
-
 		if( user == null ) {
 			return new ResponseEntity<List<Trip>>( HttpStatus.NO_CONTENT );
 		}
@@ -93,26 +93,46 @@ public class MapController {
 			CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
 
 			Specification<Trip> spec = new TripSpecification( ud.getId(), req );
-			res = tripService.findTrip( spec );
+			List<Trip> res = tripService.findTrip( spec );
 
 			return new ResponseEntity<List<Trip>>( res, HttpStatus.OK );
 		}
 	}
 
-	@RequestMapping( value = "/trip/days" )
-	public ResponseEntity<List<Trip>> daysList( @RequestBody Rq data, HttpServletRequest req, Principal user ) {
-		List<Trip> res = new ArrayList<>();
-		System.err.println( data );
-		// if( user == null ) {
-		// return new ResponseEntity<List<Trip>>( HttpStatus.NO_CONTENT );
-		// }
-		// else {
-		// CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
-		//
-		// Specification<Trip> spec = new TripSpecification( ud.getId(), req );
-		// res = tripService.findTrip( spec );
-		//
-		return new ResponseEntity<List<Trip>>( res, HttpStatus.OK );
-		// }
+	@RequestMapping( value = "/trip/day/list" )
+	public ResponseEntity<List<Trip>> dayList( @RequestBody DayListRequestBody data, HttpServletRequest req,
+			Principal user ) {
+
+		if( user == null ) {
+			return new ResponseEntity<List<Trip>>( HttpStatus.NO_CONTENT );
+		}
+		else {
+			CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
+
+			Specification<Trip> spec = new TripDaySpecification( ud.getId(), data, req );
+			List<Trip> res = tripService.findDay( spec );
+
+			return new ResponseEntity<List<Trip>>( res, HttpStatus.OK );
+		}
+	}
+
+	@RequestMapping( value = "/trip/day/point/list" )
+	public ResponseEntity<List<UserPoint>> dayPointList( @RequestBody DayListRequestBody data, HttpServletRequest req,
+			Principal user ) {
+
+		if( user == null ) {
+			return new ResponseEntity<List<UserPoint>>( HttpStatus.NO_CONTENT );
+		}
+		else {
+			CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
+
+			List<UserPoint> res = new ArrayList<>();
+			Specification<Trip> spec = new TripDaySpecification( ud.getId(), data, req );
+
+			// res = tripService.findDay( spec );
+			System.err.println( tripService.findDay( spec ) );
+
+			return new ResponseEntity<List<UserPoint>>( res, HttpStatus.OK );
+		}
 	}
 }

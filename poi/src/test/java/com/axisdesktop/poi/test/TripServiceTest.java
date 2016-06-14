@@ -18,6 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.axisdesktop.poi.config.AppConf;
 import com.axisdesktop.poi.config.PersistenceConf;
 import com.axisdesktop.poi.entity.Trip;
+import com.axisdesktop.poi.helper.DayListRequestBody;
+import com.axisdesktop.poi.helper.TripDaySpecification;
 import com.axisdesktop.poi.helper.TripSpecification;
 import com.axisdesktop.poi.service.TripService;
 
@@ -42,6 +44,14 @@ public class TripServiceTest {
 		List<Trip> tr = tripService.findTrip( spec );
 
 		assertThat( "Number of trips is wron!", tr.size(), is( 2 ) );
+	}
+
+	@Test
+	public void tripDayList() {
+		Specification<Trip> spec = new TripDaySpecification( 5L, new DayListRequestBody( 5 ), null );
+		List<Trip> tr = tripService.findDay( spec );
+
+		assertThat( "Number of trips is wron!", tr.size(), is( 1 ) );
 	}
 
 }

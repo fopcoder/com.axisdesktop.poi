@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.axisdesktop.base.entity.SimpleEntity;
+import com.axisdesktop.poi.helper.JsonToPointDeserializer;
+import com.axisdesktop.poi.helper.PointToJsonSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Point;
 
 @Entity
@@ -13,6 +17,8 @@ public class UserPoint extends SimpleEntity<Long> {
 	@Column( name = "user_id" )
 	private long userId;
 
+	@JsonSerialize( using = PointToJsonSerializer.class )
+	@JsonDeserialize( using = JsonToPointDeserializer.class )
 	private Point point;
 
 	@Column( name = "point_id" )
@@ -40,6 +46,12 @@ public class UserPoint extends SimpleEntity<Long> {
 
 	public void setPoint( Point point ) {
 		this.point = point;
+	}
+
+	@Override
+	public String toString() {
+		return "UserPoint [" + super.toString() + ", userId=" + userId + ", point=" + point + ", pointId=" + pointId
+				+ "]";
 	}
 
 }

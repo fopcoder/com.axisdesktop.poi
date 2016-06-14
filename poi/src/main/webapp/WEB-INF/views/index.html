@@ -81,6 +81,11 @@
 </div>
 </div>
 
+<a href="#/">home</a> - 
+<a href="#/trip">поездки</a>
+<div class="ng-view"></div>
+
+<!--  
 <uib-tabset active="activeJustified" justified="true" class="row">
 	<uib-tab index="0" heading="Поездки">
 		<th:block th:include="include/trips :: trips" />
@@ -89,7 +94,7 @@
 		Short Labeled Justified content
 	</uib-tab>
  </uib-tabset>
-
+-->
 
 
 
@@ -112,6 +117,8 @@
 </pageslide>
  -->
 
+<th:block th:include="include/trip_list :: trip_list" />
+<th:block th:include="include/trip_day_list :: trip_day_list" />
 
 </body>
 </html>
