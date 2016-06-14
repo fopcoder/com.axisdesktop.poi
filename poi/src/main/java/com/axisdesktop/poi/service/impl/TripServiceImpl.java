@@ -33,7 +33,7 @@ public class TripServiceImpl implements TripService {
 	}
 
 	@Override
-	public Trip getTrip( long id ) {
+	public Trip loadTrip( long id ) {
 		return tripRepo.findOne( id );
 	}
 
@@ -58,7 +58,7 @@ public class TripServiceImpl implements TripService {
 	}
 
 	@Override
-	public Trip getDay( long id ) {
+	public Trip loadDay( long id ) {
 		return tripRepo.findOne( id );
 	}
 

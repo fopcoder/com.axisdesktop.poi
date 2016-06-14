@@ -125,12 +125,10 @@ public class MapController {
 		}
 		else {
 			CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
-
 			List<UserPoint> res = new ArrayList<>();
-			Specification<Trip> spec = new TripDaySpecification( ud.getId(), data, req );
 
 			// res = tripService.findDay( spec );
-			System.err.println( tripService.findDay( spec ) );
+			System.err.println( tripService.loadDay( data.tripId ).getPoints() );
 
 			return new ResponseEntity<List<UserPoint>>( res, HttpStatus.OK );
 		}

@@ -11,7 +11,7 @@ public interface TripService {
 
 	Trip createTrip( Trip trip );
 
-	Trip getTrip( long id );
+	Trip loadTrip( long id );
 
 	Trip updateTrip( Trip trip );
 
@@ -21,7 +21,7 @@ public interface TripService {
 
 	Trip createDay( Trip day );
 
-	Trip getDay( long id );
+	Trip loadDay( long id );
 
 	Trip updateDay( Trip day );
 
