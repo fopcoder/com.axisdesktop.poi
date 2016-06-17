@@ -1,5 +1,5 @@
-MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$controller', 'TripService', 'NgMap', 
-            function($scope, $http, $localStorage, $controller, TripService, NgMap) {
+MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$controller', '$routeParams', 'TripService', 'NgMap', 
+            function($scope, $http, $localStorage, $controller, $routeParams, TripService, NgMap) {
 	var mc = this;
 	var markers = [];
 	var markerClusterer;
@@ -39,6 +39,7 @@ MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$contr
 		description: ''
 	};
 	
+	var runIdle = false;
 	
 	// slidebar
 	$scope.sidebarChecked = false; 
@@ -85,9 +86,12 @@ MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$contr
 		}
 		
 		mc.onIdle = function(event) {
-			mc.loadPointsInBBox( mc.map.getBounds() );
-			saveCenterPoint();
-			saveZoom();
+			if( runIdle )	{
+				mc.loadPointsInBBox( mc.map.getBounds() );
+				saveCenterPoint();
+				saveZoom();
+			}
+			runIdle = true; // грязній хак
 		}
 		
 		mc.onClick = function(event) {
@@ -251,5 +255,27 @@ MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$contr
 		console.log( id, checked );
 	}
 	
+	mc.addToList = function( anchor )	{
+		var params = {};
+		params.latitude = anchor.getPosition().lat();
+		params.longitude = anchor.getPosition().lng();
+		
+		if( $routeParams.tripId )	{
+			params.tripId = $routeParams.id;
+		}
+		
+		if( anchor.id )	{
+			params.pointId = anchor.id;
+		}
+		
+		$http.post( "/trip/add/point", params ).then(
+			function()	{
+				
+			},
+			function()	{
+				
+			}
+		);
+	}
 	
 }])

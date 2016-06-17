@@ -1,10 +1,13 @@
-MapApp.controller( 'PointController', [ 'PointService', function() {
+MapApp.controller( 'PointController', [ '$routeParams', 'PointService', function( $routeParams, PointService ) {
 	var self = this;
 
 	self.pointList = function( params ) {
-		PointService.findTrip( params ).then( //
+		params = params || {};
+		params.dayId = $routeParams.dayId;
+		
+		PointService.listPoint( params ).then( //
 		function( data ) {
-			self.trips = data;
+			self.points = data;
 		}, function( err ) {
 			console.log( err )
 		} );

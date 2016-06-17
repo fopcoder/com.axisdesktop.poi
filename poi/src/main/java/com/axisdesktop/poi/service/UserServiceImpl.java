@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
 	public UserDetails loadUserByUsername( String username ) throws UsernameNotFoundException {
 		// User user = userRepo.findByName( username );
 		User user = userRepo.findByEmail( username );
-		System.out.println( user );
 		if( user == null ) {
 			throw new UsernameNotFoundException( "user with name " + username + "not found" );
 		}

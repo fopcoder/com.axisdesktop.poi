@@ -23,7 +23,7 @@ public class DayListRequestBody {
 
 	@Override
 	public String toString() {
-		return "DayListRequestBody [tripId=" + tripId + "]";
+		return "DayListRequestBody [dayId=" + tripId + "]";
 	}
 
 }

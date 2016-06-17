@@ -35,7 +35,7 @@ public class DayPointListRequestBody {
 
 	@Override
 	public String toString() {
-		return "DayPointListRequestBody [tripId=" + tripId + ", dayId=" + dayId + "]";
+		return "DayPointListRequestBody [dayId=" + tripId + ", dayId=" + dayId + "]";
 	}
 
 }

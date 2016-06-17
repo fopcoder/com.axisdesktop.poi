@@ -2,12 +2,14 @@ package com.axisdesktop.poi.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.axisdesktop.poi.entity.Trip;
 
 public interface TripService {
-	List<Trip> findTrip( Specification<Trip> spec );
+	Page<Trip> findTrip( Specification<Trip> spec, Pageable page );
 
 	Trip createTrip( Trip trip );
 

@@ -1,14 +1,11 @@
 package com.axisdesktop.poi.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,11 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.axisdesktop.poi.entity.Trip;
 import com.axisdesktop.poi.entity.UserPoint;
 import com.axisdesktop.poi.helper.BBoxHelper;
-import com.axisdesktop.poi.helper.DayListRequestBody;
 import com.axisdesktop.poi.helper.NewUserPointHelper;
-import com.axisdesktop.poi.helper.TripDaySpecification;
 import com.axisdesktop.poi.helper.TripPointRequestBody;
-import com.axisdesktop.poi.helper.TripListSpecification;
+import com.axisdesktop.poi.helper.UserPointListRequestBody;
+import com.axisdesktop.poi.helper.UserPointListSpecification;
 import com.axisdesktop.poi.service.CustomUserDetails;
 import com.axisdesktop.poi.service.LocationService;
 import com.axisdesktop.poi.service.TripService;
@@ -36,7 +32,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
 @RestController
-public class MapController {
+public class UserPointController {
 	@Autowired
 	private LocationService locService;
 	@Autowired
@@ -46,7 +42,23 @@ public class MapController {
 	@Autowired
 	private TripService tripService;
 
-	@RequestMapping( value = { "/point/list", "/point" } )
+	@RequestMapping( value = { "/userpoint", "/userpoint/list" } )
+	public ResponseEntity<List<UserPoint>> dayPointList( @RequestBody UserPointListRequestBody data, Principal user ) {
+		if( user == null ) {
+			return new ResponseEntity<List<UserPoint>>( HttpStatus.FORBIDDEN );
+		}
+
+		CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
+		List<UserPoint> res;// = tripService.loadDay( data.getDayId() ).getPoints();
+		// System.err.println( res );
+
+		res = upointService.list( new UserPointListSpecification( data ) );
+
+		return new ResponseEntity<List<UserPoint>>( res, HttpStatus.OK );
+
+	}
+
+	@RequestMapping( value = { "/point999/list", "/point" } )
 	public List<String[]> pointList( @RequestBody BBoxHelper arr ) {
 
 		List<String[]> res = locService.findPointsInBoundingBox( arr.south, arr.west, arr.north, arr.east );
@@ -54,7 +66,7 @@ public class MapController {
 		return res;
 	}
 
-	@RequestMapping( value = "/point/create", method = RequestMethod.POST )
+	@RequestMapping( value = "/point999/create", method = RequestMethod.POST )
 	public UserPoint createUserPoint( @Valid @RequestBody NewUserPointHelper arr, Principal user,
 			BindingResult bindingResult, Authentication auth ) {
 
@@ -84,21 +96,42 @@ public class MapController {
 		return null;
 	}
 
-	@RequestMapping( value = "/trip/day/list" )
-	public ResponseEntity<List<Trip>> dayList( @RequestBody DayListRequestBody data, HttpServletRequest req,
-			Principal user ) {
+	@RequestMapping( value = "/userpoint/create" )
+	public void addTripPoint( @RequestBody TripPointRequestBody data, BindingResult bindingResult, Principal user ) {
+
+		if( bindingResult.hasErrors() ) {
+			return;
+		}
 
 		if( user == null ) {
-			return new ResponseEntity<List<Trip>>( HttpStatus.NO_CONTENT );
+			return;
 		}
-		else {
-			CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
 
-			Specification<Trip> spec = new TripDaySpecification( ud.getId(), data, req );
-			List<Trip> res = tripService.findDay( spec );
+		Trip t = tripService.loadDay( data.tripId );
 
-			return new ResponseEntity<List<Trip>>( res, HttpStatus.OK );
+		CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
+
+		UserPoint up = new UserPoint();
+		GeometryFactory gg = new GeometryFactory( new PrecisionModel(), 4326 );
+
+		up.setPoint( gg.createPoint( new Coordinate( data.longitude, data.latitude ) ) );
+		// up.setName( data.name );
+		up.setName( "point" );
+		// up.setDescription( data.description );
+		up.setUserId( ud.getId() );
+		if( data.pointId > 0 ) {
+			up.setPointId( data.pointId );
 		}
+
+		up = upointService.create( up );
+
+		// t.getPoints().add( up );
+		tripService.updateDay( t );
+
+		// Point p = new Point( , new PrecisionModel(), 4326 );
+		// System.err.println( user );
+		// System.err.println( arr );
+		return;
+
 	}
-
 }

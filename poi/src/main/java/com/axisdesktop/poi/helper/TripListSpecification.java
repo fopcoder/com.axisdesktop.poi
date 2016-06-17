@@ -7,24 +7,23 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.data.jpa.domain.Specification;
 
 import com.axisdesktop.poi.entity.Trip;
 
-public class TripSpecification implements Specification<Trip> {
+public class TripListSpecification implements Specification<Trip> {
 	private Long userId;
-	private HttpServletRequest req;
+	private BaseRequestBody data;
 
-	public TripSpecification( Long userId, HttpServletRequest req ) {
+	public TripListSpecification( Long userId, BaseRequestBody data ) {
 		this.userId = userId;
-		this.req = req;
+		this.data = data;
 	}
 
 	@Override
 	public Predicate toPredicate( Root<Trip> root, CriteriaQuery<?> query, CriteriaBuilder cb ) {
-		List<Predicate> predicates = new ArrayList<Predicate>();
+		List<Predicate> predicates = new ArrayList<>();
 
 		Predicate prIsTrip = cb.isNull( root.get( "parentId" ) );
 		predicates.add( prIsTrip );
@@ -34,9 +33,9 @@ public class TripSpecification implements Specification<Trip> {
 			predicates.add( prUser );
 		}
 
-		if( req != null ) {
-
-		}
+		// if( req != null ) {
+		//
+		// }
 
 		return cb.and( predicates.toArray( new Predicate[predicates.size()] ) );
 	}

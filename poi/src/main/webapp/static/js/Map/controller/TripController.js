@@ -2,9 +2,12 @@ MapApp.controller( 'TripController', [ '$scope', '$routeParams', 'TripService', 
 	var self = this;
 
 	self.tripList = function( params ) {
+		params = params || {};
+		params.sorters = [ { property: "id", direction: "desc" } ];
+		
 		TripService.findTrip( params ).then( //
 		function( data ) {
-			self.trips = data;
+			self.trips = data.content;
 		}, function( err ) {
 			console.log( err )
 		} );

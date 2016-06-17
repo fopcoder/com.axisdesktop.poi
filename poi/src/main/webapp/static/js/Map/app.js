@@ -6,7 +6,7 @@ var MapApp = angular.module( "MapApp", [ "ngMap", "ngStorage", "ngRoute", "pages
 	        .when( "/", {
 		        template: "11111"
 	        } )//
-	        .when( "/trip", {
+	        .when( "/trips", {
 		        templateUrl: "/include/trip_list.html"
 	        } )//
 	        .when( "/trip/:id", {
@@ -15,8 +15,8 @@ var MapApp = angular.module( "MapApp", [ "ngMap", "ngStorage", "ngRoute", "pages
 	        .when( "/trip/:id/day", {
 		        templateUrl: "/include/trip_day_list.html"
 	        } )//
-	        .when( "/trip/:tripId/day/:id/point", {
-		        templateUrl: "/include/trip_day_point_list.html"
+	        .when( "/trip/:tripId/day/:dayId/point", {
+		        templateUrl: "/include/trip_point_list.html"
 	        } )//
 	        .otherwise( {
 		        redirectTo: "/"

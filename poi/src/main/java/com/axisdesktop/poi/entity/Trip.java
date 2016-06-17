@@ -1,16 +1,18 @@
 package com.axisdesktop.poi.entity;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.axisdesktop.base.entity.SimpleEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table( name = "trip", schema = "poi" )
@@ -23,11 +25,10 @@ public class Trip extends SimpleEntity<Long> {
 
 	private int ord;
 
-	@OneToMany( fetch = FetchType.LAZY )
-	@JoinTable( name = "user_point2trip", schema = "poi", joinColumns = {
-			@JoinColumn( name = "trip_id", referencedColumnName = "id" ) }, inverseJoinColumns = {
-					@JoinColumn( name = "point_id", referencedColumnName = "id" ) } )
-	List<UserPoint> points;
+	@JsonIgnore
+	@OneToMany( fetch = FetchType.LAZY, mappedBy = "trip", cascade = CascadeType.ALL )
+	@OrderBy( "porder" )
+	Set<UserPoint2Trip> point2trip = new HashSet<>();
 
 	public Long getParentId() {
 		return parentId;
@@ -53,12 +54,12 @@ public class Trip extends SimpleEntity<Long> {
 		this.ord = ord;
 	}
 
-	public List<UserPoint> getPoints() {
-		return points;
+	public Set<UserPoint2Trip> getPoint2trip() {
+		return point2trip;
 	}
 
-	public void setPoints( List<UserPoint> points ) {
-		this.points = points;
+	public void setPoint2trip( Set<UserPoint2Trip> point2trip ) {
+		this.point2trip = point2trip;
 	}
 
 	@Override

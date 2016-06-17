@@ -30,6 +30,7 @@
 			<div>header {{anchor.title}}</div>
 			<div>body {{anchor.getPosition()}}</div>
 			<label>Добавить в избранное: <input type="checkbox" ng-model="chkp" ng-click="mc.checkPoint( anchor.id, chkp )" /></label>
+			<button ng-click="mc.addToList( anchor )"><span class="glyphicon glyphicon-plus"></span></button>
 		</div>
 		</form>
 	</info-window>
@@ -82,7 +83,7 @@
 </div>
 
 <a href="#/">home</a> - 
-<a href="#/trip">поездки</a>
+<a href="#/trips">поездки</a>
 <div class="ng-view"></div>
 
 <!--  
@@ -119,6 +120,7 @@
 
 <th:block th:include="include/trip_list :: trip_list" />
 <th:block th:include="include/trip_day_list :: trip_day_list" />
+<th:block th:include="include/trip_point_list :: trip_point_list" />
 
 </body>
 </html>

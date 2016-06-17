@@ -4,9 +4,8 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 	var self = this;
 	
 	self.findTrip = function( params )	{
-		return $http.post( '/trip/list', params ).then(
+		return $http.post( '/trips', params ).then(
 			function(res) {
-				console.log(res);
 				return res.data;
 			},
 			function(res) {
@@ -19,7 +18,6 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 	self.findDay = function( params )	{
 		return $http.post( '/trip/day/list', params ).then(
 			function(res) {
-				console.log(res);
 				return res.data;
 			},
 			function(res) {
