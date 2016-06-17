@@ -7,6 +7,15 @@ public class BaseRequestBody {
 	private int start = 0;
 	private int limit = 50;
 	private List<Sorter> sorters = new ArrayList<>();
+	private long tripId;
+
+	public long getTripId() {
+		return tripId;
+	}
+
+	public void setTripId( long tripId ) {
+		this.tripId = tripId;
+	}
 
 	public int getStart() {
 		return start;

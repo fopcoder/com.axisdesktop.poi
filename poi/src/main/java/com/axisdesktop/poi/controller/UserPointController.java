@@ -1,7 +1,9 @@
 package com.axisdesktop.poi.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -17,10 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.axisdesktop.poi.entity.Trip;
 import com.axisdesktop.poi.entity.UserPoint;
+import com.axisdesktop.poi.entity.UserPoint2Trip;
 import com.axisdesktop.poi.helper.BBoxHelper;
+import com.axisdesktop.poi.helper.BaseRequestBody;
 import com.axisdesktop.poi.helper.NewUserPointHelper;
 import com.axisdesktop.poi.helper.TripPointRequestBody;
-import com.axisdesktop.poi.helper.UserPointListRequestBody;
 import com.axisdesktop.poi.helper.UserPointListSpecification;
 import com.axisdesktop.poi.service.CustomUserDetails;
 import com.axisdesktop.poi.service.LocationService;
@@ -42,17 +45,28 @@ public class UserPointController {
 	@Autowired
 	private TripService tripService;
 
-	@RequestMapping( value = { "/userpoint", "/userpoint/list" } )
-	public ResponseEntity<List<UserPoint>> dayPointList( @RequestBody UserPointListRequestBody data, Principal user ) {
+	@RequestMapping( "/userpoints" )
+	public ResponseEntity<List<UserPoint>> dayPointList( @RequestBody BaseRequestBody data, Principal user ) {
 		if( user == null ) {
 			return new ResponseEntity<List<UserPoint>>( HttpStatus.FORBIDDEN );
 		}
 
-		CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
-		List<UserPoint> res;// = tripService.loadDay( data.getDayId() ).getPoints();
+		// CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
+		Trip t = tripService.loadTrip( data.getTripId() );
+		// List<UserPoint> res = t.getPoint2trip().stream().map( i -> {
+		// System.err.println( i.getPoint() );
+		// return i.getPoint();
+		// } ).collect( Collectors.toList() );
 		// System.err.println( res );
 
-		res = upointService.list( new UserPointListSpecification( data ) );
+		List<UserPoint> res = new ArrayList<>();
+
+		for( UserPoint2Trip up : t.getPoint2trip() ) {
+			res.add( up.getPoint() );
+			System.err.println( up.getPoint().getName() );
+		}
+		System.err.println( res );
+		// res = upointService.list( new UserPointListSpecification( data.g ) );
 
 		return new ResponseEntity<List<UserPoint>>( res, HttpStatus.OK );
 
@@ -107,7 +121,7 @@ public class UserPointController {
 			return;
 		}
 
-		Trip t = tripService.loadDay( data.tripId );
+		Trip t = tripService.loadTrip( data.tripId );
 
 		CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
 
@@ -126,7 +140,7 @@ public class UserPointController {
 		up = upointService.create( up );
 
 		// t.getPoints().add( up );
-		tripService.updateDay( t );
+		tripService.updateTrip( t );
 
 		// Point p = new Point( , new PrecisionModel(), 4326 );
 		// System.err.println( user );

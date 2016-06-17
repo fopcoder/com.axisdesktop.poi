@@ -1,7 +1,7 @@
 package com.axisdesktop.poi.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,21 +11,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.axisdesktop.base.entity.SimpleEntity;
-import com.axisdesktop.poi.helper.JsonToPointDeserializer;
-import com.axisdesktop.poi.helper.PointToJsonSerializer;
+import com.axisdesktop.poi.helper.GeometrySerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.vividsolutions.jts.geom.Point;
 
 @Entity
 @Table( schema = "poi", name = "user_point" )
+@JsonIgnoreProperties( { "hibernateLazyInitializer", "handler" } )
 public class UserPoint extends SimpleEntity<Long> {
 	@Column( name = "user_id" )
 	private long userId;
 
-	@JsonSerialize( using = PointToJsonSerializer.class )
-	@JsonDeserialize( using = JsonToPointDeserializer.class )
+	@JsonSerialize( using = GeometrySerializer.class )
+	// @JsonDeserialize( using = JsonToPointDeserializer.class )
 	private Point point;
 
 	@Column( name = "point_id" )
@@ -33,7 +33,7 @@ public class UserPoint extends SimpleEntity<Long> {
 
 	@JsonIgnore
 	@OneToMany( fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "point" )
-	Set<UserPoint2Trip> point2trip = new HashSet<>();
+	List<UserPoint2Trip> point2trip = new ArrayList<>();
 
 	public Long getPointId() {
 		return pointId;
@@ -59,11 +59,11 @@ public class UserPoint extends SimpleEntity<Long> {
 		this.point = point;
 	}
 
-	public Set<UserPoint2Trip> getTrips() {
+	public List<UserPoint2Trip> getPoint2trip() {
 		return point2trip;
 	}
 
-	public void setTrips( Set<UserPoint2Trip> trips ) {
+	public void setPoint2trip( List<UserPoint2Trip> trips ) {
 		this.point2trip = trips;
 	}
 

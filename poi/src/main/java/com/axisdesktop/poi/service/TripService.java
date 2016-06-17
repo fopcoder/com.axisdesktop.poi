@@ -1,7 +1,5 @@
 package com.axisdesktop.poi.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,13 +17,4 @@ public interface TripService {
 
 	void deleteTrip( long id );
 
-	List<Trip> findDay( Specification<Trip> spec );
-
-	Trip createDay( Trip day );
-
-	Trip loadDay( long id );
-
-	Trip updateDay( Trip day );
-
-	void deleteDay( long id );
 }

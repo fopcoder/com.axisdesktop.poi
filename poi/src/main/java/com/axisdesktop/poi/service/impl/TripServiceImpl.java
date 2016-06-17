@@ -1,7 +1,5 @@
 package com.axisdesktop.poi.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,31 +44,6 @@ public class TripServiceImpl implements TripService {
 
 	@Override
 	public void deleteTrip( long id ) {
-		tripRepo.delete( id );
-	}
-
-	@Override
-	public List<Trip> findDay( Specification<Trip> spec ) {
-		return tripRepo.findAll( spec );
-	}
-
-	@Override
-	public Trip createDay( Trip day ) {
-		return tripRepo.save( day );
-	}
-
-	@Override
-	public Trip loadDay( long id ) {
-		return tripRepo.findOne( id );
-	}
-
-	@Override
-	public Trip updateDay( Trip day ) {
-		return tripRepo.save( day );
-	}
-
-	@Override
-	public void deleteDay( long id ) {
 		tripRepo.delete( id );
 	}
 

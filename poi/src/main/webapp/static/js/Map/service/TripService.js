@@ -3,7 +3,7 @@
 MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 	var self = this;
 	
-	self.findTrip = function( params )	{
+	self.listTrip = function( params )	{
 		return $http.post( '/trips', params ).then(
 			function(res) {
 				return res.data;
@@ -15,8 +15,8 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 		);
 	};
 	
-	self.findDay = function( params )	{
-		return $http.post( '/trip/day/list', params ).then(
+	self.listDay = function( params )	{
+		return $http.post( '/trip/days', params ).then(
 			function(res) {
 				return res.data;
 			},
@@ -27,10 +27,9 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 		);
 	};
 	
-	self.findPoint = function( params )	{
-		return $http.post( '/trip/day/list', params ).then(
+	self.listPoint = function( params )	{
+		return $http.post( '/trip/day/points', params ).then(
 			function(res) {
-				console.log(res);
 				return res.data;
 			},
 			function(res) {

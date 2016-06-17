@@ -1,6 +1,8 @@
 package com.axisdesktop.poi.controller;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.axisdesktop.poi.entity.Trip;
+import com.axisdesktop.poi.entity.UserPoint;
 import com.axisdesktop.poi.helper.BaseRequestBody;
 import com.axisdesktop.poi.helper.TripListSpecification;
 import com.axisdesktop.poi.service.CustomUserDetails;
@@ -29,7 +32,7 @@ public class TripController {
 	@RequestMapping( value = "/trips", method = RequestMethod.POST )
 	public ResponseEntity<Page<Trip>> tripList( @RequestBody BaseRequestBody data, Principal user ) {
 		if( user == null ) {
-			return new ResponseEntity<Page<Trip>>( HttpStatus.NO_CONTENT );
+			return new ResponseEntity<Page<Trip>>( HttpStatus.FORBIDDEN );
 		}
 		else {
 			long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
@@ -40,6 +43,38 @@ public class TripController {
 			Page<Trip> res = tripService.findTrip( spec, page );
 
 			return new ResponseEntity<Page<Trip>>( res, HttpStatus.OK );
+		}
+	}
+
+	@RequestMapping( value = "/trip/days", method = RequestMethod.POST )
+	public ResponseEntity<Page<Trip>> tripDaysList( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return new ResponseEntity<Page<Trip>>( HttpStatus.FORBIDDEN );
+		}
+		else {
+			long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+
+			Pageable page = HttpUtils.createPageable( data );
+			Specification<Trip> spec = new TripListSpecification( uid, data, false );
+
+			Page<Trip> res = tripService.findTrip( spec, page );
+
+			return new ResponseEntity<Page<Trip>>( res, HttpStatus.OK );
+		}
+	}
+
+	@RequestMapping( value = "/trip/day/points", method = RequestMethod.POST )
+	public ResponseEntity<List<UserPoint>> tripPointsList( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return new ResponseEntity<List<UserPoint>>( HttpStatus.FORBIDDEN );
+		}
+		else {
+			Trip t = tripService.loadTrip( data.getTripId() );
+			List<UserPoint> res = t.getPoint2trip().stream().map( i -> {
+				return i.getPoint();
+			} ).collect( Collectors.toList() );
+
+			return new ResponseEntity<List<UserPoint>>( res, HttpStatus.OK );
 		}
 	}
 

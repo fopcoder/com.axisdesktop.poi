@@ -5,6 +5,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -20,9 +21,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.axisdesktop.poi.config.AppConf;
 import com.axisdesktop.poi.config.PersistenceConf;
 import com.axisdesktop.poi.entity.Trip;
+import com.axisdesktop.poi.entity.UserPoint;
 import com.axisdesktop.poi.entity.UserPoint2Trip;
 import com.axisdesktop.poi.helper.DayListRequestBody;
-import com.axisdesktop.poi.helper.TripDaySpecification;
 import com.axisdesktop.poi.helper.TripListSpecification;
 import com.axisdesktop.poi.service.TripService;
 
@@ -53,23 +54,19 @@ public class TripServiceTest {
 	@Test
 	@Ignore
 	public void tripDayList() {
-		Specification<Trip> spec = new TripDaySpecification( 5L, new DayListRequestBody( 2 ), null );
-		List<Trip> tr = tripService.findDay( spec );
-
-		assertThat( "Number of trips is wron!", tr.size(), is( 3 ) );
+		// Specification<Trip> spec = new TripListSpecification( 5L, new DayListRequestBody( 2 ) );
+		// List<Trip> tr = tripService.findDay( spec );
+		//
+		// assertThat( "Number of trips is wron!", tr.size(), is( 3 ) );
 	}
 
 	@Test
 	public void tripPoints() {
-		Trip t = tripService.loadDay( 2 );
-		Set<UserPoint2Trip> pp = t.getPoint2trip();
-
-		System.err.println( pp.size() );
-
-		pp.forEach( i -> {
-			i.getPoint().getName();
-		} );
-
+		Trip t = tripService.loadTrip( 2 );
+		List<UserPoint> res = t.getPoint2trip().stream().map( i -> {
+			return i.getPoint();
+		} ).collect( Collectors.toList() );
+		System.err.println( res );
 		// t.getPoints().stream().map( s -> {
 		// System.out.println( s.getName() );
 		// return s.getName();

@@ -9,13 +9,10 @@ var MapApp = angular.module( "MapApp", [ "ngMap", "ngStorage", "ngRoute", "pages
 	        .when( "/trips", {
 		        templateUrl: "/include/trip_list.html"
 	        } )//
-	        .when( "/trip/:id", {
-		        template: "pppp {{id}}"
-	        } )//
-	        .when( "/trip/:id/day", {
+	        .when( "/trip/:tripId", {
 		        templateUrl: "/include/trip_day_list.html"
 	        } )//
-	        .when( "/trip/:tripId/day/:dayId/point", {
+	        .when( "/trip/:tripId/day/:dayId", {
 		        templateUrl: "/include/trip_point_list.html"
 	        } )//
 	        .otherwise( {

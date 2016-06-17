@@ -1,7 +1,7 @@
 package com.axisdesktop.poi.entity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,12 +23,12 @@ public class Trip extends SimpleEntity<Long> {
 	@Column( name = "user_id" )
 	private long userId;
 
-	private int ord;
+	private int torder;
 
 	@JsonIgnore
 	@OneToMany( fetch = FetchType.LAZY, mappedBy = "trip", cascade = CascadeType.ALL )
 	@OrderBy( "porder" )
-	Set<UserPoint2Trip> point2trip = new HashSet<>();
+	List<UserPoint2Trip> point2trip = new ArrayList<>();
 
 	public Long getParentId() {
 		return parentId;
@@ -46,25 +46,25 @@ public class Trip extends SimpleEntity<Long> {
 		this.userId = userId;
 	}
 
-	public int getOrd() {
-		return ord;
+	public int getTorder() {
+		return torder;
 	}
 
-	public void setOrd( int ord ) {
-		this.ord = ord;
+	public void setTorder( int torder ) {
+		this.torder = torder;
 	}
 
-	public Set<UserPoint2Trip> getPoint2trip() {
+	public List<UserPoint2Trip> getPoint2trip() {
 		return point2trip;
 	}
 
-	public void setPoint2trip( Set<UserPoint2Trip> point2trip ) {
+	public void setPoint2trip( List<UserPoint2Trip> point2trip ) {
 		this.point2trip = point2trip;
 	}
 
 	@Override
 	public String toString() {
-		return "Trip [" + super.toString() + ", parentId=" + parentId + ", userId=" + userId + ", ord=" + ord + "]";
+		return "Trip [" + super.toString() + ", parentId=" + parentId + ", userId=" + userId + ", ord=" + torder + "]";
 	}
 
 }

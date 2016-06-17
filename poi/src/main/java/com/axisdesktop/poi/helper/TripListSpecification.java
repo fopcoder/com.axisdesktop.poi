@@ -15,27 +15,33 @@ import com.axisdesktop.poi.entity.Trip;
 public class TripListSpecification implements Specification<Trip> {
 	private Long userId;
 	private BaseRequestBody data;
+	private boolean isTrip;
 
 	public TripListSpecification( Long userId, BaseRequestBody data ) {
+		this( userId, data, true );
+	}
+
+	public TripListSpecification( Long userId, BaseRequestBody data, boolean isTrip ) {
 		this.userId = userId;
 		this.data = data;
+		this.isTrip = isTrip;
 	}
 
 	@Override
 	public Predicate toPredicate( Root<Trip> root, CriteriaQuery<?> query, CriteriaBuilder cb ) {
 		List<Predicate> predicates = new ArrayList<>();
 
-		Predicate prIsTrip = cb.isNull( root.get( "parentId" ) );
-		predicates.add( prIsTrip );
+		predicates.add( this.isTrip ? cb.isNull( root.get( "parentId" ) ) : cb.isNotNull( root.get( "parentId" ) ) );
 
 		if( userId != null ) {
 			Predicate prUser = cb.equal( root.get( "userId" ), userId );
 			predicates.add( prUser );
 		}
 
-		// if( req != null ) {
-		//
-		// }
+		if( data != null && data.getTripId() > 0 ) {
+			Predicate p = cb.equal( root.get( "parentId" ), data.getTripId() );
+			predicates.add( p );
+		}
 
 		return cb.and( predicates.toArray( new Predicate[predicates.size()] ) );
 	}

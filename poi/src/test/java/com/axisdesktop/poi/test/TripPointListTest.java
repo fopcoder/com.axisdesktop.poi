@@ -1,6 +1,8 @@
 package com.axisdesktop.poi.test;
 
-import org.hibernate.sql.ordering.antlr.GeneratedOrderByFragmentParser;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.axisdesktop.poi.config.AppConf;
 import com.axisdesktop.poi.config.PersistenceConf;
 import com.axisdesktop.poi.entity.Trip;
+import com.axisdesktop.poi.entity.UserPoint;
+import com.axisdesktop.poi.entity.UserPoint2Trip;
 import com.axisdesktop.poi.service.TripService;
 
 @RunWith( SpringJUnit4ClassRunner.class )
@@ -32,11 +36,21 @@ public class TripPointListTest {
 
 	@Test
 	public void tripPoints() {
-		Trip t = tripService.loadDay( 2 );
+		Trip t = tripService.loadTrip( 2 );
 
-		t.getPoint2trip().stream().forEach( s -> {
-			System.err.println( s.getPoint().getName() + " == " + s.getPorder() );
-		} );
+		System.err.println( t.getPoint2trip().size() );
+
+		List<UserPoint> l = new ArrayList<>();
+
+		for( UserPoint2Trip up : t.getPoint2trip() ) {
+			l.add( up.getPoint() );
+			// System.err.println( up.getPoint().getName() );
+		}
+		System.err.println( l );
+		// t.getPoint2trip().stream().map( s -> {
+		// System.err.println( s.getPoint().getName() + " == " + s.getPorder() );
+		// return s.getPoint();
+		// } );
 	}
 
 }

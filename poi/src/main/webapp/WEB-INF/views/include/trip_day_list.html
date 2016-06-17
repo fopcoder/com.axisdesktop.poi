@@ -3,7 +3,7 @@
 <body th:fragment="trip_day_list">
 
 <script type="text/ng-template" id="/include/trip_day_list.html">
-<div data-ng-controller="TripController as tc" data-ng-init="tc.dayList();">
+<div data-ng-controller="TripController as tc" data-ng-init="tc.listDay();">
 	<button type="button" class="btn btn-primary">Добавить</button>
 	<table class="table table-hover table-condensed">
 		<thead>
@@ -11,7 +11,7 @@
 		</thead>
 		<tbody>
 			<tr data-ng-repeat="t in tc.days">
-				<td><a href="#/trip/{{t.parentId}}/day/{{t.id}}/point" data-ng-bind="t.name"></a></td>
+				<td><a href="#/trip/{{t.parentId}}/day/{{t.id}}" data-ng-bind="t.name"></a></td>
 				<!--td><a href="#/trip/{{t.id}}" type="button" class="btn btn-warning btn-xs">Инфо</a></td-->
 			</tr>
 		</tbody>

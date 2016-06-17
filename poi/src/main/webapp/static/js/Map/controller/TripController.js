@@ -1,11 +1,11 @@
 MapApp.controller( 'TripController', [ '$scope', '$routeParams', 'TripService', function( $scope, $routeParams, TripService ) {
 	var self = this;
 
-	self.tripList = function( params ) {
+	self.listTrip = function( params ) {
 		params = params || {};
 		params.sorters = [ { property: "id", direction: "desc" } ];
 		
-		TripService.findTrip( params ).then( //
+		TripService.listTrip( params ).then( //
 		function( data ) {
 			self.trips = data.content;
 		}, function( err ) {
@@ -13,11 +13,24 @@ MapApp.controller( 'TripController', [ '$scope', '$routeParams', 'TripService', 
 		} );
 	};
 
-	self.dayList = function( params ) {
+	self.listDay = function( params ) {
 		params = params || {};
-		params.tripId = $routeParams.id;
+		params.tripId = $routeParams.tripId;
+		params.sorters = [ { property: "torder", direction: "asc" } ];
 		
-		TripService.findDay( params ).then( //
+		TripService.listDay( params ).then( //
+		function( data ) {
+			self.days = data.content;
+		}, function( err ) {
+			console.log( err )
+		} );
+	};
+	
+	self.listPoint = function( params ) {
+		params = params || {};
+		params.tripId = $routeParams.dayId;
+		
+		TripService.listPoint( params ).then( //
 		function( data ) {
 			self.days = data;
 		}, function( err ) {

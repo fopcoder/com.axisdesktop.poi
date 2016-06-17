@@ -1,9 +1,9 @@
 MapApp.controller( 'PointController', [ '$routeParams', 'PointService', function( $routeParams, PointService ) {
 	var self = this;
 
-	self.pointList = function( params ) {
+	self.listPoint = function( params ) {
 		params = params || {};
-		params.dayId = $routeParams.dayId;
+		params.tripId = $routeParams.dayId;
 		
 		PointService.listPoint( params ).then( //
 		function( data ) {

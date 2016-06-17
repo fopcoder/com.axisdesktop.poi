@@ -1,7 +1,6 @@
 package com.axisdesktop.poi.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.axisdesktop.poi.entity.Trip;
 import com.axisdesktop.poi.entity.UserPoint;
 import com.axisdesktop.poi.helper.BBoxHelper;
-import com.axisdesktop.poi.helper.DayListRequestBody;
+import com.axisdesktop.poi.helper.BaseRequestBody;
 import com.axisdesktop.poi.helper.NewUserPointHelper;
-import com.axisdesktop.poi.helper.TripDaySpecification;
-import com.axisdesktop.poi.helper.TripPointRequestBody;
 import com.axisdesktop.poi.helper.TripListSpecification;
 import com.axisdesktop.poi.service.CustomUserDetails;
 import com.axisdesktop.poi.service.LocationService;
@@ -84,21 +81,21 @@ public class MapController {
 		return null;
 	}
 
-	@RequestMapping( value = "/trip/day/list" )
-	public ResponseEntity<List<Trip>> dayList( @RequestBody DayListRequestBody data, HttpServletRequest req,
-			Principal user ) {
-
-		if( user == null ) {
-			return new ResponseEntity<List<Trip>>( HttpStatus.NO_CONTENT );
-		}
-		else {
-			CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
-
-			Specification<Trip> spec = new TripDaySpecification( ud.getId(), data, req );
-			List<Trip> res = tripService.findDay( spec );
-
-			return new ResponseEntity<List<Trip>>( res, HttpStatus.OK );
-		}
-	}
+	// @RequestMapping( value = "/trip/day/list" )
+	// public ResponseEntity<List<Trip>> dayList( @RequestBody BaseRequestBody data, HttpServletRequest req,
+	// Principal user ) {
+	//
+	// if( user == null ) {
+	// return new ResponseEntity<List<Trip>>( HttpStatus.NO_CONTENT );
+	// }
+	// else {
+	// CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
+	//
+	// Specification<Trip> spec = new TripListSpecification( ud.getId(), data, false );
+	// List<Trip> res = tripService.findDay( spec );
+	//
+	// return new ResponseEntity<List<Trip>>( res, HttpStatus.OK );
+	// }
+	// }
 
 }
