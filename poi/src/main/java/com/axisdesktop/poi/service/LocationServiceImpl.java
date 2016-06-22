@@ -43,4 +43,9 @@ public class LocationServiceImpl implements LocationService {
 		return null;
 	}
 
+	@Override
+	public Location load( long id ) {
+		return locRepo.findOne( id );
+	}
+
 }

@@ -69,7 +69,7 @@ public class TripController {
 			return new ResponseEntity<List<UserPoint>>( HttpStatus.FORBIDDEN );
 		}
 		else {
-			Trip t = tripService.loadTrip( data.getTripId() );
+			Trip t = tripService.load( data.getTripId() );
 			List<UserPoint> res = t.getPoint2trip().stream().map( i -> {
 				return i.getPoint();
 			} ).collect( Collectors.toList() );

@@ -33,7 +33,7 @@ public class TripServiceImpl implements TripService {
 	}
 
 	@Override
-	public Trip loadTrip( long id ) {
+	public Trip load( long id ) {
 		return tripRepo.findOne( id );
 	}
 

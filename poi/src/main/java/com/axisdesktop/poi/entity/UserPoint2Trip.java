@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table( name = "user_point2trip", schema = "poi" )
@@ -20,15 +19,13 @@ public class UserPoint2Trip {
 	@ManyToOne( fetch = FetchType.LAZY )
 	private Trip trip;
 
-	@Transient
-	@Column( name = "trip_id" )
+	@Column( name = "trip_id", insertable = false, updatable = false )
 	private long tripId;
 
 	@ManyToOne( fetch = FetchType.LAZY )
 	private UserPoint point;
 
-	@Transient
-	@Column( name = "point_id" )
+	@Column( name = "point_id", insertable = false, updatable = false )
 	private long pointId;
 
 	private int porder;
@@ -41,28 +38,12 @@ public class UserPoint2Trip {
 		this.id = id;
 	}
 
-	public int getPorder() {
-		return porder;
-	}
-
-	public void setPorder( int porder ) {
-		this.porder = porder;
-	}
-
 	public Trip getTrip() {
 		return trip;
 	}
 
 	public void setTrip( Trip trip ) {
 		this.trip = trip;
-	}
-
-	public UserPoint getPoint() {
-		return point;
-	}
-
-	public void setPoint( UserPoint point ) {
-		this.point = point;
 	}
 
 	public long getTripId() {
@@ -73,12 +54,28 @@ public class UserPoint2Trip {
 		this.tripId = tripId;
 	}
 
+	public UserPoint getPoint() {
+		return point;
+	}
+
+	public void setPoint( UserPoint point ) {
+		this.point = point;
+	}
+
 	public long getPointId() {
 		return pointId;
 	}
 
 	public void setPointId( long pointId ) {
 		this.pointId = pointId;
+	}
+
+	public int getPorder() {
+		return porder;
+	}
+
+	public void setPorder( int porder ) {
+		this.porder = porder;
 	}
 
 	@Override

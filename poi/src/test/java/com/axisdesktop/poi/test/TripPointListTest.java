@@ -36,7 +36,7 @@ public class TripPointListTest {
 
 	@Test
 	public void tripPoints() {
-		Trip t = tripService.loadTrip( 2 );
+		Trip t = tripService.load( 2 );
 
 		System.err.println( t.getPoint2trip().size() );
 

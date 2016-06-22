@@ -11,7 +11,7 @@ public interface TripService {
 
 	Trip createTrip( Trip trip );
 
-	Trip loadTrip( long id );
+	Trip load( long id );
 
 	Trip updateTrip( Trip trip );
 

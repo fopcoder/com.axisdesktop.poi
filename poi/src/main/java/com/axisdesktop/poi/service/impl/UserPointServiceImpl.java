@@ -3,6 +3,8 @@ package com.axisdesktop.poi.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +27,17 @@ public class UserPointServiceImpl implements UserPointService {
 	}
 
 	@Override
+	public Page<UserPoint> list( Specification<UserPoint> spec, Pageable page ) {
+		return pointRepo.findAll( spec, page );
+	}
+
+	@Override
 	public UserPoint create( UserPoint point ) {
 		return pointRepo.save( point );
 	}
 
 	@Override
-	public UserPoint createTripPoint( UserPoint point ) {
+	public UserPoint addPoint( UserPoint point ) {
 		// TODO Auto-generated method stub
 		return null;
 	}

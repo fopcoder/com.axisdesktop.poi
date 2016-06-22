@@ -1,13 +1,13 @@
 package com.axisdesktop.poi.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,64 +20,75 @@ import org.springframework.web.bind.annotation.RestController;
 import com.axisdesktop.poi.entity.Trip;
 import com.axisdesktop.poi.entity.UserPoint;
 import com.axisdesktop.poi.entity.UserPoint2Trip;
-import com.axisdesktop.poi.helper.BBoxHelper;
 import com.axisdesktop.poi.helper.BaseRequestBody;
 import com.axisdesktop.poi.helper.NewUserPointHelper;
-import com.axisdesktop.poi.helper.TripPointRequestBody;
 import com.axisdesktop.poi.helper.UserPointListSpecification;
 import com.axisdesktop.poi.service.CustomUserDetails;
-import com.axisdesktop.poi.service.LocationService;
 import com.axisdesktop.poi.service.TripService;
+import com.axisdesktop.poi.service.UserPoint2TripService;
 import com.axisdesktop.poi.service.UserPointService;
 import com.axisdesktop.poi.service.UserService;
+import com.axisdesktop.utils.HttpUtils;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
 @RestController
 public class UserPointController {
-	@Autowired
-	private LocationService locService;
+	// @Autowired
+	// private LocationService locService;
 	@Autowired
 	private UserPointService upointService;
+	@Autowired
+	private UserPoint2TripService uptService;
 	@Autowired
 	private UserService userService;
 	@Autowired
 	private TripService tripService;
 
 	@RequestMapping( "/userpoints" )
-	public ResponseEntity<List<UserPoint>> dayPointList( @RequestBody BaseRequestBody data, Principal user ) {
+	public ResponseEntity<Page<UserPoint>> dayPointList( @RequestBody BaseRequestBody data, Principal user ) {
 		if( user == null ) {
-			return new ResponseEntity<List<UserPoint>>( HttpStatus.FORBIDDEN );
+			return new ResponseEntity<Page<UserPoint>>( HttpStatus.FORBIDDEN );
 		}
 
-		// CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
-		Trip t = tripService.loadTrip( data.getTripId() );
-		// List<UserPoint> res = t.getPoint2trip().stream().map( i -> {
-		// System.err.println( i.getPoint() );
-		// return i.getPoint();
-		// } ).collect( Collectors.toList() );
-		// System.err.println( res );
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
 
-		List<UserPoint> res = new ArrayList<>();
+		Pageable page = HttpUtils.createPageable( data );
+		Specification<UserPoint> spec = new UserPointListSpecification( uid, data );
 
-		for( UserPoint2Trip up : t.getPoint2trip() ) {
-			res.add( up.getPoint() );
-			System.err.println( up.getPoint().getName() );
-		}
-		System.err.println( res );
-		// res = upointService.list( new UserPointListSpecification( data.g ) );
+		Page<UserPoint> res = upointService.list( spec, page );
 
-		return new ResponseEntity<List<UserPoint>>( res, HttpStatus.OK );
-
+		return new ResponseEntity<Page<UserPoint>>( res, HttpStatus.OK );
 	}
 
-	@RequestMapping( value = { "/point999/list", "/point" } )
-	public List<String[]> pointList( @RequestBody BBoxHelper arr ) {
+	@RequestMapping( value = "/userpoint/add" )
+	public void addTripPoint( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return;
+		}
 
-		List<String[]> res = locService.findPointsInBoundingBox( arr.south, arr.west, arr.north, arr.east );
+		CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
+		GeometryFactory gf = new GeometryFactory( new PrecisionModel(), 4326 );
 
-		return res;
+		UserPoint up = new UserPoint();
+		up.setPoint( gf.createPoint( new Coordinate( data.getLongitude(), data.getLatitude() ) ) );
+		up.setName( data.getName() );
+		up.setPointId( data.getPointId() );
+		up.setUserId( ud.getId() );
+		upointService.create( up );
+
+		if( data.getTripId() > 0 ) {
+			Trip trip = tripService.load( data.getTripId() );
+
+			UserPoint2Trip order = uptService.getLast( trip.getId() );
+
+			UserPoint2Trip up2t = new UserPoint2Trip();
+			up2t.setPorder( order == null ? 0 : order.getPorder() + 10 );
+			up2t.setTrip( trip );
+			up2t.setPoint( up );
+			uptService.save( up2t );
+		}
 	}
 
 	@RequestMapping( value = "/point999/create", method = RequestMethod.POST )
@@ -110,42 +121,42 @@ public class UserPointController {
 		return null;
 	}
 
-	@RequestMapping( value = "/userpoint/create" )
-	public void addTripPoint( @RequestBody TripPointRequestBody data, BindingResult bindingResult, Principal user ) {
-
-		if( bindingResult.hasErrors() ) {
-			return;
-		}
-
-		if( user == null ) {
-			return;
-		}
-
-		Trip t = tripService.loadTrip( data.tripId );
-
-		CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
-
-		UserPoint up = new UserPoint();
-		GeometryFactory gg = new GeometryFactory( new PrecisionModel(), 4326 );
-
-		up.setPoint( gg.createPoint( new Coordinate( data.longitude, data.latitude ) ) );
-		// up.setName( data.name );
-		up.setName( "point" );
-		// up.setDescription( data.description );
-		up.setUserId( ud.getId() );
-		if( data.pointId > 0 ) {
-			up.setPointId( data.pointId );
-		}
-
-		up = upointService.create( up );
-
-		// t.getPoints().add( up );
-		tripService.updateTrip( t );
-
-		// Point p = new Point( , new PrecisionModel(), 4326 );
-		// System.err.println( user );
-		// System.err.println( arr );
-		return;
-
-	}
+	// @RequestMapping( value = "/userpoint/create" )
+	// public void addTripPoint( @RequestBody RequestBody data, BindingResult bindingResult, Principal user ) {
+	//
+	// if( bindingResult.hasErrors() ) {
+	// return;
+	// }
+	//
+	// if( user == null ) {
+	// return;
+	// }
+	//
+	// Trip t = tripService.loadTrip( data.tripId );
+	//
+	// CustomUserDetails ud = (CustomUserDetails)userService.loadUserByUsername( user.getName() );
+	//
+	// UserPoint up = new UserPoint();
+	// GeometryFactory gg = new GeometryFactory( new PrecisionModel(), 4326 );
+	//
+	// up.setPoint( gg.createPoint( new Coordinate( data.longitude, data.latitude ) ) );
+	// // up.setName( data.name );
+	// up.setName( "point" );
+	// // up.setDescription( data.description );
+	// up.setUserId( ud.getId() );
+	// if( data.pointId > 0 ) {
+	// up.setPointId( data.pointId );
+	// }
+	//
+	// up = upointService.create( up );
+	//
+	// // t.getPoints().add( up );
+	// tripService.updateTrip( t );
+	//
+	// // Point p = new Point( , new PrecisionModel(), 4326 );
+	// // System.err.println( user );
+	// // System.err.println( arr );
+	// return;
+	//
+	// }
 }

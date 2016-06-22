@@ -62,7 +62,7 @@ public class TripServiceTest {
 
 	@Test
 	public void tripPoints() {
-		Trip t = tripService.loadTrip( 2 );
+		Trip t = tripService.load( 2 );
 		List<UserPoint> res = t.getPoint2trip().stream().map( i -> {
 			return i.getPoint();
 		} ).collect( Collectors.toList() );

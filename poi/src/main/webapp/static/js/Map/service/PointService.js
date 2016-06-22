@@ -13,6 +13,20 @@ MapApp.service( 'PointService', [ '$http', function( $http ) {
 		);
 	};
 	
+	self.addPoint = function( params )	{
+		return $http.post( '/userpoint/add', params ).then(
+				function(res) {//
+					return res.data;
+				},
+				function(res) {
+					console.log(res);
+					return $q.reject(res);
+				}
+			);
+	};
+	
+	
+///////	
 	self.loadPoint = function( params )	{
 		return $http.get( '/userpoint/load/' + params.id ).then(
 				function(res) {

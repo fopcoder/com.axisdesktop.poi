@@ -25,14 +25,16 @@
 	>
 	
 	<info-window id="info-window">
+	<div data-ng-controller="PointController as pc">
 		<form>
 		<div ng-non-bindable="">
 			<div>header {{anchor.title}}</div>
 			<div>body {{anchor.getPosition()}}</div>
 			<label>Добавить в избранное: <input type="checkbox" ng-model="chkp" ng-click="mc.checkPoint( anchor.id, chkp )" /></label>
-			<button ng-click="mc.addToList( anchor )"><span class="glyphicon glyphicon-plus"></span></button>
+			<button ng-click="pc.addPointAnchor( anchor )"><span class="glyphicon glyphicon-plus"></span></button>
 		</div>
 		</form>
+		</div>
 	</info-window>
 	<custom-control position="TOP_RIGHT">
 		<button type="button" class="btn btn-default btn-lg" id="panel-button" ng-click="mc.sidebarToggle()"><span class="glyphicon glyphicon-menu-hamburger"></span></button>
