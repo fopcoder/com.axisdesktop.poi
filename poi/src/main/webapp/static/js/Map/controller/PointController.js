@@ -1,6 +1,11 @@
-MapApp.controller( 'PointController', [ '$routeParams', 'PointService', function( $routeParams, PointService ) {
+MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', 'PointService', 
+                                     function( $scope, $rootScope, $routeParams, PointService ) {
 	var self = this;
 
+	$scope.$on('reloadUserPoints', function() {
+        self.listPoint();
+    });
+	
 	self.listPoint = function( params ) {
 		params = params || {};
 		params.tripId = $routeParams.dayId;
@@ -28,7 +33,7 @@ MapApp.controller( 'PointController', [ '$routeParams', 'PointService', function
 
 		PointService.addPoint( params ).then( //
 		function( data ) {
-			//self.points = data.content;
+			$rootScope.$broadcast('reloadUserPoints');
 		}, function( err ) {
 			console.log( err )
 		} );
