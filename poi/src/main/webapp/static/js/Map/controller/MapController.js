@@ -31,6 +31,10 @@ MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$contr
 	    null //new google.maps.Size(12, 18)
 	);
 	
+	$scope.$on('selectPoint', function( event, data ) {
+		mc.map.setCenter( { lat: data.latitude, lng: data.longitude } );
+	} );
+	
 	$scope.newPoint = {
 		value: '',
 		latitude: '',
@@ -183,6 +187,7 @@ MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$contr
 		
 		google.maps.event.addListener( marker, 'click', function() {
 			$scope.chkp = isChecked( data[0] );
+			//data-ng-init="pc.loadInfoAnchor( anchor.id )"
 			mc.map.showInfoWindow( "info-window" , this );
 		} );
 		

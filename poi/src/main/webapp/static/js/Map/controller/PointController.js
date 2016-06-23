@@ -37,6 +37,11 @@ MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', '
 		}, function( err ) {
 			console.log( err )
 		} );
-	}
+	};
+	
+	self.selectPoint = function( point )	{
+		$rootScope.$broadcast('selectPoint', point );
+	};
+
 
 } ] )
