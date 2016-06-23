@@ -1,4 +1,4 @@
-MapApp.service( 'PointService', [ '$http', function( $http ) {
+MapApp.service( 'UserPointService', [ '$http', function( $http ) {
 	var self = this;
 	
 	self.listPoint = function( params )	{

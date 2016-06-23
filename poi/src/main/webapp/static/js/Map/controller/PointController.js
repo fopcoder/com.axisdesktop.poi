@@ -1,5 +1,5 @@
-MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', 'PointService', 
-                                     function( $scope, $rootScope, $routeParams, PointService ) {
+MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', 'UserPointService', 
+                                     function( $scope, $rootScope, $routeParams, UserPointService ) {
 	var self = this;
 
 	$scope.$on('reloadUserPoints', function() {
@@ -14,7 +14,7 @@ MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', '
 		    direction: "asc"
 		} ];
 
-		PointService.listPoint( params ).then( //
+		UserPointService.listPoint( params ).then( //
 		function( data ) {
 			self.points = data.content;
 		}, function( err ) {
@@ -31,7 +31,7 @@ MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', '
 			name: anchor.title
 		};
 
-		PointService.addPoint( params ).then( //
+		UserPointService.addPoint( params ).then( //
 		function( data ) {
 			$rootScope.$broadcast('reloadUserPoints');
 		}, function( err ) {
