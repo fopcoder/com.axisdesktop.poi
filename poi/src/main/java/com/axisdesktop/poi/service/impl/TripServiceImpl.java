@@ -19,17 +19,14 @@ public class TripServiceImpl implements TripService {
 		this.tripRepo = tripRepo;
 	}
 
-	public TripServiceImpl() {
-	}
-
 	@Override
-	public Page<Trip> findTrip( Specification<Trip> spec, Pageable page ) {
+	public Page<Trip> list( Specification<Trip> spec, Pageable page ) {
 		return tripRepo.findAll( spec, page );
 	}
 
 	@Override
-	public Trip createTrip( Trip trip ) {
-		return tripRepo.save( trip );
+	public Trip load( long id, long userId ) {
+		return tripRepo.findOneByIdAndUserId( id, userId );
 	}
 
 	@Override
@@ -38,12 +35,17 @@ public class TripServiceImpl implements TripService {
 	}
 
 	@Override
-	public Trip updateTrip( Trip trip ) {
+	public Trip create( Trip trip ) {
 		return tripRepo.save( trip );
 	}
 
 	@Override
-	public void deleteTrip( long id ) {
+	public Trip update( Trip trip ) {
+		return tripRepo.save( trip );
+	}
+
+	@Override
+	public void delete( long id ) {
 		tripRepo.delete( id );
 	}
 

@@ -17,6 +17,11 @@ public class UserPoint2TripServiceImpl implements UserPoint2TripService {
 	}
 
 	@Override
+	public UserPoint2Trip load( long pointId, long tripId ) {
+		return uptRepo.findOneByPointIdAndTripId( pointId, tripId );
+	}
+
+	@Override
 	public UserPoint2Trip save( UserPoint2Trip upt ) {
 		return uptRepo.save( upt );
 	}
@@ -24,6 +29,11 @@ public class UserPoint2TripServiceImpl implements UserPoint2TripService {
 	@Override
 	public UserPoint2Trip getLast( long tripId ) {
 		return uptRepo.findTop1ByTripIdOrderByPorderDesc( tripId );
+	}
+
+	@Override
+	public void delete( long id ) {
+		uptRepo.delete( id );
 	}
 
 }

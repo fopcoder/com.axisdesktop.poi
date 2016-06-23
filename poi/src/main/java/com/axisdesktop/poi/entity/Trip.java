@@ -3,7 +3,6 @@ package com.axisdesktop.poi.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,7 +25,7 @@ public class Trip extends SimpleEntity<Long> {
 	private int torder;
 
 	@JsonIgnore
-	@OneToMany( fetch = FetchType.LAZY, mappedBy = "trip", cascade = CascadeType.ALL )
+	@OneToMany( fetch = FetchType.LAZY, mappedBy = "trip" )
 	@OrderBy( "porder" )
 	List<UserPoint2Trip> point2trip = new ArrayList<>();
 

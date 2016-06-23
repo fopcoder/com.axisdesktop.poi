@@ -3,26 +3,24 @@ package com.axisdesktop.poi.controller;
 import java.security.Principal;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.axisdesktop.poi.entity.Trip;
 import com.axisdesktop.poi.entity.UserPoint;
 import com.axisdesktop.poi.helper.BBoxHelper;
-import com.axisdesktop.poi.helper.BaseRequestBody;
+import com.axisdesktop.poi.helper.LocationInfo;
 import com.axisdesktop.poi.helper.NewUserPointHelper;
-import com.axisdesktop.poi.helper.TripListSpecification;
+import com.axisdesktop.poi.repository.LocationRepository;
 import com.axisdesktop.poi.service.CustomUserDetails;
 import com.axisdesktop.poi.service.LocationService;
 import com.axisdesktop.poi.service.TripService;
@@ -42,6 +40,8 @@ public class MapController {
 	private UserService userService;
 	@Autowired
 	private TripService tripService;
+	@Autowired
+	private LocationRepository locRepo;
 
 	@RequestMapping( value = { "/point/list", "/point" } )
 	public List<String[]> pointList( @RequestBody BBoxHelper arr ) {
@@ -49,6 +49,13 @@ public class MapController {
 		List<String[]> res = locService.findPointsInBoundingBox( arr.south, arr.west, arr.north, arr.east );
 
 		return res;
+	}
+
+	@RequestMapping( value = "/point/info/{id}" )
+	public ResponseEntity<LocationInfo> loadPointInfo( @PathVariable long id ) {
+		LocationInfo res = locRepo.loadLocationInfo( id );
+
+		return new ResponseEntity<LocationInfo>( res, HttpStatus.OK );
 	}
 
 	@RequestMapping( value = "/point/create", method = RequestMethod.POST )

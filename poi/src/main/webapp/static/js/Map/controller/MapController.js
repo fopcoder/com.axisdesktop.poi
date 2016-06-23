@@ -181,12 +181,23 @@ MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$contr
 		var marker = new google.maps.Marker({
 		    position: new google.maps.LatLng(data[1], data[2]),
 		    title: data[3],
+		    label: 111,
 		    id: data[0],
 		    icon: isChecked( data[0] ) ? checkedIcon : freeIcon
 		});
 		
 		google.maps.event.addListener( marker, 'click', function() {
 			$scope.chkp = isChecked( data[0] );
+			$http.get( '/point/info/'+data[0] ).then(
+					function(res) {//
+						$scope.infoData = res.data;
+						//console.log( res);
+					},
+					function(res) {
+						console.log(res);
+						//return $q.reject(res);
+					}
+				);
 			//data-ng-init="pc.loadInfoAnchor( anchor.id )"
 			mc.map.showInfoWindow( "info-window" , this );
 		} );

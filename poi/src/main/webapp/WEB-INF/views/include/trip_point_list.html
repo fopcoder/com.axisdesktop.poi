@@ -12,6 +12,7 @@
 		<tbody>
 			<tr data-ng-repeat="t in pc.points">
 				<td><a data-ng-bind="t.name" data-ng-click="pc.selectPoint( t )"></a></td>
+				<td><span class="glyphicon glyphicon-remove" ng-click="pc.removePoint( t )"></span></td>
 				<!--td><a href="#/trip/{{t.id}}" type="button" class="btn btn-warning btn-xs">Инфо</a></td-->
 			</tr>
 		</tbody>

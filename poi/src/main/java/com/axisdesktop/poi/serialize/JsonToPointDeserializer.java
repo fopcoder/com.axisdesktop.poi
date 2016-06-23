@@ -1,4 +1,4 @@
-package com.axisdesktop.poi.helper;
+package com.axisdesktop.poi.serialize;
 
 import java.io.IOException;
 import com.fasterxml.jackson.core.JsonParser;

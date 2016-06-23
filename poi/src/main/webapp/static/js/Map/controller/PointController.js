@@ -1,5 +1,5 @@
-MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', 'UserPointService', 
-                                     function( $scope, $rootScope, $routeParams, UserPointService ) {
+MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routeParams', 'UserPointService', 
+                                     function( $http,$scope, $rootScope, $routeParams, UserPointService ) {
 	var self = this;
 
 	$scope.$on('reloadUserPoints', function() {
@@ -21,6 +21,29 @@ MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', '
 			console.log( err )
 		} );
 	};
+	
+	self.loadInfo = function( id ) {
+		var params = {
+			id: id
+		};
+
+		$http.get( '/point/info/'+id ).then(
+				function(res) {//
+					console.log( res);
+				},
+				function(res) {
+					console.log(res);
+					return $q.reject(res);
+				}
+			);
+		
+//		UserPointService.removePoint( params ).then( //
+//		function( data ) {
+//			$scope.$broadcast('reloadUserPoints');
+//		}, function( err ) {
+//			console.log( err )
+//		} );
+	};
 
 	self.addPointAnchor = function( anchor ) {
 		var params = {
@@ -34,6 +57,20 @@ MapApp.controller( 'PointController', [ '$scope','$rootScope', '$routeParams', '
 		UserPointService.addPoint( params ).then( //
 		function( data ) {
 			$rootScope.$broadcast('reloadUserPoints');
+		}, function( err ) {
+			console.log( err )
+		} );
+	};
+	
+	self.removePoint = function( params ) {
+		var params = {
+			pointId: params.id,
+			tripId: $routeParams.dayId
+		};
+
+		UserPointService.removePoint( params ).then( //
+		function( data ) {
+			$scope.$broadcast('reloadUserPoints');
 		}, function( err ) {
 			console.log( err )
 		} );

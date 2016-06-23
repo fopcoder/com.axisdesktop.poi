@@ -7,14 +7,16 @@ import org.springframework.data.jpa.domain.Specification;
 import com.axisdesktop.poi.entity.Trip;
 
 public interface TripService {
-	Page<Trip> findTrip( Specification<Trip> spec, Pageable page );
+	Page<Trip> list( Specification<Trip> spec, Pageable page );
 
-	Trip createTrip( Trip trip );
+	Trip create( Trip trip );
 
 	Trip load( long id );
 
-	Trip updateTrip( Trip trip );
+	Trip load( long id, long userId );
 
-	void deleteTrip( long id );
+	Trip update( Trip trip );
+
+	void delete( long id );
 
 }

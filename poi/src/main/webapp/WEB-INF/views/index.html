@@ -28,10 +28,12 @@
 	<div >
 		<form>
 		<div ng-non-bindable="">
-			<div>header {{anchor.title}}</div>
+			<div><b>{{infoData.name}}</b></div>
+			<div>{{infoData.description}}</div>
 			<div>body {{anchor.getPosition()}}</div>
 			<label>Добавить в избранное: <input type="checkbox" ng-model="chkp" ng-click="mc.checkPoint( anchor.id, chkp )" /></label>
 			<button ng-click="pc.addPointAnchor( anchor )"><span class="glyphicon glyphicon-plus"></span></button>
+			<button ng-click="pc.loadInfo( anchor.id )"><span class="glyphicon glyphicon-minus"></span></button>
 		</div>
 		</form>
 		</div>

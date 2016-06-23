@@ -40,7 +40,7 @@ public class TripController {
 			Pageable page = HttpUtils.createPageable( data );
 			Specification<Trip> spec = new TripListSpecification( uid, data );
 
-			Page<Trip> res = tripService.findTrip( spec, page );
+			Page<Trip> res = tripService.list( spec, page );
 
 			return new ResponseEntity<Page<Trip>>( res, HttpStatus.OK );
 		}
@@ -57,7 +57,7 @@ public class TripController {
 			Pageable page = HttpUtils.createPageable( data );
 			Specification<Trip> spec = new TripListSpecification( uid, data, false );
 
-			Page<Trip> res = tripService.findTrip( spec, page );
+			Page<Trip> res = tripService.list( spec, page );
 
 			return new ResponseEntity<Page<Trip>>( res, HttpStatus.OK );
 		}

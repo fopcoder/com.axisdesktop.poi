@@ -9,4 +9,7 @@ public interface UserPoint2TripRepository
 		extends JpaRepository<UserPoint2Trip, Long>, JpaSpecificationExecutor<UserPoint2Trip> {
 
 	UserPoint2Trip findTop1ByTripIdOrderByPorderDesc( long tripId );
+
+	UserPoint2Trip findOneByPointIdAndTripId( long pointId, long tripId );
+
 }

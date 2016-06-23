@@ -33,9 +33,10 @@ public class UserPointListSpecification implements Specification<UserPoint> {
 		}
 
 		if( data != null && data.getTripId() > 0 ) {
-			Join<UserPoint, UserPoint2Trip> t = root.join( "point2trip" );
-			Predicate e = cb.equal( t.get( "tripId" ), data.getTripId() );
-			predicates.add( e );
+			// Join<UserPoint, UserPoint2Trip> t = root.join( "point2trip" );
+			//
+			// Predicate e = cb.equal( t.get( "tripId" ), data.getTripId() );
+			// predicates.add( e );
 		}
 
 		return cb.and( predicates.toArray( new Predicate[predicates.size()] ) );

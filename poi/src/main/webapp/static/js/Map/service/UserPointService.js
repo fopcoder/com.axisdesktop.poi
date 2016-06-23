@@ -2,7 +2,7 @@ MapApp.service( 'UserPointService', [ '$http', function( $http ) {
 	var self = this;
 	
 	self.listPoint = function( params )	{
-		return $http.post( '/userpoints', params ).then(
+		return $http.post( '/userpoint/trippoints', params ).then(
 			function(res) {
 				return res.data;
 			},
@@ -15,6 +15,18 @@ MapApp.service( 'UserPointService', [ '$http', function( $http ) {
 	
 	self.addPoint = function( params )	{
 		return $http.post( '/userpoint/add', params ).then(
+				function(res) {//
+					return res.data;
+				},
+				function(res) {
+					console.log(res);
+					return $q.reject(res);
+				}
+			);
+	};
+	
+	self.removePoint = function( params )	{
+		return $http.post( '/userpoint/remove', params ).then(
 				function(res) {//
 					return res.data;
 				},

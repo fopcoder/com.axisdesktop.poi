@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import com.axisdesktop.poi.entity.Trip;
 
 public interface TripRepository extends JpaRepository<Trip, Long>, JpaSpecificationExecutor<Trip> {
-	// List<Trip> findByParentId( Specification<Trip> spec );
+	Trip findOneByIdAndUserId( long id, long userId );
 }
