@@ -2,6 +2,7 @@ package com.axisdesktop.poi.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -93,6 +94,11 @@ public class UserPointServiceImpl implements UserPointService {
 				uptService.delete( upt.getId() );
 			}
 		}
+	}
+
+	@Override
+	public Page<UserPoint> listTripPoints( long userId, long tripId ) {
+		return pointRepo.findTripPoints( userId, tripId, new PageRequest( 0, 100000 ) );
 	}
 
 }

@@ -37,6 +37,18 @@ MapApp.service( 'UserPointService', [ '$http', function( $http ) {
 			);
 	};
 	
+	self.exportKml = function( params )	{
+		return $http.post( '/userpoint/kml', params ).then(
+				function(res) {//
+					return res.data;
+				},
+				function(res) {
+					console.log(res);
+					return $q.reject(res);
+				}
+			);
+	};
+	
 	
 ///////	
 	self.loadPoint = function( params )	{

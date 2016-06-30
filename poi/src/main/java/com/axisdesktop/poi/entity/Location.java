@@ -19,8 +19,8 @@ import com.vividsolutions.jts.geom.Point;
 @Entity
 @Table( name = "location", schema = "poi" )
 
-@NamedNativeQuery( name = "findFuck", query = "SELECT l.id, ST_Y(l.point) AS latitude, ST_X(l.point) AS longitude,"
-		+ "tr.name, tr.full_description description "
+@NamedNativeQuery( name = "loadLocationInfo", query = "SELECT l.id, ST_Y(l.point) AS latitude, ST_X(l.point) AS longitude, l.link, "
+		+ "tr.name, tr.full_description description, tr.short_description shortDescription, tr.address "
 		+ "FROM poi.location l LEFT JOIN poi.location_tr tr ON tr.location_id = l.id AND tr.language_id = 'ru' "
 		+ "WHERE l.id = :id", resultSetMapping = "LocationInfo" )
 
@@ -30,7 +30,11 @@ import com.vividsolutions.jts.geom.Point;
 				@ColumnResult( name = "latitude", type = Double.class ), //
 				@ColumnResult( name = "longitude", type = Double.class ), //
 				@ColumnResult( name = "name", type = String.class ), //
-				@ColumnResult( name = "description", type = String.class ), } ) } )
+				@ColumnResult( name = "description", type = String.class ), //
+				@ColumnResult( name = "shortDescription", type = String.class ), //
+				@ColumnResult( name = "link", type = String.class ), //
+				@ColumnResult( name = "address", type = String.class ), //
+		} ) } )
 
 public class Location extends BaseEntity<Long> {
 

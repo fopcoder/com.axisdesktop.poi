@@ -1,7 +1,5 @@
 package com.axisdesktop.poi.test;
 
-import java.util.List;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,9 +11,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.axisdesktop.poi.config.AppConf;
 import com.axisdesktop.poi.config.PersistenceConf;
-import com.axisdesktop.poi.entity.UserPoint;
-import com.axisdesktop.poi.helper.UserPointListRequestBody;
-import com.axisdesktop.poi.helper.UserPointListSpecification;
 import com.axisdesktop.poi.service.UserPointService;
 
 @RunWith( SpringJUnit4ClassRunner.class )
@@ -35,9 +30,9 @@ public class UserPointServiceTest {
 
 	@Test
 	public void listUserPoint() {
-		UserPointListRequestBody data = new UserPointListRequestBody( 2, 5 );
-		List<UserPoint> res = upService.list( new UserPointListSpecification( data ) );
-		System.err.println( res );
+		// UserPointListRequestBody data = new UserPointListRequestBody( 2, 5 );
+		// List<UserPoint> res = upService.list( new UserPointListSpecification( data ) );
+		// System.err.println( res );
 	}
 
 }

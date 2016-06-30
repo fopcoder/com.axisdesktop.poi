@@ -1,4 +1,4 @@
-MapApp.controller( "NewPointController", [ "$scope", "$http", function( $scope, $http ) {
+MapApp.controller( "NewPointController", [ "$scope", "$http", "$routeParams", "$rootScope", function( $scope, $http, $routeParams, $rootScope ) {
 	this.showForm = false;
 	
 	this.createNewPoint = function( newPoint )	{
@@ -10,7 +10,11 @@ MapApp.controller( "NewPointController", [ "$scope", "$http", function( $scope, 
 	}
 	
 	this.createNewPoint = function( data )	{
-		$http.post( "/point/create", data||{} );
+		data = data || {};
+		data.tripId = $routeParams.dayId;
+		$http.post( "/point/create", data||{} ).then( function(){
+			$rootScope.$broadcast('reloadUserPoints');
+		},function(){});
 	}
 	
 } ] )

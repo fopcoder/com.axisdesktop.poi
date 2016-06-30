@@ -1,6 +1,8 @@
 MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routeParams', 'UserPointService', 
                                      function( $http,$scope, $rootScope, $routeParams, UserPointService ) {
 	var self = this;
+	
+	self.dayId = $routeParams.dayId;
 
 	$scope.$on('reloadUserPoints', function() {
         self.listPoint();
@@ -51,7 +53,8 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 			longitude: anchor.getPosition().lng(),
 			pointId: anchor.id,
 			tripId: $routeParams.dayId ? $routeParams.dayId : 0,
-			name: anchor.title
+			name: anchor.title,
+			isUserPoint: anchor.isUserPoint
 		};
 
 		UserPointService.addPoint( params ).then( //
@@ -79,6 +82,25 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 	self.selectPoint = function( point )	{
 		$rootScope.$broadcast('selectPoint', point );
 	};
+	
+	self.exportKml = function( params )	{
+		params = params || {};
+		params.tripId = $routeParams.dayId;
+		params.sorters = [ {
+		    property: "point2trip.porder",
+		    direction: "asc"
+		} ];
 
+		UserPointService.exportKml( params ).then( //
+		function( data ) {
+			console.log('kokoko KML');
+			//self.points = data.content;
+		}, function( err ) {
+			console.log( err )
+		} );
+	};
+
+	
+	
 
 } ] )

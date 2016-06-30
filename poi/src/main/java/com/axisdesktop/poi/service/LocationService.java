@@ -10,7 +10,7 @@ public interface LocationService {
 
 	Location load( long id );
 
-	List<String[]> findPointsInBoundingBox( double south, double west, double north, double east );
+	List<String[]> findPointsInBoundingBox( double south, double west, double north, double east, long userId );
 
 	Map<String, String> getPoiData( long id );
 }

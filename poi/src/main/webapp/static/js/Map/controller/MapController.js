@@ -31,6 +31,14 @@ MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$contr
 	    null //new google.maps.Size(12, 18)
 	);
 	
+	var userIcon = new google.maps.MarkerImage(
+		    "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|ff00ff",
+		    null, /* size is determined at runtime */
+		    null, /* origin is 0,0 */
+		    null, /* anchor is bottom center of the scaled image */
+		    null //new google.maps.Size(12, 18)
+		);
+	
 	$scope.$on('selectPoint', function( event, data ) {
 		mc.map.setCenter( { lat: data.latitude, lng: data.longitude } );
 	} );
@@ -181,23 +189,41 @@ MapApp.controller("MapController", [ '$scope', '$http', '$localStorage', '$contr
 		var marker = new google.maps.Marker({
 		    position: new google.maps.LatLng(data[1], data[2]),
 		    title: data[3],
-		    label: 111,
+		    //label: 111,
 		    id: data[0],
-		    icon: isChecked( data[0] ) ? checkedIcon : freeIcon
+		    isUserPoint: data[4] == 1 ? true : false,
+		    icon: isChecked( data[0] ) ? checkedIcon : data[4] == 1 ? userIcon : freeIcon
 		});
 		
 		google.maps.event.addListener( marker, 'click', function() {
 			$scope.chkp = isChecked( data[0] );
-			$http.get( '/point/info/'+data[0] ).then(
-					function(res) {//
-						$scope.infoData = res.data;
-						//console.log( res);
-					},
-					function(res) {
-						console.log(res);
-						//return $q.reject(res);
-					}
-				);
+			
+			if( data[4] == 1 ) {
+				$http.get( '/userpoint/info/'+data[0] ).then(
+						function(res) {//
+							$scope.infoData = res.data;
+							//console.log( res);
+						},
+						function(res) {
+							console.log(res);
+							//return $q.reject(res);
+						}
+					);
+			}
+			else	{
+				$http.get( '/point/info/'+data[0] ).then(
+						function(res) {//
+							$scope.infoData = res.data;
+							//console.log( res);
+						},
+						function(res) {
+							console.log(res);
+							//return $q.reject(res);
+						}
+					);
+			}
+			
+			
 			//data-ng-init="pc.loadInfoAnchor( anchor.id )"
 			mc.map.showInfoWindow( "info-window" , this );
 		} );

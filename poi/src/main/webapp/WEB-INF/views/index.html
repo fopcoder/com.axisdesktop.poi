@@ -20,6 +20,7 @@
 	zoom="6" 
 	center="[48.8206639,31.2979349]" 
 	style="height:100%" 
+	scale-control="true"
 	on-idle="mc.onIdle()" 
 	on-click="mc.onClick()"
 	>
@@ -29,11 +30,14 @@
 		<form>
 		<div ng-non-bindable="">
 			<div><b>{{infoData.name}}</b></div>
+			<div>{{infoData.shortDescription}}</div>
 			<div>{{infoData.description}}</div>
+			<div>{{infoData.address}}</div>
+			<div><a href="{{infoData.link}}" target="_blank" ng-show="{{infoData.link}}">{{infoData.link}}</a></div>
 			<div>body {{anchor.getPosition()}}</div>
-			<label>Добавить в избранное: <input type="checkbox" ng-model="chkp" ng-click="mc.checkPoint( anchor.id, chkp )" /></label>
+			<!-- label>Добавить в избранное: <input type="checkbox" ng-model="chkp" ng-click="mc.checkPoint( anchor.id, chkp )" /></label-->
 			<button ng-click="pc.addPointAnchor( anchor )"><span class="glyphicon glyphicon-plus"></span></button>
-			<button ng-click="pc.loadInfo( anchor.id )"><span class="glyphicon glyphicon-minus"></span></button>
+			<!-- button ng-click="pc.loadInfo( anchor.id )"><span class="glyphicon glyphicon-minus"></span></button-->
 		</div>
 		</form>
 		</div>

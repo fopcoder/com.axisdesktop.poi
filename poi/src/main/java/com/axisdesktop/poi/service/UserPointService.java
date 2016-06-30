@@ -1,6 +1,7 @@
 package com.axisdesktop.poi.service;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -9,6 +10,8 @@ import com.axisdesktop.poi.entity.UserPoint;
 
 public interface UserPointService {
 	Page<UserPoint> list( Specification<UserPoint> spec, Pageable page );
+
+	Page<UserPoint> listTripPoints( long userId, long trupId );
 
 	UserPoint load( long id );
 

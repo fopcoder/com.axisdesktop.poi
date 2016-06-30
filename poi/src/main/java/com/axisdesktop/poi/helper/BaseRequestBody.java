@@ -3,6 +3,8 @@ package com.axisdesktop.poi.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BaseRequestBody {
 	private int start = 0;
 	private int limit = 50;
@@ -13,6 +15,17 @@ public class BaseRequestBody {
 	private double longitude;
 	private String name;
 	private String description;
+
+	@JsonProperty
+	private boolean isUserPoint;
+
+	public boolean isUserPoint() {
+		return isUserPoint;
+	}
+
+	public void setUserPoint( boolean isUserPoint ) {
+		this.isUserPoint = isUserPoint;
+	}
 
 	public String getName() {
 		return name;

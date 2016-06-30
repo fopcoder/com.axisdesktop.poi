@@ -1,14 +1,26 @@
 package com.axisdesktop.poi.helper;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
-
 public class LocationInfo {
 	private long id;
 	private String name;
 	private String description;
+	private String shortDescription;
+	private String address;
+	private String link;
 	private double latitude;
 	private double longitude;
+
+	public LocationInfo( long id, double latitude, double longitude, String name, String description,
+			String shortDescription, String link, String address ) {
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.shortDescription = shortDescription;
+		this.address = address;
+		this.link = link;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
 
 	public LocationInfo( long id, double latitude, double longitude, String name, String description ) {
 		this.id = id;
@@ -16,6 +28,30 @@ public class LocationInfo {
 		this.description = description;
 		this.latitude = latitude;
 		this.longitude = longitude;
+	}
+
+	public String getShortDescription() {
+		return shortDescription;
+	}
+
+	public void setShortDescription( String shortDescription ) {
+		this.shortDescription = shortDescription;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress( String address ) {
+		this.address = address;
+	}
+
+	public String getLink() {
+		return link;
+	}
+
+	public void setLink( String link ) {
+		this.link = link;
 	}
 
 	public double getLatitude() {
@@ -60,7 +96,8 @@ public class LocationInfo {
 
 	@Override
 	public String toString() {
-		return "LocationInfo [id=" + id + ", name=" + name + ", description=" + description + ", latitude=" + latitude
+		return "LocationInfo [id=" + id + ", name=" + name + ", description=" + description + ", shortDescription="
+				+ shortDescription + ", address=" + address + ", link=" + link + ", latitude=" + latitude
 				+ ", longitude=" + longitude + "]";
 	}
 

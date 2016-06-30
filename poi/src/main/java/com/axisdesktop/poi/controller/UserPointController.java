@@ -4,12 +4,10 @@ import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,31 +15,26 @@ import org.springframework.web.bind.annotation.RestController;
 import com.axisdesktop.poi.entity.Trip;
 import com.axisdesktop.poi.entity.UserPoint;
 import com.axisdesktop.poi.helper.BaseRequestBody;
-import com.axisdesktop.poi.helper.UserPointListSpecification;
-import com.axisdesktop.poi.repository.UserPointRepository;
+import com.axisdesktop.poi.helper.LocationInfo;
+import com.axisdesktop.poi.repository.LocationRepository;
 import com.axisdesktop.poi.service.CustomUserDetails;
 import com.axisdesktop.poi.service.TripService;
 import com.axisdesktop.poi.service.UserPointService;
-import com.axisdesktop.utils.HttpUtils;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
 @RestController
 public class UserPointController {
-	// @Autowired
-	// private LocationService locService;
+
 	@Autowired
 	private UserPointService upointService;
-	// @Autowired
-	// private UserPoint2TripService uptService;
-	// @Autowired
-	// private UserService userService;
+
 	@Autowired
 	private TripService tripService;
 
 	@Autowired
-	private UserPointRepository upRepo;
+	private LocationRepository locRepo;
 
 	@RequestMapping( "/userpoint/trippoints" )
 	public ResponseEntity<Page<UserPoint>> dayPointList( @RequestBody BaseRequestBody data, Principal user ) {
@@ -51,14 +44,41 @@ public class UserPointController {
 
 		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
 
-		Pageable page = HttpUtils.createPageable( data );
-		Specification<UserPoint> spec = new UserPointListSpecification( uid, data );
+		// Pageable page = HttpUtils.createPageable( data );
+		// Specification<UserPoint> spec = new UserPointListSpecification( uid, data );
 
 		// Page<UserPoint> res = upointService.list( spec, page );
 
-		Page<UserPoint> res = upRepo.findTripPoints( uid, data.getTripId(), new PageRequest( 0, 100000 ) );
+		Page<UserPoint> res = upointService.listTripPoints( uid, data.getTripId() );
 
 		return new ResponseEntity<Page<UserPoint>>( res, HttpStatus.OK );
+	}
+
+	@RequestMapping( value = "/userpoint/info/{id}" )
+	public ResponseEntity<LocationInfo> loadPointInfo( @PathVariable( "id" ) long pointId, Principal user ) {
+		if( user == null ) {
+			return null;
+		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+
+		UserPoint up = upointService.load( pointId );
+
+		if( up.getUserId() != uid ) {
+			return null;
+		}
+
+		LocationInfo info;
+
+		if( up.getPointId() != null ) {
+			info = locRepo.loadLocationInfo( up.getPointId() );
+		}
+		else {
+			info = new LocationInfo( up.getId(), up.getLatitude(), up.getLongitude(), up.getName(),
+					up.getDescription() );
+		}
+
+		return new ResponseEntity<LocationInfo>( info, HttpStatus.OK );
 	}
 
 	@RequestMapping( value = "/userpoint/add" )
@@ -70,12 +90,20 @@ public class UserPointController {
 		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
 		GeometryFactory gf = new GeometryFactory( new PrecisionModel(), 4326 );
 
-		UserPoint up = new UserPoint();
-		up.setPoint( gf.createPoint( new Coordinate( data.getLongitude(), data.getLatitude() ) ) );
-		up.setName( data.getName() );
-		up.setDescription( data.getDescription() );
-		if( data.getPointId() > 0 ) up.setPointId( data.getPointId() );
-		up.setUserId( uid );
+		UserPoint up;
+
+		if( data.isUserPoint() ) {
+			up = upointService.load( data.getPointId() );
+			if( up.getUserId() != uid ) return;
+		}
+		else {
+			up = new UserPoint();
+			up.setPoint( gf.createPoint( new Coordinate( data.getLongitude(), data.getLatitude() ) ) );
+			up.setName( data.getName() );
+			up.setDescription( data.getDescription() );
+			if( data.getPointId() > 0 ) up.setPointId( data.getPointId() );
+			up.setUserId( uid );
+		}
 
 		Trip trip = tripService.load( data.getTripId(), uid );
 
@@ -89,6 +117,37 @@ public class UserPointController {
 		}
 
 		upointService.remove( data.getPointId(), data.getTripId() );
+	}
+
+	@RequestMapping( value = "/userpoint/kml/{tripId}", produces = "text/xml;charset=UTF-8" )
+	public String exportKml( @PathVariable( "tripId" ) long tripId, Principal user ) {
+		if( user == null ) {
+			return null;
+		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+
+		Trip trip = tripService.load( tripId, uid );
+
+		if( trip == null ) {
+			return null;
+		}
+
+		Page<UserPoint> res = upointService.listTripPoints( uid, tripId );
+
+		StringBuilder sb = new StringBuilder( 10 );
+		sb.append( String.format( "<?xml version='1.0' encoding='UTF-8'?><kml xmlns='http://www.opengis.net/kml/2.2'>"
+				+ "<Document><name>%s</name>", trip.getName() ) );
+
+		for( UserPoint up : res ) {
+			sb.append( String.format(
+					"<Placemark><name>%s</name><Point><coordinates>%s,%s,0.0</coordinates></Point></Placemark>",
+					up.getName(), up.getLongitude(), up.getLatitude() ) );
+		}
+
+		sb.append( "</Document></kml>" );
+
+		return sb.toString();
 	}
 
 	////
