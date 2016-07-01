@@ -4,8 +4,11 @@
 
 <script type="text/ng-template" id="/include/trip_point_list.html">
 <div data-ng-controller="PointController as pc" data-ng-init="pc.listPoint();">
-	<button type="button" class="btn btn-primary" data-ng-click="pc.exportKml()">KML</button>
-	<a href="/userpoint/kml/2">KML2</a>
+	<a class="btn btn-primary" href="#/trip/{{pc.tripId}}" ><span class="glyphicon glyphicon-arrow-up"></span></a>
+	<a class="btn btn-primary" href="/userpoint/kml/{{pc.dayId}}" target='_blank'>KML</a>
+	<a class="btn btn-primary" href="/userpoint/txt/{{pc.dayId}}" target='_blank'>TXT</a>
+	<a class="btn btn-primary" ng-click="pc.createRoute(pc.points)" target='_blank'>R</a>
+	
 	<table class="table table-hover table-condensed" style="overflow: auto">
 		<thead>
 			
@@ -18,6 +21,9 @@
 			</tr>
 		</tbody>
 	</table>
+	<div ng-repeat="i in pc.routeInfo">
+		<div>{{i}}</div>
+	</div>
 </div>
 </script>
 

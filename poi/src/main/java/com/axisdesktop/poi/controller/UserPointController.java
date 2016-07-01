@@ -150,6 +150,57 @@ public class UserPointController {
 		return sb.toString();
 	}
 
+	@RequestMapping( value = "/userpoint/txt/{tripId}", produces = "text/html;charset=UTF-8" )
+	public String exportTxt( @PathVariable( "tripId" ) long tripId, Principal user ) {
+		if( user == null ) {
+			return null;
+		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+
+		Trip trip = tripService.load( tripId, uid );
+
+		if( trip == null ) {
+			return null;
+		}
+
+		Page<UserPoint> res = upointService.listTripPoints( uid, tripId );
+
+		StringBuilder sb = new StringBuilder( 10 );
+		sb.append( String.format( "<html><body><H1>%s</H1>", trip.getName() ) );
+
+		for( UserPoint up : res ) {
+			LocationInfo info;
+
+			if( up.getPointId() != null ) {
+				info = locRepo.loadLocationInfo( up.getPointId() );
+			}
+			else {
+				info = new LocationInfo( up.getId(), up.getLatitude(), up.getLongitude(), up.getName(),
+						up.getDescription() );
+			}
+
+			sb.append( String.format( "<p><b>%s</b><br>", info.getName() ) );
+
+			if( info.getDescription() != null && !info.getDescription().equals( "" ) )
+				sb.append( String.format( "%s<br>", info.getDescription() ) );
+
+			if( info.getAddress() != null && !info.getAddress().equals( "" ) )
+				sb.append( String.format( "%s<br>", info.getAddress() ) );
+
+			if( info.getLink() != null && !info.getLink().equals( "" ) )
+				sb.append( String.format( "<a href='%s' target='_blank'>%s</a><br>", info.getLink(), info.getLink() ) );
+
+			sb.append( String.format(
+					"<a href='https://www.google.com.ua/maps/@%s,%s,16z?hl=uk' target='_blank'>координаты</a></p>",
+					info.getLatitude(), info.getLongitude() ) );
+		}
+
+		sb.append( "</body></html>" );
+
+		return sb.toString();
+	}
+
 	////
 	// @RequestMapping( value = "/point999/create", method = RequestMethod.POST )
 	// public UserPoint createUserPoint( @Valid @RequestBody NewUserPointHelper arr, Principal user,
