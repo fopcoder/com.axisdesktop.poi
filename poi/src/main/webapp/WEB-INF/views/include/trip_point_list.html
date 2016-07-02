@@ -9,6 +9,11 @@
 	<a class="btn btn-primary" href="/userpoint/txt/{{pc.dayId}}" target='_blank'>TXT</a>
 	<a class="btn btn-primary" ng-click="pc.createRoute(pc.points)" target='_blank'>R</a>
 	
+		<select ng-model="pc.travelMode">
+			<option value="DRIVING" selected="selected">машиной</option>
+			<option value="WALKING">пешком</option>
+		</select>
+	
 	<table class="table table-hover table-condensed" style="overflow: auto">
 		<thead>
 			
@@ -16,7 +21,9 @@
 		<tbody>
 			<tr data-ng-repeat="t in pc.points">
 				<td><a data-ng-bind="t.name" data-ng-click="pc.selectPoint( t )"></a></td>
-				<td><span class="glyphicon glyphicon-remove" ng-click="pc.removePoint( t )"></span></td>
+				<td style="width:30px"><span class="glyphicon glyphicon-chevron-up" ng-click="pc.moveUp( t )"></span></td>
+				<td style="width:30px"><span class="glyphicon glyphicon-chevron-down" ng-click="pc.moveDown( t )"></span></td>
+				<td style="width:30px"><span class="glyphicon glyphicon-remove" ng-click="pc.removePoint( t )"></span></td>
 				<!--td><a href="#/trip/{{t.id}}" type="button" class="btn btn-warning btn-xs">Инфо</a></td-->
 			</tr>
 		</tbody>

@@ -4,6 +4,8 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 	self.tripId = $routeParams.tripId;
 	self.dayId = $routeParams.dayId;
 	self.routeInfo = [];
+	//self.travelMode = google.maps.TravelMode["DRIVING"];
+	self.travelMode = "DRIVING";
 
 	$scope.$on('reloadUserPoints', function() {
         self.listPoint();
@@ -94,7 +96,6 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 
 		UserPointService.exportKml( params ).then( //
 		function( data ) {
-			console.log('kokoko KML');
 			//self.points = data.content;
 		}, function( err ) {
 			console.log( err )
@@ -119,7 +120,7 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
             origin: start,
             destination: finish,
             waypoints: waypts,
-            travelMode: google.maps.TravelMode.DRIVING
+            travelMode: google.maps.TravelMode[self.travelMode]
         };
         
         directionsService.route( request, directionResults );
@@ -204,6 +205,28 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
         
         
         
+	};
+	
+	self.moveUp = function( point )	{
+		$http.get( "/userpoint/moveUp/" + point.id, params ).then(
+			function()	{
+				$scope.$broadcast('reloadUserPoints');
+			},
+			function()	{
+				
+			}
+		);
+	};
+	
+	self.moveDown = function( point )	{
+		$http.get( "/userpoint/moveDown/" + point.id, params ).then(
+			function()	{
+				$scope.$broadcast('reloadUserPoints');
+			},
+			function()	{
+				
+			}
+		);
 	}
 	
 

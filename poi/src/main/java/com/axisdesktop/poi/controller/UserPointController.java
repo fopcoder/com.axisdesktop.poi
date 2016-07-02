@@ -201,6 +201,22 @@ public class UserPointController {
 		return sb.toString();
 	}
 
+	@RequestMapping( value = "/userpoint/moveUp/{id}" )
+	public void moveUp( @PathVariable( "id" ) long id, Principal user ) {
+		if( user == null ) {
+			return;
+		}
+
+	}
+
+	@RequestMapping( value = "/userpoint/moveDown/{id}" )
+	public void moveDown( @PathVariable( "id" ) long id, Principal user ) {
+		if( user == null ) {
+			return;
+		}
+
+	}
+
 	////
 	// @RequestMapping( value = "/point999/create", method = RequestMethod.POST )
 	// public UserPoint createUserPoint( @Valid @RequestBody NewUserPointHelper arr, Principal user,
