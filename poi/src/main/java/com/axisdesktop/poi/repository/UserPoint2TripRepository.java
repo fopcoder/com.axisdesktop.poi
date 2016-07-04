@@ -12,4 +12,8 @@ public interface UserPoint2TripRepository
 
 	UserPoint2Trip findOneByPointIdAndTripId( long pointId, long tripId );
 
+	UserPoint2Trip findTop1ByTripIdAndPorderLessThanOrderByPorderDesc( long tripId, int porder );
+
+	UserPoint2Trip findTop1ByTripIdAndPorderGreaterThanOrderByPorderAsc( long tripId, int porder );
+
 }

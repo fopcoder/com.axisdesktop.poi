@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.poi.entity.Trip;
 import com.axisdesktop.poi.entity.UserPoint;
@@ -99,6 +100,41 @@ public class UserPointServiceImpl implements UserPointService {
 	@Override
 	public Page<UserPoint> listTripPoints( long userId, long tripId ) {
 		return pointRepo.findTripPoints( userId, tripId, new PageRequest( 0, 100000 ) );
+	}
+
+	@Override
+	@Transactional
+	public void moveUp( long pointId, long tripId ) {
+		UserPoint2Trip upt = uptService.load( pointId, tripId );
+		UserPoint2Trip uptPrev = uptService.getPrev( upt );
+
+		System.err.println( upt );
+		System.err.println( uptPrev );
+
+		if( uptPrev != null && upt != null ) {
+			int tmp = uptPrev.getPorder();
+			uptPrev.setPorder( upt.getPorder() );
+			upt.setPorder( tmp );
+
+			uptService.save( uptPrev );
+			uptService.save( upt );
+		}
+	}
+
+	@Override
+	@Transactional
+	public void moveDown( long pointId, long tripId ) {
+		UserPoint2Trip upt = uptService.load( pointId, tripId );
+		UserPoint2Trip uptNext = uptService.getNext( upt );
+
+		if( uptNext != null && upt != null ) {
+			int tmp = uptNext.getPorder();
+			uptNext.setPorder( upt.getPorder() );
+			upt.setPorder( tmp );
+
+			uptService.save( uptNext );
+			uptService.save( upt );
+		}
 	}
 
 }

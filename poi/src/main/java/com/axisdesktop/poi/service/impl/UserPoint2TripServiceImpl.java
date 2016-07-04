@@ -36,4 +36,14 @@ public class UserPoint2TripServiceImpl implements UserPoint2TripService {
 		uptRepo.delete( id );
 	}
 
+	@Override
+	public UserPoint2Trip getPrev( UserPoint2Trip pt ) {
+		return uptRepo.findTop1ByTripIdAndPorderLessThanOrderByPorderDesc( pt.getTripId(), pt.getPorder() );
+	}
+
+	@Override
+	public UserPoint2Trip getNext( UserPoint2Trip pt ) {
+		return uptRepo.findTop1ByTripIdAndPorderGreaterThanOrderByPorderAsc( pt.getTripId(), pt.getPorder() );
+	}
+
 }

@@ -201,19 +201,29 @@ public class UserPointController {
 		return sb.toString();
 	}
 
-	@RequestMapping( value = "/userpoint/moveUp/{id}" )
-	public void moveUp( @PathVariable( "id" ) long id, Principal user ) {
+	@RequestMapping( value = "/userpoint/moveUp" )
+	public void moveUp( @RequestBody BaseRequestBody data, Principal user ) {
 		if( user == null ) {
 			return;
 		}
+
+		System.err.println( data.getPointId() );
+		System.err.println( data.getTripId() );
+
+		upointService.moveUp( data.getPointId(), data.getTripId() );
 
 	}
 
-	@RequestMapping( value = "/userpoint/moveDown/{id}" )
-	public void moveDown( @PathVariable( "id" ) long id, Principal user ) {
+	@RequestMapping( value = "/userpoint/moveDown" )
+	public void moveDown( @RequestBody BaseRequestBody data, Principal user ) {
 		if( user == null ) {
 			return;
 		}
+
+		System.err.println( data.getPointId() );
+		System.err.println( data.getTripId() );
+
+		upointService.moveDown( data.getPointId(), data.getTripId() );
 
 	}
 

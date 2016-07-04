@@ -17,6 +17,10 @@ public interface UserPointService {
 
 	UserPoint load( long userId, long pointId );
 
+	void moveUp( long pointId, long tripId );
+
+	void moveDown( long pointId, long tripId );
+
 	UserPoint create( UserPoint point );
 
 	UserPoint add( UserPoint point, Trip trip );

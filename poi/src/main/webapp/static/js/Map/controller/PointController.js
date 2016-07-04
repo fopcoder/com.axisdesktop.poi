@@ -208,7 +208,11 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 	};
 	
 	self.moveUp = function( point )	{
-		$http.get( "/userpoint/moveUp/" + point.id, params ).then(
+		var params = {};
+		params.tripId = $routeParams.dayId;
+		params.pointId = point.id;
+		
+		$http.post( "/userpoint/moveUp", params ).then(
 			function()	{
 				$scope.$broadcast('reloadUserPoints');
 			},
@@ -219,7 +223,11 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 	};
 	
 	self.moveDown = function( point )	{
-		$http.get( "/userpoint/moveDown/" + point.id, params ).then(
+		var params = {};
+		params.tripId = $routeParams.dayId;
+		params.pointId = point.id;
+		
+		$http.post( "/userpoint/moveDown", params ).then(
 			function()	{
 				$scope.$broadcast('reloadUserPoints');
 			},
