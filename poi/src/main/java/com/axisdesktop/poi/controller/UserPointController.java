@@ -207,11 +207,7 @@ public class UserPointController {
 			return;
 		}
 
-		System.err.println( data.getPointId() );
-		System.err.println( data.getTripId() );
-
 		upointService.moveUp( data.getPointId(), data.getTripId() );
-
 	}
 
 	@RequestMapping( value = "/userpoint/moveDown" )
@@ -220,11 +216,7 @@ public class UserPointController {
 			return;
 		}
 
-		System.err.println( data.getPointId() );
-		System.err.println( data.getTripId() );
-
 		upointService.moveDown( data.getPointId(), data.getTripId() );
-
 	}
 
 	////

@@ -78,4 +78,48 @@ public class TripController {
 		}
 	}
 
+	@RequestMapping( value = "/trip/create", method = RequestMethod.POST )
+	public void createTrip( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return;
+		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+
+		Trip trip = new Trip();
+		trip.setName( data.getName() );
+		trip.setUserId( uid );
+		if( data.getTripId() > 0 ) trip.setParentId( data.getTripId() );
+
+		tripService.append( trip );
+	}
+
+	@RequestMapping( value = "/trip/moveUp" )
+	public void moveUp( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return;
+		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+		Trip trip = tripService.load( data.getTripId(), uid );
+
+		if( trip != null ) {
+			tripService.moveUp( trip );
+		}
+	}
+
+	@RequestMapping( value = "/trip/moveDown" )
+	public void moveDown( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return;
+		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+		Trip trip = tripService.load( data.getTripId(), uid );
+
+		if( trip != null ) {
+			tripService.moveDown( trip );
+		}
+	}
+
 }

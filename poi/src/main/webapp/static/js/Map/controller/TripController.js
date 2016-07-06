@@ -1,5 +1,11 @@
-MapApp.controller( 'TripController', [ '$scope', '$routeParams', 'TripService', function( $scope, $routeParams, TripService ) {
+MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripService', 
+                                       	function( $http, $scope, $routeParams, TripService ) {
 	var self = this;
+	self.newTrip = '';
+	
+	$scope.$on('reloadDays', function() {
+        self.listDay();
+    });
 
 	self.listTrip = function( params ) {
 		params = params || {};
@@ -37,5 +43,49 @@ MapApp.controller( 'TripController', [ '$scope', '$routeParams', 'TripService', 
 			console.log( err )
 		} );
 	};
+	
+	self.addDay = function()	{
+		var params = {};
+		params.tripId = $routeParams.tripId;
+		params.name = self.newTrip;
+		
+		$http.post( "/trip/create", params ).then(
+				function()	{
+					$scope.$broadcast('reloadDays');
+				},
+				function()	{
+					
+				}
+			);
+	};
+	
+	self.moveUp = function( trip )	{
+		console.log(trip);
+		var params = {};
+		params.tripId = trip.id;
+		
+		$http.post( "/trip/moveUp", params ).then(
+			function()	{
+				$scope.$broadcast('reloadDays');
+			},
+			function()	{
+				
+			}
+		);
+	};
+	
+	self.moveDown = function( trip )	{
+		var params = {};
+		params.tripId = trip.id;
+		
+		$http.post( "/trip/moveDown", params ).then(
+			function()	{
+				$scope.$broadcast('reloadDays');
+			},
+			function()	{
+				
+			}
+		);
+	}
 
 } ] );
