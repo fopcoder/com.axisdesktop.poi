@@ -6,6 +6,7 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 	self.routeInfo = [];
 	//self.travelMode = google.maps.TravelMode["DRIVING"];
 	self.travelMode = "DRIVING";
+	var directionsService = new google.maps.DirectionsService();
 
 	$scope.$on('reloadUserPoints', function() {
         self.listPoint();
@@ -103,27 +104,57 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 	};
 
 	self.createRoute = function( points )	{
-		var waypts = [];
-        var start, finish;
-        var directionsService = new google.maps.DirectionsService();
+        var maxWpt = 10;
         
-        for( var i = 0; i < points.length; i++) {
-            waypts.push({
-                location: new google.maps.LatLng( points[i].latitude, points[i].longitude ),
-                stopover: true
-            });
+        var pts = angular.copy(points);
+        var splitPts = [];
+        
+        var dist = 0;
+        var time = 0;
+        var routeData = [];
+        
+        var bounds = new google.maps.LatLngBounds();
+        
+        while( pts.length )	{
+        	var data = pts.splice( 0, ( maxWpt - 1 ) );
+        	
+        	if( splitPts.length > 0 ) {
+        		data.unshift( splitPts[ splitPts.length - 1 ][ maxWpt - 1 ] );
+        	}
+        	else {
+        		if( pts[0] ) data.push( pts[0] );
+        	}
+        	
+        	splitPts.push( data );
         }
-        start = (waypts.shift()).location;
-        finish = (waypts.pop()).location;
         
-        var request = {
-            origin: start,
-            destination: finish,
-            waypoints: waypts,
-            travelMode: google.maps.TravelMode[self.travelMode]
-        };
+        console.log(splitPts);
         
-        directionsService.route( request, directionResults );
+        for( var i = 0; i < splitPts.length; i++ )	{
+        	var wp = [];
+        	
+        	for( var j = 0; j < splitPts[i].length; j++ ) {
+        		var loc = new google.maps.LatLng( splitPts[i][j].latitude, splitPts[i][j].longitude );
+        		
+        		bounds.extend( loc );
+        		
+                wp.push({
+                    location: loc,
+                    stopover: true
+                });
+            }
+        	
+            var request = {
+                origin: ( wp.shift() ).location,
+                destination: ( wp.pop() ).location,
+                waypoints: wp,
+                travelMode: google.maps.TravelMode[self.travelMode]
+            };
+        	
+            directionsService.route( request, directionResults ) ;
+        }
+        
+        $scope.map.fitBounds( bounds );
         
         function displayDist( val ) {
         	if( val < 100 )	{
@@ -150,24 +181,20 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
         		return h + ":" + m;
         	}
         }
-        	
         
-        function directionResults(result, status) {
-            if (status == google.maps.DirectionsStatus.OK) {
-                console.log(result);
-                
+        
+        
+        function directionResults( result, status ) {
+            if( status == google.maps.DirectionsStatus.OK ) {
                 var data = result.routes[0];
                 
-                $scope.map.fitBounds(data.bounds);
+                var rdl = routeData.length;
                 
-                var dist = 0;
-                var time = 0;
-                var routeData = [];
                 for( var i = 0; i < data.legs.length; i++ )	{
                 	dist += data.legs[i].distance.value;
                 	time += data.legs[i].duration.value;
                 	
-                	routeData.push( self.points[i+1].name + ": " +
+                	routeData.push( self.points[ i + rdl ].name + ": " +
                 			displayDist( dist )  + " / "+
                 			displayTime( time ) );
                 }
@@ -195,11 +222,10 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 //                    }
                 });
 
-                // Use this new renderer with the result
                 render.setDirections(result);
-                // and start the next request
-                //nextRequest();
             }
+            
+            return data.bounds;
 
         }
         
