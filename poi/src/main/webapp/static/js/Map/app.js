@@ -1,6 +1,6 @@
 'use strict';
 
-var MapApp = angular.module( "MapApp", [ "ngMap", "ngStorage", "ngRoute", "pageslide-directive", "ui.bootstrap" ] )
+var MapApp = angular.module( "MapApp", [ "ngMap", "ngStorage", "ngRoute", "pageslide-directive", "ui.bootstrap", "xeditable" ] )
         .config( [ '$routeProvider', function( $routeProvider ) {
 	        $routeProvider//
 	        .when( "/", {

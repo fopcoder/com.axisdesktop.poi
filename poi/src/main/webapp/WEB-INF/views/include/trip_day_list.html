@@ -12,7 +12,8 @@
 		</thead>
 		<tbody>
 			<tr data-ng-repeat="t in tc.days">
-				<td><a href="#/trip/{{t.parentId}}/day/{{t.id}}" data-ng-bind="t.name"></a></td>
+				<td><a href="#/trip/{{t.parentId}}/day/{{t.id}}" data-ng-bind="t.name" editable-text="t.name" onaftersave="tc.updateTrip(t)"></a></td>
+				<td style="width:30px"><span class="glyphicon glyphicon-pencil" ng-click=""></span></td>
 				<td style="width:30px"><span class="glyphicon glyphicon-chevron-up" ng-click="tc.moveUp( t )"></span></td>
 				<td style="width:30px"><span class="glyphicon glyphicon-chevron-down" ng-click="tc.moveDown( t )"></span></td>
 				<!--td><a href="#/trip/{{t.id}}" type="button" class="btn btn-warning btn-xs">Инфо</a></td-->

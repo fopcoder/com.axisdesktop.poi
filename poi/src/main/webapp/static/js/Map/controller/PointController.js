@@ -7,6 +7,10 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
 	//self.travelMode = google.maps.TravelMode["DRIVING"];
 	self.travelMode = "DRIVING";
 	var directionsService = new google.maps.DirectionsService();
+	var renderers = [];
+	
+	//render = new google.maps.DirectionsRenderer();
+    //render.setMap($scope.map);
 
 	$scope.$on('reloadUserPoints', function() {
         self.listPoint();
@@ -130,6 +134,12 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
         
         console.log(splitPts);
         
+        while( renderers.length > 0 )	{
+        	var r = renderers.shift();
+        	r.setMap(null);
+        	r = null;
+        }
+        
         for( var i = 0; i < splitPts.length; i++ )	{
         	var wp = [];
         	
@@ -187,22 +197,33 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
         function directionResults( result, status ) {
             if( status == google.maps.DirectionsStatus.OK ) {
                 var data = result.routes[0];
-                
                 var rdl = routeData.length;
+                
+                if( rdl == 0 && maxWpt > self.points.length ) {
+                  routeData.push( self.points[ rdl ].name + ": " +
+        			displayDist( 0 )  + " / "+
+        			displayTime( 0 ) );
+                  	rdl = routeData.length;
+                }
+                
+//                console.log(data.legs);
                 
                 for( var i = 0; i < data.legs.length; i++ )	{
                 	dist += data.legs[i].distance.value;
                 	time += data.legs[i].duration.value;
-                	
+//                	console.log( displayDist(dist) );
+                	//if( self.points[ i + rdl  ] ) {
                 	routeData.push( self.points[ i + rdl ].name + ": " +
                 			displayDist( dist )  + " / "+
                 			displayTime( time ) );
+                	//}
                 }
                 
                 self.routeInfo = routeData;
                 
                 var render = new google.maps.DirectionsRenderer();
                 render.setMap($scope.map);
+                renderers.push( render );
 
                 // Some unique options from the colorArray so we can see the routes
                 render.setOptions({
@@ -211,7 +232,7 @@ MapApp.controller( 'PointController', [ '$http','$scope','$rootScope', '$routePa
                     polylineOptions: {
                         strokeWeight: 4,
                         strokeOpacity: 0.8,
-                        strokeColor: colourArray[i]
+                        strokeColor: "blue"
                     },
 //                    markerOptions:{
 //                        icon:{

@@ -86,6 +86,10 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 				
 			}
 		);
-	}
+	};
+	
+	self.updateTrip = function( trip )	{
+		console.log(trip);
+	};
 
 } ] );
