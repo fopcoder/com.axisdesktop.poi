@@ -12,8 +12,22 @@
 		</thead>
 		<tbody>
 			<tr data-ng-repeat="t in tc.days">
-				<td><a href="#/trip/{{t.parentId}}/day/{{t.id}}" data-ng-bind="t.name" editable-text="t.name" onaftersave="tc.updateTrip(t)"></a></td>
-				<td style="width:30px"><span class="glyphicon glyphicon-pencil" ng-click=""></span></td>
+				<td><a href="#/trip/{{t.parentId}}/day/{{t.id}}" data-ng-bind="t.name" editable-text="t.name" e-name="name" e-form="rowform"></a></td>
+				<td style="width:30px">
+<form editable-form="" name="rowform" onbeforesave="saveUser()" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == t" >
+          <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+            save
+          </button>
+          <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
+            cancel
+          </button>
+        </form>
+<div class="buttons" ng-show="!rowform.$visible">
+          <span class="glyphicon glyphicon-pencil" ng-click="rowform.$show()"></span>
+        </div>
+
+
+</td>
 				<td style="width:30px"><span class="glyphicon glyphicon-chevron-up" ng-click="tc.moveUp( t )"></span></td>
 				<td style="width:30px"><span class="glyphicon glyphicon-chevron-down" ng-click="tc.moveDown( t )"></span></td>
 				<!--td><a href="#/trip/{{t.id}}" type="button" class="btn btn-warning btn-xs">Инфо</a></td-->
