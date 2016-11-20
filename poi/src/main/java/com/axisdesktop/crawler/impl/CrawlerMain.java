@@ -9,8 +9,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.axisdesktop.crawler.base.Crawler;
 import com.axisdesktop.poi.config.AppConf;
 import com.axisdesktop.poi.config.PersistenceConf;
-import com.axisdesktop.poi.config.SecurityConf;
-import com.axisdesktop.poi.config.SocialConf;
 
 public class CrawlerMain {
 
@@ -29,7 +27,7 @@ public class CrawlerMain {
 		// ProxyService proxyService = ctx.getBean( ProxyService.class );
 
 		// DorogaCrawler crawler = new DorogaCrawler( proxyService, providerService );
-		// DorogaCrawler crawler = new DorogaCrawler();
+		// Crawler crawler = new DorogaCrawler();
 		Crawler crawler = ctx.getBean( Crawler.class );
 		crawler.run();
 

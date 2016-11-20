@@ -3,7 +3,7 @@
 MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 	var self = this;
 	
-	self.listTrip = function( params )	{
+	self.tripList = function( params )	{
 		return $http.post( '/trips', params ).then(
 			function(res) {
 				return res.data;
@@ -15,7 +15,7 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 		);
 	};
 	
-	self.listDay = function( params )	{
+	self.dayList = function( params )	{
 		return $http.post( '/trip/days', params ).then(
 			function(res) {
 				return res.data;
@@ -27,7 +27,7 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 		);
 	};
 	
-	self.listPoint = function( params )	{
+	self.pointList = function( params )	{
 		return $http.post( '/trip/day/points', params ).then(
 			function(res) {
 				return res.data;
@@ -38,5 +38,49 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 			}
 		);
 	};
+	
+	self.create = function( params ) {
+		return $http.post( "/trip/create", params ).then( 
+			function( res ) {
+		       return res.data;
+	        }, function( res ) {
+	        	console.log(res);
+				return $q.reject(res);
+	        } 
+	    );
+	};
+	
+	self.update = function( params ) {
+		return $http.post( "/trip/update", params ).then( 
+			function( res ) {
+		       return res.data;
+	        }, function( res ) {
+	        	console.log(res);
+				return $q.reject(res);
+	        } 
+	    );
+	};
+	
+	self.moveUp = function( params ) {
+		return $http.post( "/trip/moveUp", params ).then( 
+			function( res ) {
+		       return res.data;
+	        }, function( res ) {
+	        	console.log(res);
+				return $q.reject(res);
+	        } 
+	    );
+	};
+	
+	self.moveDown = function( params ) {
+		return $http.post( "/trip/moveDown", params ).then( 
+			function( res ) {
+		       return res.data;
+	        }, function( res ) {
+	        	console.log(res);
+				return $q.reject(res);
+	        } 
+	    );
+	}
 	
 } ])

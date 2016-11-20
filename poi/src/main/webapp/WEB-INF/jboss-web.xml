@@ -6,5 +6,5 @@
         </cookie-config>
     </session-config>
     <context-root>/</context-root>
-    <virtual-host>poapobpoc.org.ua</virtual-host>
+    <virtual-host>poi-route</virtual-host>
 </jboss-web>

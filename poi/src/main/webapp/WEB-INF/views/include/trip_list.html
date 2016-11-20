@@ -3,15 +3,29 @@
 <body th:fragment="trip_list">
 
 <script type="text/ng-template" id="/include/trip_list.html">
-<div data-ng-controller="TripController as tc" data-ng-init="tc.listTrip();">
-	<button type="button" class="btn btn-primary">Добавить</button>
+<div data-ng-controller="TripController as tc" data-ng-init="tc.tripList();">
+	<form name="newTripForm" ng-submit="tc.createTrip(newTripForm)" class="form-inline">
+		<div class="form-group"><input type="text" name="newTrip" ng-model="tc.newTrip" required="" class="form-control" /></div>
+		<div class="form-group"><button type="submit" class="btn btn-primary">Добавить</button></div>
+	</form>
 	<table class="table table-hover table-condensed">
-		<thead>
-			
-		</thead>
 		<tbody>
 			<tr data-ng-repeat="t in tc.trips">
-				<td><a href="#/trip/{{t.id}}" data-ng-bind="t.name"></a></td>
+				<td><a href="#/trip/{{t.id}}" data-ng-bind="t.name" editable-text="t.name" e-name="name" e-form="rowform"></a></td>
+				<td style="width:30px;white-space:nowrap">
+					<form editable-form="" name="rowform" onbeforesave="tc.updateTrip( $data, t )" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == t" >
+          				<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary btn-xs">
+            				<span class="glyphicon glyphicon-ok"></span>
+          				</button>
+          				<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default btn-xs">
+            				<span class="glyphicon glyphicon-remove"></span>
+          				</button>
+        			</form>
+					<div class="buttons" ng-show="!rowform.$visible">
+          				<span class="glyphicon glyphicon-pencil" ng-click="rowform.$show()"></span>
+        			</div>
+				</td>
+				<td style="width:30px"><span class="glyphicon glyphicon-trash" ng-click="tc.deleteTrip( t )"></span></td>
 				<!--td><a href="#/trip/{{t.id}}" type="button" class="btn btn-warning btn-xs">Инфо</a></td-->
 			</tr>
 		</tbody>

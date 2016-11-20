@@ -37,11 +37,11 @@ public class PersistenceConf {
 			// new org.postgresql.Driver();
 			// new org.postgresql.util.PGobject();
 
-			ds = new SimpleDriverDataSource( new org.postgresql.Driver(), env.getRequiredProperty( "poiroute.db.dsn" ),
-					env.getRequiredProperty( "poiroute.db.user" ), env.getRequiredProperty( "poiroute.db.password" ) );
-			// ds = new SimpleDriverDataSource( new org.postgresql.Driver(), "jdbc:postgresql://127.0.0.1/poi",
-			// "webadmin",
-			// "webadmin" );
+			// ds = new SimpleDriverDataSource( new org.postgresql.Driver(), env.getRequiredProperty( "poiroute.db.dsn"
+			// ),
+			// env.getRequiredProperty( "poiroute.db.user" ), env.getRequiredProperty( "poiroute.db.password" ) );
+			ds = new SimpleDriverDataSource( new org.postgresql.Driver(), "jdbc:postgresql://127.0.0.1/poi", "webadmin",
+					"webadmin" );
 
 		}
 		catch( Exception e /* IllegalStateException | NamingException e */ ) {

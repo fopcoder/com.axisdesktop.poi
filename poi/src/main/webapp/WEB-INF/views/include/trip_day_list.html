@@ -3,18 +3,15 @@
 <body th:fragment="trip_day_list">
 
 <script type="text/ng-template" id="/include/trip_day_list.html">
-<div data-ng-controller="TripController as tc" data-ng-init="tc.listDay();">
+<div data-ng-controller="TripController as tc" data-ng-init="tc.dayList();">
 	<input type="text" name="newTrip" ng-model="tc.newTrip"/>
-	<button type="button" class="btn btn-primary" ng-click="tc.addDay()">Добавить</button>
+	<button type="button" class="btn btn-primary" ng-click="tc.createDay()">Добавить</button>
 	<table class="table table-hover table-condensed">
-		<thead>
-			
-		</thead>
 		<tbody>
 			<tr data-ng-repeat="t in tc.days">
 				<td><a href="#/trip/{{t.parentId}}/day/{{t.id}}" data-ng-bind="t.name" editable-text="t.name" e-name="name" e-form="rowform"></a></td>
 				<td style="width:30px">
-<form editable-form="" name="rowform" onbeforesave="saveUser()" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == t" >
+		<form editable-form="" name="rowform" onbeforesave="saveUser()" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == t" >
           <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
             save
           </button>
