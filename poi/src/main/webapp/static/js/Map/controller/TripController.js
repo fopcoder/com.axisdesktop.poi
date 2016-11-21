@@ -114,19 +114,48 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 	        );
 	    };
 	    
-	    self.updateDay = function( trip ) {
-	    	var params = {};
-	        console.log( trip );
+	    self.updateDay = function( data, trip ) {
+	    	var params = {
+	    		name: data.name,
+	    		tripId: trip.id
+	    	};
+	    	
+	    	TripService.update( params ).then( //
+		        function() {
+			        $scope.$broadcast( 'reloadDays' );
+		        }, 
+		        function() {} 
+	        );
 	    };
 	    
 	    self.deleteTrip = function( trip ) {
-	    	var params = {};
-	        console.log( trip );
+	    	var params = {
+	    		tripId: trip.id
+	    	};
+	    	
+	    	if( confirm('Удалить?') == true )	{
+	    		TripService.delete( params ).then( //
+    		        function() {
+    			        $scope.$broadcast( 'reloadTrips' );
+    		        }, 
+    		        function() {} 
+    	        );
+	    	}
 	    };
 	    
 	    self.deleteDay = function( trip ) {
-	    	var params = {};
-	        console.log( trip );
+	    	var params = {
+	    		tripId: trip.id
+	    	};
+	    	
+	    	if( confirm('Удалить?') == true )	{
+	    		TripService.delete( params ).then( //
+    		        function() {
+    			        $scope.$broadcast( 'reloadDays' );
+    		        }, 
+    		        function() {} 
+    	        );
+	    	}
 	    };
 	
 	} ] );

@@ -81,6 +81,17 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 				return $q.reject(res);
 	        } 
 	    );
-	}
+	};
+	
+	self.delete = function( params ) {
+		return $http.post( "/trip/delete", params ).then( 
+			function( res ) {
+		       return res.data;
+	        }, function( res ) {
+	        	console.log(res);
+				return $q.reject(res);
+	        } 
+	    );
+	};
 	
 } ])
