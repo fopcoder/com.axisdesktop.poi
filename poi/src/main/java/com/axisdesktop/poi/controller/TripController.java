@@ -68,14 +68,26 @@ public class TripController {
 		if( user == null ) {
 			return new ResponseEntity<List<UserPoint>>( HttpStatus.FORBIDDEN );
 		}
-		else {
-			Trip t = tripService.load( data.getTripId() );
-			List<UserPoint> res = t.getPoint2trip().stream().map( i -> {
-				return i.getPoint();
-			} ).collect( Collectors.toList() );
 
-			return new ResponseEntity<List<UserPoint>>( res, HttpStatus.OK );
+		Trip t = tripService.load( data.getTripId() );
+		List<UserPoint> res = t.getPoint2trip().stream().map( i -> {
+			return i.getPoint();
+		} ).collect( Collectors.toList() );
+
+		return new ResponseEntity<List<UserPoint>>( res, HttpStatus.OK );
+
+	}
+
+	@RequestMapping( value = "/trip/load", method = RequestMethod.POST )
+	public ResponseEntity<Trip> loadTrip( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return new ResponseEntity<Trip>( HttpStatus.FORBIDDEN );
 		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+		Trip trip = tripService.load( data.getTripId(), uid );
+
+		return new ResponseEntity<Trip>( trip, HttpStatus.OK );
 	}
 
 	@RequestMapping( value = "/trip/create", method = RequestMethod.POST )
@@ -92,6 +104,37 @@ public class TripController {
 		if( data.getTripId() > 0 ) trip.setParentId( data.getTripId() );
 
 		tripService.append( trip );
+	}
+
+	@RequestMapping( value = "/trip/update", method = RequestMethod.POST )
+	public void updateTrip( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return;
+		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+
+		Trip trip = tripService.load( data.getTripId(), uid );
+
+		if( trip != null ) {
+			trip.setName( data.getName() );
+			tripService.update( trip );
+		}
+	}
+
+	@RequestMapping( value = "/trip/delete", method = RequestMethod.POST )
+	public void deleteTrip( @RequestBody BaseRequestBody data, Principal user ) {
+		if( user == null ) {
+			return;
+		}
+
+		long uid = ( (CustomUserDetails)( (Authentication)user ).getPrincipal() ).getId();
+
+		Trip trip = tripService.load( data.getTripId(), uid );
+
+		if( trip != null ) {
+			tripService.delete( trip.getId() );
+		}
 	}
 
 	@RequestMapping( value = "/trip/moveUp" )

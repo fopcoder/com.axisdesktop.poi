@@ -1,5 +1,7 @@
 package com.axisdesktop.poi.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -13,4 +15,6 @@ public interface TripRepository extends JpaRepository<Trip, Long>, JpaSpecificat
 	Trip findTop1ByParentIdAndTorderLessThanOrderByTorderDesc( Long parentId, int torder );
 
 	Trip findTop1ByParentIdAndTorderGreaterThanOrderByTorderAsc( Long parentId, int torder );
+
+	List<Trip> findByParentId( Long parentId );
 }

@@ -1,5 +1,7 @@
 package com.axisdesktop.poi.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.axisdesktop.poi.entity.Trip;
-import com.axisdesktop.poi.entity.UserPoint2Trip;
 import com.axisdesktop.poi.repository.TripRepository;
 import com.axisdesktop.poi.service.TripService;
 
@@ -48,6 +49,12 @@ public class TripServiceImpl implements TripService {
 
 	@Override
 	public void delete( long id ) {
+		List<Trip> trips = tripRepo.findByParentId( id );
+
+		for( Trip t : trips ) {
+			tripRepo.delete( t );
+		}
+
 		tripRepo.delete( id );
 	}
 
@@ -105,6 +112,11 @@ public class TripServiceImpl implements TripService {
 			tripRepo.save( trip );
 		}
 		return null;
+	}
+
+	@Override
+	public List<Trip> children( Trip trip ) {
+		return tripRepo.findByParentId( trip.getId() );
 	}
 
 }

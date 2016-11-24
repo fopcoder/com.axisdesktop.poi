@@ -39,6 +39,17 @@ MapApp.service( 'TripService', [ '$http', '$q', function( $http, $q ) {
 		);
 	};
 	
+	self.load = function( params ) {
+		return $http.post( "/trip/load", params ).then( 
+			function( res ) {
+		       return res.data;
+	        }, function( res ) {
+	        	console.log(res);
+				return $q.reject(res);
+	        } 
+	    );
+	};
+	
 	self.create = function( params ) {
 		return $http.post( "/trip/create", params ).then( 
 			function( res ) {

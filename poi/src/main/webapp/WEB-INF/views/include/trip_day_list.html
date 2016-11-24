@@ -3,30 +3,33 @@
 <body th:fragment="trip_day_list">
 
 <script type="text/ng-template" id="/include/trip_day_list.html">
-<div data-ng-controller="TripController as tc" data-ng-init="tc.dayList();">
-	<input type="text" name="newTrip" ng-model="tc.newTrip"/>
-	<button type="button" class="btn btn-primary" ng-click="tc.createDay()">Добавить</button>
+<div data-ng-controller="TripController as tc" data-ng-init="tc.dayList(); tc.loadTrip()">
+	<h4>Планы для {{tc.currentTrip.name}}</h4>
+	<form name="newTripForm" ng-submit="tc.createDay(newTripForm)" class="form-inline">
+		<div class="form-group"><a class="btn btn-primary" href="#/trips" ><span class="glyphicon glyphicon-arrow-up"></span></a></div>
+		<div class="form-group"><input type="text" name="newTrip" ng-model="tc.newTrip" required="" class="form-control" /></div>
+		<div class="form-group"><button type="submit" class="btn btn-primary">Добавить</button></div>
+	</form>
 	<table class="table table-hover table-condensed">
 		<tbody>
 			<tr data-ng-repeat="t in tc.days">
 				<td><a href="#/trip/{{t.parentId}}/day/{{t.id}}" data-ng-bind="t.name" editable-text="t.name" e-name="name" e-form="rowform"></a></td>
-				<td style="width:30px">
-		<form editable-form="" name="rowform" onbeforesave="saveUser()" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == t" >
-          <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
-            save
-          </button>
-          <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">
-            cancel
-          </button>
-        </form>
-<div class="buttons" ng-show="!rowform.$visible">
-          <span class="glyphicon glyphicon-pencil" ng-click="rowform.$show()"></span>
-        </div>
-
-
-</td>
-				<td style="width:30px"><span class="glyphicon glyphicon-chevron-up" ng-click="tc.moveUp( t )"></span></td>
-				<td style="width:30px"><span class="glyphicon glyphicon-chevron-down" ng-click="tc.moveDown( t )"></span></td>
+				<td style="width:25px;white-space:nowrap">
+					<form editable-form="" name="rowform" onbeforesave="tc.updateDay( $data, t )" ng-show="rowform.$visible" class="form-buttons form-inline" shown="inserted == t" >
+          				<button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary btn-xs">
+          					<span class="glyphicon glyphicon-ok"></span>
+          				</button>
+          				<button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default btn-xs">
+          					<span class="glyphicon glyphicon-remove"></span>
+          				</button>
+        			</form>
+					<div class="buttons" ng-show="!rowform.$visible">
+          				<span class="glyphicon glyphicon-pencil" ng-click="rowform.$show()"></span>
+        			</div>
+				</td>
+				<td style="width:25px"><span class="glyphicon glyphicon-chevron-up" ng-click="tc.moveUp( t )"></span></td>
+				<td style="width:25px"><span class="glyphicon glyphicon-chevron-down" ng-click="tc.moveDown( t )"></span></td>
+				<td style="width:25px"><span class="glyphicon glyphicon-trash" ng-click="tc.deleteDay( t )"></span></td>
 				<!--td><a href="#/trip/{{t.id}}" type="button" class="btn btn-warning btn-xs">Инфо</a></td-->
 			</tr>
 		</tbody>

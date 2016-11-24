@@ -1,11 +1,12 @@
 package com.axisdesktop.poi.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.axisdesktop.poi.entity.Trip;
-import com.axisdesktop.poi.entity.UserPoint2Trip;
 
 public interface TripService {
 	Page<Trip> list( Specification<Trip> spec, Pageable page );
@@ -29,5 +30,7 @@ public interface TripService {
 	Trip moveUp( Trip pt );
 
 	Trip moveDown( Trip pt );
+
+	List<Trip> children( Trip trip );
 
 }

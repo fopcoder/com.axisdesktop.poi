@@ -2,6 +2,7 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 	function( $http, $scope, $routeParams, TripService ) {
 	    var self = this;
 	    self.newTrip = '';
+	    self.currentTrip = {};
 	
 	    $scope.$on( 'reloadDays', function() {
 	        self.dayList();
@@ -51,6 +52,18 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 	        } );
 	    };
 	
+	    self.loadTrip = function() {
+    		var params = {};
+	        params.tripId = $routeParams.tripId;
+	
+	        TripService.load( params ).then( //
+	        	function( data ) {
+	        		self.currentTrip = data;
+	        	}, 
+	        	function() {} 
+	        );	
+	    };
+	    
 	    self.createTrip = function( form ) {
 	    	if( form.$valid ){
 	    		var params = {};
@@ -63,7 +76,6 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 		        }, function() {
 		        } );	
 	    	}
-	        
 	    };
 	    
 	    self.createDay = function() {
@@ -74,6 +86,7 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 	        TripService.create( params ).then( //
 	        function() {
 		        $scope.$broadcast( 'reloadDays' );
+		        self.newTrip = '';
 	        }, function() {
 	        } );
 	    };
@@ -106,12 +119,18 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 	    		tripId: trip.id
 	    	};
 	    	
-	    	TripService.update( params ).then( //
-		        function() {
-			        $scope.$broadcast( 'reloadTrips' );
-		        }, 
-		        function() {} 
-	        );
+	    	if( data.name.length > 0 ) {
+	    		TripService.update( params ).then( //
+    		        function() {
+    			        $scope.$broadcast( 'reloadTrips' );
+    		        }, 
+    		        function() {} 
+    	        );	
+	    	}
+	    	else	{
+	    		$scope.$broadcast( 'reloadTrips' );
+	    	}
+	    	
 	    };
 	    
 	    self.updateDay = function( data, trip ) {
@@ -133,7 +152,7 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 	    		tripId: trip.id
 	    	};
 	    	
-	    	if( confirm('Удалить?') == true )	{
+	    	if( confirm('Удалить полностью всю поездку?') == true )	{
 	    		TripService.delete( params ).then( //
     		        function() {
     			        $scope.$broadcast( 'reloadTrips' );
@@ -148,7 +167,7 @@ MapApp.controller( 'TripController', [ '$http', '$scope', '$routeParams', 'TripS
 	    		tripId: trip.id
 	    	};
 	    	
-	    	if( confirm('Удалить?') == true )	{
+	    	if( confirm('Удалить день?') == true )	{
 	    		TripService.delete( params ).then( //
     		        function() {
     			        $scope.$broadcast( 'reloadDays' );
