@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +23,8 @@ import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
 
 @Component
-public class DorogaCrawler extends WebCrawler {
-	private static final Logger logger = LoggerFactory.getLogger( DorogaCrawler.class );
+public class DorogaUaCrawler extends WebCrawler {
+	private static final Logger logger = LoggerFactory.getLogger( DorogaUaCrawler.class );
 
 	private final int providerId = 1;
 	private Map<String, String> connProps = new HashMap<>();
@@ -31,11 +33,11 @@ public class DorogaCrawler extends WebCrawler {
 		connProps.put( "read-timeout", Integer.toString( 20 * 60_000 ) );
 	}
 
-	public DorogaCrawler() {
+	public DorogaUaCrawler() {
 	}
 
 	@Autowired
-	public DorogaCrawler( ProxyService proxyService, ProviderService providerService, Environment env ) {
+	public DorogaUaCrawler( ProxyService proxyService, ProviderService providerService, Environment env ) {
 		super( proxyService, providerService, env );
 	}
 
@@ -45,18 +47,18 @@ public class DorogaCrawler extends WebCrawler {
 			// TODO switsh on feed url
 			this.getAndUpdateFeedUrls();
 
-			// ExecutorService exec = Executors.newFixedThreadPool( 5 );
+			ExecutorService exec = Executors.newFixedThreadPool( 5 );
 
 			List<ProviderUrl> updateList = this.getProviderService().findUrlForUpdate( providerId );
 			for( ProviderUrl updateUrl : updateList ) {
 				Worker worker = new DorogaWorker( this, updateUrl );
-				// exec.execute( worker );
-				worker.run();
-				Thread.sleep( 1_000 );
+				exec.execute( worker );
+				// worker.run();
+				// Thread.sleep( 1_000 );
 				// break;
 			}
 
-			// exec.shutdown();
+			exec.shutdown();
 		}
 
 		catch( Exception e ) {

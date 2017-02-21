@@ -46,6 +46,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         	
         	.antMatchers("/getdata/**").permitAll()
             .antMatchers("/porom/**").hasAnyRole( "USER", "ADMIN" )
+//            .antMatchers("/crawler/**").hasRole( "ADMIN" )
             .and()
             .csrf().csrfTokenRepository(csrfTokenRepository())
             

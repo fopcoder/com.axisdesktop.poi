@@ -10,6 +10,17 @@
 <script src="/crawler/models.js"></script>
 <script src="/crawler/app.js"></script>
 
+<script>
+Ext.Ajax.on('beforerequest', function (conn, options) {
+	   if (!(/^http:.*/.test(options.url) || /^https:.*/.test(options.url))) {
+	     if (typeof(options.headers) == "undefined") {
+	       options.headers = {'X-XSRF-TOKEN': Ext.util.Cookies.get('XSRF-TOKEN')};
+	     } else {
+	       options.headers.extend({'X-XSRF-TOKEN': Ext.util.Cookies.get('XSRF-TOKEN')});
+	     }                        
+	   }
+	}, this);
+</script>
 
 </head>
 <body></body>

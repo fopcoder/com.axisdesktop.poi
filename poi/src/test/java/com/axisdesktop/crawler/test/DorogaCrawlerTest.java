@@ -15,7 +15,7 @@
 //
 // import com.axisdesktop.crawler.base.Crawler;
 // import com.axisdesktop.crawler.entity.ProviderUrl;
-// import com.axisdesktop.crawler.impl.DorogaCrawler;
+// import com.axisdesktop.crawler.impl.DorogaUaCrawler;
 // import com.axisdesktop.crawler.service.ProxyService;
 // import com.axisdesktop.poi.config.AppConf;
 // import com.axisdesktop.poi.config.PersistenceConf;
@@ -37,7 +37,7 @@
 //
 // @BeforeClass
 // public static void setUpBeforeClass() throws Exception {
-// wc = new DorogaCrawler();
+// wc = new DorogaUaCrawler();
 // }
 //
 // @AfterClass

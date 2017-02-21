@@ -21,7 +21,7 @@ import ch.rasc.extclassgenerator.OutputFormat;
 @Controller
 @RequestMapping( "/crawler" )
 public class CrawlerController {
-	@RequestMapping( "models.js" )
+	@RequestMapping( value = "models.js" )
 	public void user( HttpServletRequest request, HttpServletResponse response ) throws IOException {
 		StringBuilder sb = new StringBuilder();
 		sb.append( ModelGenerator.generateJavascript( CrawlerProxy.class, OutputFormat.EXTJS5, false ) );
@@ -34,6 +34,7 @@ public class CrawlerController {
 		sb.append( ModelGenerator.generateJavascript( ProviderDataType.class, OutputFormat.EXTJS5, false ) );
 
 		response.getWriter().println( sb.toString() );
+		response.setContentType( "application/javascript" );
 	}
 
 }

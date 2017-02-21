@@ -52,9 +52,8 @@ Ext.define( 'Crawler.proxy.view.Panel', {
         listeners: {
             scope: this,
             beforeload: function( store ) {
-	            // console.log(111);
-	            // store.proxy.extraParams.filters = [{ property: 'id', value: 1
-	            // } ];
+	            // console.log(111); XSRF-TOKEN
+	            //store.proxy.extraParams._csrf = Ext.util.Cookies.get('XSRF-TOKEN');
             }
         },
         filters: [ {
