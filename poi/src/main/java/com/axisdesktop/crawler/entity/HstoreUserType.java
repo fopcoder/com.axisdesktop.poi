@@ -119,7 +119,17 @@ public class HstoreUserType implements UserType {
 	}
 
 	private String quote( String str ) {
-		return str.replaceAll( "\"", "\\\\\"" );
+		StringBuilder sb = new StringBuilder();
+
+		for( int pos = 0; pos < str.length(); pos++ ) {
+			char ch = str.charAt( pos );
+			if( ch == '"' || ch == '\\' ) {
+				sb.append( '\\' );
+			}
+			sb.append( ch );
+		}
+		return sb.toString();
+		// return str.replaceAll( "\\", "\\\\" ).replaceAll( "\"", "\\\\\"" );
 	}
 
 	private Map<String, Object> convertToEntityAttribute( final String dbData ) {

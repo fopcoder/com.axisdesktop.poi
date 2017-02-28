@@ -1,7 +1,7 @@
-Ext.define( 'Crawler.data.view.Panel', {
+Ext.define( 'Crawler.poi.view.Panel', {
     extend: 'Axis.ux.grid.Panel',
 
-    title: 'Данные',
+    title: 'POI',
     
     columns: [ {
         text: 'Код',

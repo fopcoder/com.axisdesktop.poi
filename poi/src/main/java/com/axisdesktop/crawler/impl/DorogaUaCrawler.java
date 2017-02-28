@@ -22,7 +22,7 @@ import com.axisdesktop.crawler.parser.impl.DorogaParser;
 import com.axisdesktop.crawler.service.ProviderService;
 import com.axisdesktop.crawler.service.ProxyService;
 
-@Component
+//@Component
 public class DorogaUaCrawler extends WebCrawler {
 	private static final Logger logger = LoggerFactory.getLogger( DorogaUaCrawler.class );
 
@@ -47,18 +47,18 @@ public class DorogaUaCrawler extends WebCrawler {
 			// TODO switsh on feed url
 			this.getAndUpdateFeedUrls();
 
-			ExecutorService exec = Executors.newFixedThreadPool( 5 );
+			// ExecutorService exec = Executors.newFixedThreadPool( 5 );
 
 			List<ProviderUrl> updateList = this.getProviderService().findUrlForUpdate( providerId );
 			for( ProviderUrl updateUrl : updateList ) {
 				Worker worker = new DorogaWorker( this, updateUrl );
-				exec.execute( worker );
-				// worker.run();
+				// exec.execute( worker );
+				worker.run();
 				// Thread.sleep( 1_000 );
 				// break;
 			}
 
-			exec.shutdown();
+			// exec.shutdown();
 		}
 
 		catch( Exception e ) {

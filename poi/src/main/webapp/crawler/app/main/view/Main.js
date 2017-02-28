@@ -43,6 +43,10 @@ Ext.define( 'Crawler.main.view.Main', {
 	                    handler: me.switchCard,
 	                    itemId: 'dataType'
 	                } ]
+	            }, {
+	            	text: 'POI',
+	            	handler: me.switchCard,
+	                itemId: 'poi'
 	            } ],
 
 	            items: [ //
@@ -72,7 +76,11 @@ Ext.define( 'Crawler.main.view.Main', {
 	            } ), //
 	            Ext.create( 'Crawler.data.view.Panel', {
 		            itemId: 'data'
-	            } ) ]
+	            } ),  //
+	            Ext.create( 'Crawler.poi.view.Panel', {
+		            itemId: 'poi'
+	            } )  //
+	            ]
 
 	        }
 

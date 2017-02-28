@@ -44,8 +44,8 @@ public class ExtDataService {
 	}
 
 	@ExtDirectMethod( ExtDirectMethodType.STORE_MODIFY )
-	public void delete( List<ProviderData> proxyList ) {
-		this.dataService.delete( proxyList );
+	public void delete( List<ProviderData> data ) {
+		this.dataService.delete( data );
 	}
 
 	@ExtDirectMethod( ExtDirectMethodType.STORE_READ )
