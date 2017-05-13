@@ -13,9 +13,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.axisdesktop.base.utils.DateUtils;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import ch.rasc.extclassgenerator.ModelField;
 
 @MappedSuperclass
 public class BaseEntity<ID> {
@@ -24,13 +21,13 @@ public class BaseEntity<ID> {
 	private ID id;
 
 	@Column( updatable = false )
-	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ssZ" )
-	@ModelField( dateFormat = "Y-m-d H:i:sO" )
+	// @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ssZ" )
+	// @ModelField( dateFormat = "Y-m-d H:i:sO" )
 	@Temporal( TemporalType.TIMESTAMP )
 	private Calendar created;
 
-	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ssZ" )
-	@ModelField( dateFormat = "Y-m-d H:i:sO" )
+	// @JsonFormat( pattern = "yyyy-MM-dd HH:mm:ssZ" )
+	// @ModelField( dateFormat = "Y-m-d H:i:sO" )
 	@Temporal( TemporalType.TIMESTAMP )
 	private Calendar modified;
 
