@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class ParsedData {
-	private HashSet<String> links = new HashSet<>();
+	private HashSet<Link> links = new HashSet<>();
 	private HashMap<String, Object> data = new HashMap<>();
 
-	public HashSet<String> getLinks() {
+	public HashSet<Link> getLinks() {
 		return links;
 	}
 
-	public void setLinks( HashSet<String> links ) {
+	public void setLinks( HashSet<Link> links ) {
 		this.links = links;
 	}
 
